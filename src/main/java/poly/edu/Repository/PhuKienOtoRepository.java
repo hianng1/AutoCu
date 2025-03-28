@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import poly.edu.Model.PhuKienOto;
 
 @Repository
-public interface PhuKienOtoRepository extends JpaRepository<PhuKienOto, String> {
+public interface PhuKienOtoRepository extends JpaRepository<PhuKienOto, Long> {
 }

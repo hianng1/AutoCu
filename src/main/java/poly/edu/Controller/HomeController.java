@@ -20,7 +20,7 @@ import poly.edu.Model.NhanVien;
 import poly.edu.Model.PhuKienOto;
 import poly.edu.Model.SanPham;
 import poly.edu.Service.PhuKienOtoService;
-//toi ten la tran anh hao
+
 @Controller
 public class HomeController {
 	@Autowired
