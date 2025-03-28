@@ -61,7 +61,7 @@
     <!-- Header -->
     <jsp:include page="/common/header.jsp" />
 
-    <div class="container mt-5">
+    <%-- <div class="container mt-5">
         <h2 class="text-center">Đăng Nhập</h2>
 
         <!-- Hiển thị thông báo lỗi nếu có -->
@@ -82,7 +82,15 @@
 
             <button type="submit" class="btn btn-primary w-100">Đăng nhập</button>
         </form>
-    </div>
+    </div> --%>
+    
+    <h2>Đăng Nhập</h2>
+    <form action="/login" method="post">
+        <input type="text" name="username" placeholder="Tên đăng nhập" required><br>
+        <input type="password" name="password" placeholder="Mật khẩu" required><br>
+        <button type="submit">Đăng nhập</button>
+    </form>
+    <a href="/register">Đăng ký</a>
 
     <!-- Footer -->
     <jsp:include page="/common/footer.jsp" />
