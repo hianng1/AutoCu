@@ -1,101 +1,139 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt"%>
-<footer>
-    <div class="container">
-        <div class="row text-dark fw-semibold">
-            <div class="col-sm-3 text-center">
-			    <img src="/imgs/logo2.png" class="rounded float-start mx-1 my-1 mt-n3" alt="">
-			    <p class="text-semibold">
-			        Auto.Cu nỗ lực từng ngày để đem đến những sản phẩm mới mẻ và chất lượng dịch vụ hoàn hảo tới khách hàng.
-			    </p>
-			</div>
-            <div class="col-sm-9">
-                <div class="row">
-                    <div class="col-sm-4">
-                        <h4 class="mt-4 text-dark"><b>HOẠT ĐỘNG</b></h4>
-                        <hr>
-                        <ul class="no-bullets ms-0">
-                            <li class="mb-3"><a
-                                    class="nav-link link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                                    href="gioi_thieu.html"><i class="fa-solid fa-angle-right"></i> Về Mioto</a></li>
-                            <li class="mb-3"><a
-                                    class="nav-link link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                                    href=""><i class="fa-solid fa-angle-right"></i> Tuyển dụng</a></li>
-                            <li class="mb-3"><a
-                                    class="nav-link link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                                    href=""><i class="fa-solid fa-angle-right"></i> Hồ sơ năng lực</a></li>
-                            <li class="mb-3"><a
-                                    class="nav-link link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                                    href=""><i class="fa-solid fa-angle-right"></i> Thuê xe du lịch</a></li>
-                            <li class="mb-3"><a
-                                    class="nav-link link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                                    href=""><i class="fa-solid fa-angle-right"></i> Blog du lịch</a></li>
-                            <li class="mb-3"><a
-                                    class="nav-link link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                                    href=""><i class="fa-solid fa-angle-right"></i> Dịch vụ visa</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-sm-4">
-                        <h4 class="mt-4 text-dark"><b>THÔNG TIN HỮU ÍCH</b></h4>
-                        <hr>
-                        <ul class="no-bullets ms-0">
-                            <li class="mb-3"><a
-                                    class="nav-link link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                                    href=""><i class="fa-solid fa-angle-right"></i> Hướng dẫn thanh toán</a></li>
-                            <li class="mb-3"><a
-                                    class="nav-link link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                                    href=""><i class="fa-solid fa-angle-right"></i> Chính sách hoãn hủy tour</a>
-                            </li>
-                            <li class="mb-3"><a
-                                    class="nav-link link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                                    href=""><i class="fa-solid fa-angle-right"></i> Điều khoản sử dụng</a></li>
-                            <li class="mb-3"><a
-                                    class="nav-link link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                                    href=""><i class="fa-solid fa-angle-right"></i> Chính sách bảo mật</a></li>
-                            <li class="mb-3"><a
-                                    class="nav-link link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                                    href=""><i class="fa-solid fa-angle-right"></i> Bản quyền hình ảnh</a></li>
-                            <li class="mb-3"><a
-                                    class="nav-link link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                                    href="lien_he.html"><i class="fa-solid fa-angle-right"></i> Liên hệ</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-sm-4">
-                        <h4 class="mt-4 text-dark"><b>THÔNG TIN LIÊN HỆ</b></h4>
-                        <hr>
-                        <ul class="no-bullets ms-0">
-                            <li class="mb-3"><a
-                                    class="nav-link link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                                    href=""><i class="fa-solid fa-location-dot"></i> Add: Số 2 Ngõ 18, Đường Nguyễn
-                                    Cơ Thạch, Phường Cầu Diễn, Quận Nam Từ Liêm, Hà Nội</a></li>
-                            <li class="mb-3"><a
-                                    class="nav-link link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                                    href=""><i class="fa-solid fa-phone"></i> Tel: 024 6686 1789</a></li>
-                            <li class="mb-3"><a
-                                    class="nav-link link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                                    href=""><i class="fa-solid fa-phone"></i> Hotline: 082 6151 1515</a></li>
-                            <li class="mb-3"><a
-                                    class="nav-link link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                                    href=""><i class="fa-solid fa-envelope"></i> Email: info@Auto.Cu</a></li>
-                            <li class="mb-3"><a
-                                    class="nav-link link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                                    href=""><i class="fa-solid fa-magnifying-glass"></i> Website: Auto.Cu</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+pageEncoding="UTF-8"%> <%@ taglib uri="http://java.sun.com/jstl/core_rt"
+prefix="c"%> <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt"%>
+<footer class="bg-gray-900 text-white">
+  <div class="container mx-auto px-4 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <!-- Thông tin công ty -->
+      <div>
+        <img src="/imgs/logo2.png" alt="AutoCu Logo" class="h-12 mb-4" />
+        <p class="text-gray-400 mb-4">
+          AutoCu - Nơi bạn tìm thấy những sản phẩm chất lượng nhất cho xe của
+          bạn.
+        </p>
+        <div class="flex space-x-4">
+          <a href="#" class="text-gray-400 hover:text-white transition-colors">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-white transition-colors">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-white transition-colors">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-white transition-colors">
+            <i class="fab fa-youtube"></i>
+          </a>
         </div>
-        <div class="row text-dark p-0">
-            <h5 class="text-dark">CÔNG TY TNHH DỊCH VỤ AM VIỆT NAM</h5>
-            <h8 class="text-dark">- Giấy phép kinh doanh số: 0110137416 - Giấy phép Kinh doanh Lữ hành số: 01-0324/2022/SDL-GP LHND -
-                Giấy phép Vận tải số:</h8>
-            <h8 class="text-dark">9488/GPKDVT</h8>
-        </div>
-        <div class="row text-dark text-center">
-            <p class="mt-3 text-dark">Copyright 2020 <i class="fa-regular fa-copyright"></i> Auto.Cu</p>
-        </div>
+      </div>
+
+      <!-- Liên kết nhanh -->
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Liên kết nhanh</h3>
+        <ul class="space-y-2">
+          <li>
+            <a
+              href="/trangchu"
+              class="text-gray-400 hover:text-white transition-colors"
+            >
+              <i class="fas fa-chevron-right mr-2 text-xs"></i>
+              Trang chủ
+            </a>
+          </li>
+          <li>
+            <a
+              href="#"
+              class="text-gray-400 hover:text-white transition-colors"
+            >
+              <i class="fas fa-chevron-right mr-2 text-xs"></i>
+              Sản phẩm
+            </a>
+          </li>
+          <li>
+            <a
+              href="#"
+              class="text-gray-400 hover:text-white transition-colors"
+            >
+              <i class="fas fa-chevron-right mr-2 text-xs"></i>
+              Về chúng tôi
+            </a>
+          </li>
+          <li>
+            <a
+              href="#"
+              class="text-gray-400 hover:text-white transition-colors"
+            >
+              <i class="fas fa-chevron-right mr-2 text-xs"></i>
+              Liên hệ
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Thông tin liên hệ -->
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Thông tin liên hệ</h3>
+        <ul class="space-y-3">
+          <li class="flex items-start">
+            <i class="fas fa-map-marker-alt mt-1 mr-3 text-orange-500"></i>
+            <span class="text-gray-400">123 Đường ABC, Quận 1, TP.HCM</span>
+          </li>
+          <li class="flex items-start">
+            <i class="fas fa-phone mt-1 mr-3 text-orange-500"></i>
+            <span class="text-gray-400">+84 382 948 198</span>
+          </li>
+          <li class="flex items-start">
+            <i class="fas fa-envelope mt-1 mr-3 text-orange-500"></i>
+            <span class="text-gray-400">autocu@gmail.com</span>
+          </li>
+          <li class="flex items-start">
+            <i class="fas fa-clock mt-1 mr-3 text-orange-500"></i>
+            <span class="text-gray-400">Thứ 2 - Chủ nhật: 8:00 - 22:00</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Đăng ký nhận tin -->
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Đăng ký nhận tin</h3>
+        <p class="text-gray-400 mb-4">
+          Đăng ký để nhận những thông tin mới nhất về sản phẩm và khuyến mãi.
+        </p>
+        <form class="flex">
+          <input
+            type="email"
+            placeholder="Email của bạn"
+            class="flex-1 px-4 py-2 rounded-l-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500"
+          />
+          <button
+            type="submit"
+            class="bg-orange-500 text-white px-4 py-2 rounded-r-lg hover:bg-orange-600 transition-colors"
+          >
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </form>
+      </div>
     </div>
+
+    <!-- Phần bottom -->
+    <div class="border-t border-gray-800 mt-12 pt-8">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <p class="text-gray-400 text-sm">
+          © 2024 AutoCu. Tất cả quyền được bảo lưu.
+        </p>
+        <div class="flex space-x-6 mt-4 md:mt-0">
+          <a
+            href="#"
+            class="text-gray-400 hover:text-white text-sm transition-colors"
+            >Chính sách bảo mật</a
+          >
+          <a
+            href="#"
+            class="text-gray-400 hover:text-white text-sm transition-colors"
+            >Điều khoản sử dụng</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
 </footer>

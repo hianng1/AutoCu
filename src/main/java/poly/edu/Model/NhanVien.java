@@ -34,4 +34,51 @@ public class NhanVien implements Serializable {
     @Column(name = "VaiTro", nullable = false)
     private Boolean vaiTro; // True: Quản lý, False: Nhân viên bình thường
 
+    public Long getStaffID() {
+        return staffID;
+    }
+
+    public void setStaffID(Long staffID) {
+        this.staffID = staffID;
+    }
+
+    public String getTenNhanVien() {
+        return tenNhanVien;
+    }
+
+    public void setTenNhanVien(String tenNhanVien) {
+        this.tenNhanVien = tenNhanVien;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Integer getSoDienThoai() {
+        return soDienThoai;
+    }
+
+    public void setSoDienThoai(Integer soDienThoai) {
+        this.soDienThoai = soDienThoai;
+    }
+
+    public String getMatKhau() {
+        return matKhau;
+    }
+
+    public void setMatKhau(String matKhau) {
+        this.matKhau = matKhau;
+    }
+
+    public Boolean getVaiTro() {
+        return vaiTro;
+    }
+
+    public void setVaiTro(Boolean vaiTro) {
+        this.vaiTro = vaiTro;
+    }
 }

@@ -42,8 +42,68 @@ import lombok.NoArgsConstructor;
 	    @JoinColumn(name = "CategoryID", nullable = false, referencedColumnName = "CategoryID") // Liên kết với bảng danh mục
 	    private DanhMuc danhMuc;
 
-		
+		public Long getAccessoryID() {
+			return accessoryID;
+		}
 
-	    
+		public void setAccessoryID(Long accessoryID) {
+			this.accessoryID = accessoryID;
+		}
+
+		public String getTenPhuKien() {
+			return tenPhuKien;
+		}
+
+		public void setTenPhuKien(String tenPhuKien) {
+			this.tenPhuKien = tenPhuKien;
+		}
+
+		public String getMoTa() {
+			return moTa;
+		}
+
+		public void setMoTa(String moTa) {
+			this.moTa = moTa;
+		}
+
+		public Double getGia() {
+			return gia;
+		}
+
+		public void setGia(Double gia) {
+			this.gia = gia;
+		}
+
+		public Integer getSoLuong() {
+			return soLuong;
+		}
+
+		public void setSoLuong(Integer soLuong) {
+			this.soLuong = soLuong;
+		}
+
+		public String getHangSanXuat() {
+			return hangSanXuat;
+		}
+
+		public void setHangSanXuat(String hangSanXuat) {
+			this.hangSanXuat = hangSanXuat;
+		}
+
+		public String getAnhDaiDien() {
+			return anhDaiDien;
+		}
+
+		public void setAnhDaiDien(String anhDaiDien) {
+			this.anhDaiDien = anhDaiDien;
+		}
+
+		public DanhMuc getDanhMuc() {
+			return danhMuc;
+		}
+
+		public void setDanhMuc(DanhMuc danhMuc) {
+			this.danhMuc = danhMuc;
+		}
 	}
 

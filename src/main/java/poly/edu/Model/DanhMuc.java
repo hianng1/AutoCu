@@ -29,4 +29,43 @@ public class DanhMuc implements Serializable {
     @OneToMany(mappedBy = "danhMuc", cascade = CascadeType.ALL)
     private List<PhuKienOto> phuKienOtos;
 
+    public Long getCategoryID() {
+        return categoryID;
+    }
+
+    public void setCategoryID(Long categoryID) {
+        this.categoryID = categoryID;
+    }
+
+    public String getTenDanhMuc() {
+        return tenDanhMuc;
+    }
+
+    public void setTenDanhMuc(String tenDanhMuc) {
+        this.tenDanhMuc = tenDanhMuc;
+    }
+
+    public List<SanPham> getSanPhams() {
+        return sanPhams;
+    }
+
+    public void setSanPhams(List<SanPham> sanPhams) {
+        this.sanPhams = sanPhams;
+    }
+
+    public String getMoTa() {
+        return moTa;
+    }
+
+    public void setMoTa(String moTa) {
+        this.moTa = moTa;
+    }
+
+    public List<PhuKienOto> getPhuKienOtos() {
+        return phuKienOtos;
+    }
+
+    public void setPhuKienOtos(List<PhuKienOto> phuKienOtos) {
+        this.phuKienOtos = phuKienOtos;
+    }
 }

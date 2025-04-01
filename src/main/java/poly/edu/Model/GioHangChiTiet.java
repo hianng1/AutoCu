@@ -30,5 +30,36 @@ public class GioHangChiTiet implements Serializable {
 
     @Column(name = "SoLuong", nullable = false)
     private Integer soLuong;
-    
+
+    public String getCartItemID() {
+        return cartItemID;
+    }
+
+    public void setCartItemID(String cartItemID) {
+        this.cartItemID = cartItemID;
+    }
+
+    public GioHang getGioHang() {
+        return gioHang;
+    }
+
+    public void setGioHang(GioHang gioHang) {
+        this.gioHang = gioHang;
+    }
+
+    public PhuKienOto getPhuKienOto() {
+        return phuKienOto;
+    }
+
+    public void setPhuKienOto(PhuKienOto phuKienOto) {
+        this.phuKienOto = phuKienOto;
+    }
+
+    public Integer getSoLuong() {
+        return soLuong;
+    }
+
+    public void setSoLuong(Integer soLuong) {
+        this.soLuong = soLuong;
+    }
 }
