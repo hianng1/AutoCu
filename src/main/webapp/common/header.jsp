@@ -38,11 +38,13 @@ prefix="c"%> <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt"%>
 <header class="bg-white py-4 shadow-sm">
   <div class="container mx-auto flex justify-between items-center">
     <div class="flex items-center space-x-3">
-      <img
+      <a href="/trangchu">
+      	<img
         src="/imgs/logo2.png"
         alt="logo"
         class="h-16 max-w-[300px] object-contain"
       />
+      </a>
     </div>
     <div class="relative flex items-center w-full max-w-2xl mx-auto">
       <form action="/search" method="get" class="flex w-full">
@@ -66,7 +68,7 @@ prefix="c"%> <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt"%>
         <div class="flex items-center justify-center space-x-2">
           <a href="/cart/views" class="relative flex items-center">
             <h2 class="text-lg font-semibold hover:text-orange-500 mr-2">
-              My Cart
+              Giỏ Hàng
             </h2>
             <div class="relative">
               <i class="fas fa-shopping-basket text-orange-400 text-lg"></i>
@@ -96,7 +98,7 @@ prefix="c"%> <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt"%>
           class="bg-orange-500 text-white px-4 py-2 rounded flex items-center space-x-2 hover:bg-orange-600"
         >
           <i class="fas fa-home"></i>
-          <span> Home </span>
+          <span> Trang Chủ </span>
         </button>
       </a>
       <a class="hover:bg-orange-600 px-4 py-2 rounded" href="#"> Xe oto cũ </a>
@@ -110,8 +112,8 @@ prefix="c"%> <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt"%>
       <a class="hover:bg-orange-600 px-4 py-2 rounded" href="#"> Liên hệ </a>
     </div>
     <div>
-      <a class="hover:bg-orange-600 px-4 py-2 rounded" href="#">
-        <i class="fas fa-user"> </i> Sign In
+      <a class="hover:bg-orange-600 px-4 py-2 rounded" href="/login">
+        <i class="fas fa-user"> </i> Đăng Nhập
       </a>
     </div>
   </div>

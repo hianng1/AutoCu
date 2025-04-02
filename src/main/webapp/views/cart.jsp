@@ -11,7 +11,7 @@
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Giỏ Hàng - AutoCu</title>
+    <title>AutoCu - Chuyên xe cũ & phụ tùng</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -154,38 +154,45 @@
                     </c:forEach>
                 </div>
 
-                <!-- Tổng tiền và nút thanh toán -->
-                <div class="total-section">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Tổng Đơn Hàng</h2>
-                    <div class="space-y-2 mb-4">
-                        <div class="flex justify-between text-gray-600">
-                            <span>Tạm tính</span>
-                            <span><fmt:formatNumber value="${TOTAL}" pattern="#,##0" /> đ</span>
-                        </div>
-                        <div class="flex justify-between text-gray-600">
-                            <span>Phí vận chuyển</span>
-                            <span>Miễn phí</span>
-                        </div>
-                        <div class="border-t pt-2 mt-2">
-                            <div class="flex justify-between font-semibold text-lg">
-                                <span>Tổng cộng</span>
-                                <span class="price"><fmt:formatNumber value="${TOTAL}" pattern="#,##0" /> đ</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="space-y-3">
-                        <a href="/checkout" class="block w-full text-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">
-                            Tiến hành thanh toán
-                        </a>
-                        <a href="/trangchu" class="block w-full text-center px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors">
-                            Tiếp tục mua sắm
-                        </a>
-                        <a href="/cart/clear" class="block w-full text-center px-6 py-3 text-red-600 font-semibold hover:text-red-700 transition-colors">
-                            Xóa giỏ hàng
-                        </a>
-                    </div>
-                </div>
+				<!-- Tổng tiền và nút thanh toán -->
+				<div class="total-section">
+				    <h2 class="text-xl font-semibold text-gray-800 mb-4">Tổng Đơn Hàng</h2>
+				    <div class="space-y-2 mb-4">
+				        <div class="flex justify-between text-gray-600">
+				            <span>Tạm tính</span>
+				            <span><fmt:formatNumber value="${TOTAL}" pattern="#,##0" /> đ</span>
+				        </div>
+				        <div class="flex justify-between text-gray-600">
+				            <span>Phí vận chuyển</span>
+				            <span>Miễn phí</span>
+				        </div>
+				        <div class="flex justify-between text-gray-600">
+				            <span>Thuế VAT (10%)</span>
+				            <span><fmt:formatNumber value="${TOTAL * 0.1}" pattern="#,##0" /> đ</span>
+				        </div>
+				        <div class="border-t pt-2 mt-2">
+				            <div class="flex justify-between font-semibold text-lg">
+				                <span>Tổng cộng</span>
+				                <span class="price">
+				                    <fmt:formatNumber value="${TOTAL * 1.1}" pattern="#,##0" /> đ
+				                </span>
+				            </div>
+				        </div>
+				    </div>
+				    
+				    <div class="space-y-3">
+				        <a href="/checkout" class="block w-full text-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">
+				            Tiến hành thanh toán
+				        </a>
+				        <a href="/trangchu" class="block w-full text-center px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors">
+				            Tiếp tục mua sắm
+				        </a>
+				        <a href="/cart/clear" class="block w-full text-center px-6 py-3 text-red-600 font-semibold hover:text-red-700 transition-colors">
+				            Xóa giỏ hàng
+				        </a>
+				    </div>
+				</div>
+
             </div>
         </c:if>
     </div>

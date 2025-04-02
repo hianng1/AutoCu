@@ -10,7 +10,7 @@
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>AutoCu</title>
+    <title>AutoCu - Chuyên xe cũ & phụ tùng</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
@@ -55,47 +55,62 @@
 		button:hover {
 		  transition: background-color 0.3s ease;
 		}
+	
     </style>
 </head>
 <body>
     <!-- Header -->
     <jsp:include page="/common/header.jsp" />
-
-   <%--  <div class="container mt-5">
-        <h2 class="text-center">Đăng Ký</h2>
-
-        <!-- Hiển thị lỗi nếu có -->
-        <c:if test="${not empty error}">
-            <div class="alert alert-danger">${error}</div>
-        </c:if>
-
-        <form action="${pageContext.request.contextPath}/register" method="post" class="mx-auto w-50 border p-4 rounded shadow">
-            <div class="mb-3">
-                <label for="tenKhachHang" class="form-label">Tên đăng nhập</label>
-                <input type="text" name="tenKhachHang" id="tenKhachHang" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="matKhau" class="form-label">Mật khẩu</label>
-                <input type="password" name="matKhau" id="matKhau" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" name="email" id="email" class="form-control" required>
-            </div>
-
-            <button type="submit" class="btn btn-primary w-100">Đăng ký</button>
-        </form>
-    </div> --%>
-    <h2>Đăng Ký</h2>
+    <!-- <h2>Đăng Ký</h2>
     <form action="/register" method="post">
         <input type="text" name="username" placeholder="Tên đăng nhập" required><br>
         <input type="password" name="password" placeholder="Mật khẩu" required><br>
         <input type="email" name="email" placeholder="Email" required><br>
         <button type="submit">Đăng ký</button>
     </form>
-    <a href="/login">Đăng nhập</a>
+    <a href="/login">Đăng nhập</a> -->
+    <div class="container-fluid d-flex justify-content-center align-items-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-lg">
+                <div class="card-body p-5">
+                    <h2 class="card-title text-center mb-4">Đăng Ký</h2>
+                    <form action="/register" method="post">
+                        <div class="mb-3">
+                            <input type="text" 
+                                   class="form-control form-control-lg" 
+                                   name="username" 
+                                   placeholder="Tên đăng nhập" 
+                                   required>
+                        </div>
+                        <div class="mb-3">
+                            <input type="password" 
+                                   class="form-control form-control-lg" 
+                                   name="password" 
+                                   placeholder="Mật khẩu" 
+                                   required>
+                        </div>
+                        <div class="mb-4">
+                            <input type="email" 
+                                   class="form-control form-control-lg" 
+                                   name="email" 
+                                   placeholder="Email" 
+                                   required>
+                        </div>
+                        <button type="submit" 
+                                class="btn btn-primary btn-lg w-100 mb-3">
+                            Đăng ký
+                        </button>
+                    </form>
+                    <div class="text-center">
+                        <span class="text-muted">Đã có tài khoản?</span>
+                        <a href="/login" class="link-primary text-decoration-none">
+                            Đăng nhập ngay
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <jsp:include page="/common/footer.jsp" />

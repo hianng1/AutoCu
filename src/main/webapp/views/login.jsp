@@ -10,7 +10,7 @@
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>AutoCu</title>
+    <title>AutoCu - Chuyên xe cũ & phụ tùng</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
@@ -55,6 +55,7 @@
 		button:hover {
 		  transition: background-color 0.3s ease;
 		}
+		
     </style>
 </head>
 <body>
@@ -84,13 +85,70 @@
         </form>
     </div> --%>
     
-    <h2>Đăng Nhập</h2>
+    <!-- <h2>Đăng Nhập</h2>
     <form action="/login" method="post">
         <input type="text" name="username" placeholder="Tên đăng nhập" required><br>
         <input type="password" name="password" placeholder="Mật khẩu" required><br>
         <button type="submit">Đăng nhập</button>
     </form>
-    <a href="/register">Đăng ký</a>
+    <a href="/register">Đăng ký</a> -->
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <div class="card login-card">
+                    <div class="card-body p-4">
+                        <h2 class="text-center mb-4">Đăng Nhập</h2>
+                        <form action="/login" method="post">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Tên đăng nhập</label>
+                                <input type="text" 
+                                       class="form-control form-control-lg" 
+                                       id="username" 
+                                       name="username" 
+                                       placeholder="Nhập tên đăng nhập"
+                                       required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="password" class="form-label">Mật khẩu</label>
+                                <input type="password" 
+                                       class="form-control form-control-lg" 
+                                       id="password" 
+                                       name="password" 
+                                       placeholder="Nhập mật khẩu"
+                                       required>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
+                                Đăng nhập
+                            </button>
+                            <div class="text-end mb-4">
+                                <a href="/forgot-password" class="text-decoration-none">Quên mật khẩu?</a>
+                            </div>
+                        </form>
+
+                        <div class="text-center mb-4">
+                            <span class="text-muted">Hoặc đăng nhập bằng</span>
+                        </div>
+                        
+                        <div class="social-login d-flex gap-3 mb-4">
+                            <a href="#" class="btn btn-outline-primary flex-fill">
+                                <i class="fab fa-facebook"></i> Facebook
+                            </a>
+                            <a href="#" class="btn btn-outline-danger flex-fill">
+                                <i class="fab fa-google"></i> Google
+                            </a>
+                        </div>
+
+                        <div class="text-center">
+                            <span class="text-muted">Chưa có tài khoản? </span>
+                            <a href="/register" class="btn btn-outline-success btn-sm ms-2">
+                                Đăng ký ngay
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <jsp:include page="/common/footer.jsp" />
