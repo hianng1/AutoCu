@@ -28,9 +28,11 @@ public class AuthController {
     public String register(@RequestParam String username,
                            @RequestParam String password,
                            @RequestParam String email,
+                           @RequestParam String fullName,
+                           @RequestParam(required = false) Integer phoneNumber, // không bắt buộc nhập
                            Model model,
                            RedirectAttributes redirectAttributes) {
-        String result = userService.registerUser(username, password, email);
+        String result = userService.registerUser(username, password, email,fullName,phoneNumber);
 
         if (result.equals("Đăng ký thành công!")) {
             redirectAttributes.addFlashAttribute("message", "Đăng ký thành công! Vui lòng đăng nhập.");

@@ -138,7 +138,7 @@
 		            <td>${sp.gia}</td>
 		            <td>${sp.soLuongTrongKho}</td>
 		            <td>${sp.ngaySanXuat}</td>
-		            <td>${sp.baoHanh}</td>
+		            <td>${sp.baoHanh}</td>	
 		            <td>
 		                <img src="/imgs/${sp.anhDaiDien}" alt="${sp.tenSanPham}" width="100"/>
 		            </td>

@@ -14,17 +14,29 @@ public class UserService {
     private UserRepository userRepository;
 
     // Đăng ký tài khoản
-    public String registerUser(String username, String password, String email) {
+    public String registerUser(String username, String password, String email, String fullName, Integer phoneNumber) {
         Optional<User> existingUser = userRepository.findByUsername(username);
 
-        if (existingUser.isPresent()) {
-            return "Tên đăng nhập đã tồn tại!";
+        if (userRepository.existsByUsername(username)) {
+            return "Tên người dùng đã tồn tại!";
+        }
+        if (userRepository.existsByEmail(email)) {
+            return "Email đã được sử dụng!";
+        }
+        if (fullName == null || fullName.trim().isEmpty()) {
+            return "Họ tên không được để trống!";
         }
 
         User newUser = new User();
         newUser.setUsername(username);
         newUser.setPassword(password); // Không mã hóa mật khẩu
         newUser.setEmail(email);
+        newUser.setFullName(fullName);
+        if (phoneNumber != null) { // Nếu người dùng nhập thì mới lưu
+            newUser.setPhoneNumber(phoneNumber);
+        } else {
+            newUser.setPhoneNumber(null); // Không nhập thì để null
+        }
         newUser.setRole("USER"); // Mặc định là USER
 
         userRepository.save(newUser);

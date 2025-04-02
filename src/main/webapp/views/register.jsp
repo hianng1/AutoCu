@@ -89,6 +89,14 @@
                                    placeholder="Mật khẩu" 
                                    required>
                         </div>
+                        <div class="mb-3">
+						    <input type="text" 
+						           class="form-control form-control-lg" 
+						           name="fullName" 
+						           placeholder="Họ và tên" 
+						           required>
+						</div>
+                        
                         <div class="mb-4">
                             <input type="email" 
                                    class="form-control form-control-lg" 
@@ -96,6 +104,12 @@
                                    placeholder="Email" 
                                    required>
                         </div>
+                        <div class="mb-3">
+						    <input type="text" 
+						       class="form-control form-control-lg" 
+						       name="phoneNumber" 
+						       placeholder="Số điện thoại (không bắt buộc)">
+						</div>
                         <button type="submit" 
                                 class="btn btn-primary btn-lg w-100 mb-3">
                             Đăng ký
