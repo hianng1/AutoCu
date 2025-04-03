@@ -17,19 +17,19 @@ public class KhachHang implements Serializable {
     @Column(name = "UserID", updatable = false, nullable = false)
     private Long userID;
 
-    @Column(name = "TenKhachHang", nullable = false, length = 100)
+    @Column(name = "TenKhachHang", nullable = false, length = 100, columnDefinition = "nvarchar(100)")
     private String tenKhachHang;
 
-    @Column(name = "Email", unique = true, nullable = false, length = 100)
+    @Column(name = "Email", unique = true, nullable = false, length = 100, columnDefinition = "nvarchar(100)")
     private String email;
 
-    @Column(name = "SoDienThoai", unique = true, nullable = true)
-    private Integer soDienThoai; 
+    @Column(name = "SoDienThoai", unique = true, nullable = true, length = 15, columnDefinition = "nvarchar(15)")
+    private String soDienThoai; 
 
     @Column(name = "MatKhau", nullable = false, length = 255)
     private String matKhau;
 
-    @Column(name = "DiaChi", nullable = false, length = 255)
+    @Column(name = "DiaChi", nullable = false, length = 255, columnDefinition = "nvarchar(255)")
     private String diaChi;
 
     @Column(name = "VaiTro", nullable = false)
@@ -43,76 +43,4 @@ public class KhachHang implements Serializable {
     @OneToOne
     @JoinColumn(name = "UserID")
     private GioHang gioHang;
-
-    public Long getUserID() {
-        return userID;
-    }
-
-    public void setUserID(Long userID) {
-        this.userID = userID;
-    }
-
-    public String getTenKhachHang() {
-        return tenKhachHang;
-    }
-
-    public void setTenKhachHang(String tenKhachHang) {
-        this.tenKhachHang = tenKhachHang;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Integer getSoDienThoai() {
-        return soDienThoai;
-    }
-
-    public void setSoDienThoai(Integer soDienThoai) {
-        this.soDienThoai = soDienThoai;
-    }
-
-    public String getMatKhau() {
-        return matKhau;
-    }
-
-    public void setMatKhau(String matKhau) {
-        this.matKhau = matKhau;
-    }
-
-    public String getDiaChi() {
-        return diaChi;
-    }
-
-    public void setDiaChi(String diaChi) {
-        this.diaChi = diaChi;
-    }
-
-    public Boolean getVaiTro() {
-        return vaiTro;
-    }
-
-    public void setVaiTro(Boolean vaiTro) {
-        this.vaiTro = vaiTro;
-    }
-
-    public List<DonHang> getDonHangs() {
-        return donHangs;
-    }
-
-    public void setDonHangs(List<DonHang> donHangs) {
-        this.donHangs = donHangs;
-    }
-
-    public GioHang getGioHang() {
-        return gioHang;
-    }
-
-    public void setGioHang(GioHang gioHang) {
-        this.gioHang = gioHang;
-    }
 }

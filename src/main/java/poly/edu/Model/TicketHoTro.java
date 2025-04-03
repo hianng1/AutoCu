@@ -27,10 +27,10 @@ public class TicketHoTro implements Serializable {
     @JoinColumn(name = "StaffID", nullable = true, referencedColumnName = "StaffID") // Nhân viên hỗ trợ
     private NhanVien nhanVien;
 
-    @Column(name = "MoTaVanDe", nullable = false, length = 1000)
+    @Column(name = "MoTaVanDe", nullable = false, length = 1000, columnDefinition = "nvarchar(255)")
     private String moTaVanDe;
 
-    @Column(name = "TrangThai", nullable = false)
+    @Column(name = "TrangThai", nullable = false, columnDefinition = "nvarchar(255)")
     private String trangThai; // (Pending, In Progress, Resolved, Closed)
 
     @Column(name = "NgayTao", nullable = false)

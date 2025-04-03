@@ -18,22 +18,22 @@ public class SanPham implements Serializable {
     @Column(name = "ProductID")
     private Long productID;
 
-    @Column(name = "TenSanPham", nullable = false)
+    @Column(name = "TenSanPham", nullable = false, columnDefinition = "nvarchar(255)")
     private String tenSanPham;
     
     @Column(name = "SoGhe")
     private Integer soGhe;
     
-    @Column(name = "TruyenDong")
+    @Column(name = "TruyenDong", columnDefinition = "nvarchar(255)")
     private String truyenDong;
     
-    @Column(name = "NhienLieu")
+    @Column(name = "NhienLieu", columnDefinition = "nvarchar(255)")
     private String nhienLieu;
     
-    @Column(name = "DiaDiemLayXe")
+    @Column(name = "DiaDiemLayXe", columnDefinition = "nvarchar(255)")
     private String diaDiemLayXe;
     
-    @Column(name = "HangXe")
+    @Column(name = "HangXe", columnDefinition = "nvarchar(255)")
     private String hangXe;
 
     @Column(name = "Gia", nullable = false)
@@ -46,7 +46,7 @@ public class SanPham implements Serializable {
     @Column(name = "NgaySanXuat")
     private Date ngaySanXuat;
     
-    @Column(name = "BaoHanh")
+    @Column(name = "BaoHanh", columnDefinition = "nvarchar(255)")
     private String baoHanh;
     
     @Column(name = "AnhDaiDien")
