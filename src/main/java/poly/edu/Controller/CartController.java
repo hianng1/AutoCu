@@ -10,10 +10,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.Optional;
+
+import poly.edu.Model.DonHang;
+import poly.edu.Model.KhachHang;
+import poly.edu.Repository.KhachHangRepository;
+import poly.edu.Service.CartService;
+import poly.edu.Service.DonHangService;
+
 import jakarta.servlet.http.HttpServletRequest;
+import poly.edu.Model.DonHang;
 import poly.edu.Model.GioHang;
+import poly.edu.Model.KhachHang;
 import poly.edu.Model.PhuKienOto;
 import poly.edu.Service.CartService;
+import poly.edu.Service.DonHangService;
 import poly.edu.Service.PhuKienOtoService;
 
 @Controller
@@ -24,10 +42,13 @@ public class CartController {
 
 	@Autowired
 	CartService cartService;
-
-	/*
-	 * @Autowired DonHangService donHangService;
-	 */
+	
+	@Autowired
+	DonHangService donHangService;
+	
+	@Autowired
+	KhachHangRepository khachHangRepository;
+	 
 
 	// Hiển thị giỏ hàng
 	@GetMapping("views")
@@ -84,61 +105,79 @@ public class CartController {
 	}
 
 	
-	/*
-	 * @GetMapping("/checkout") public String showCheckout(Model model) { // Kiểm
-	 * tra giỏ hàng có sản phẩm không if (cartService.getAllItems().isEmpty()) {
-	 * return "redirect:/cart/views"; }
-	 * 
-	 * model.addAttribute("CART_ITEMS", cartService.getAllItems());
-	 * model.addAttribute("TOTAL", cartService.getAmounts());
-	 * model.addAttribute("donHang", new DonHang()); // Thêm đối tượng DonHang để
-	 * bind form
-	 * 
-	 * return "checkout"; // Trả về view checkout.html }
-	 * 
-	 * // Xử lý thanh toán
-	 * 
-	 * @PostMapping("/checkout") public String processCheckout(
-	 * 
-	 * @RequestParam("tenKhachHang") String tenKhachHang,
-	 * 
-	 * @RequestParam("soDienThoai") String soDienThoai,
-	 * 
-	 * @RequestParam("diaChi") String diaChi,
-	 * 
-	 * @RequestParam("ghiChu") String ghiChu,
-	 * 
-	 * @RequestParam("phuongThucThanhToan") String phuongThucThanhToan,
-	 * RedirectAttributes redirectAttributes) {
-	 * 
-	 * // Kiểm tra thông tin bắt buộc if (tenKhachHang.isEmpty() ||
-	 * soDienThoai.isEmpty() || diaChi.isEmpty()) {
-	 * redirectAttributes.addFlashAttribute("errorMessage",
-	 * "Vui lòng điền đầy đủ thông tin bắt buộc"); return "redirect:/cart/checkout";
-	 * }
-	 * 
-	 * try { // Tạo đơn hàng từ thông tin giỏ hàng DonHang donHang = new DonHang();
-	 * donHang.setTenKhachHang(tenKhachHang); donHang.setSoDienThoai(soDienThoai);
-	 * donHang.setDiaChi(diaChi); donHang.setGhiChu(ghiChu);
-	 * donHang.setPhuongThucThanhToan(phuongThucThanhToan);
-	 * donHang.setTongTien(cartService.getAmounts());
-	 * 
-	 * // Lưu đơn hàng và chi tiết đơn hàng donHangService.taoDonHang(donHang,
-	 * cartService.getAllItems());
-	 * 
-	 * // Xóa giỏ hàng sau khi đặt hàng thành công cartService.clear();
-	 * 
-	 * redirectAttributes.addFlashAttribute("successMessage",
-	 * "Đặt hàng thành công! Cảm ơn bạn đã mua sắm"); return
-	 * "redirect:/cart/order-success"; // Chuyển đến trang thông báo thành công }
-	 * catch (Exception e) { redirectAttributes.addFlashAttribute("errorMessage",
-	 * "Có lỗi xảy ra khi đặt hàng: " + e.getMessage()); return
-	 * "redirect:/cart/checkout"; } }
-	 * 
-	 * // Trang thông báo đặt hàng thành công
-	 * 
-	 * @GetMapping("/order-success") public String orderSuccess() { return
-	 * "order-success"; }
-	 */
+	
+	@GetMapping("/checkout")
+    public String showCheckout(Model model) {
+        if (cartService.getAllItems().isEmpty()) {
+            return "redirect:/cart/views";
+        }
+
+        model.addAttribute("CART_ITEMS", cartService.getAllItems());
+        model.addAttribute("TOTAL", cartService.getAmounts());
+        model.addAttribute("donHang", new DonHang()); // Đối tượng DonHang để binding form
+        
+        return "checkout"; // Trả về view checkout.html
+    }
+
+	@PostMapping("/checkout")
+	public String processCheckout(
+	        @RequestParam(value = "tenKhachHang", required = false) String tenKhachHang,
+	        @RequestParam(value = "soDienThoai", required = false) String soDienThoai,
+	        @RequestParam(value = "diaChi", required = false) String diaChi,
+	        RedirectAttributes redirectAttributes) {
+
+	    try {
+	        KhachHang khachHang = null;
+
+	        // Nếu khách đã đăng nhập, lấy từ database
+	        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getPrincipal())) {
+	            String email = auth.getName();
+	            Optional<KhachHang> optionalKhachHang = khachHangRepository.findByEmail(email);
+	            if (optionalKhachHang.isPresent()) {
+	                khachHang = optionalKhachHang.get();
+	            }
+	        }
+
+	        // Nếu khách không đăng nhập, kiểm tra thông tin nhập vào
+	        if (khachHang == null) {
+	            if (tenKhachHang == null || tenKhachHang.isEmpty() || 
+	                soDienThoai == null || soDienThoai.isEmpty() || 
+	                diaChi == null || diaChi.isEmpty()) {
+	                redirectAttributes.addFlashAttribute("errorMessage", "Vui lòng điền đầy đủ thông tin.");
+	                return "redirect:/checkout";
+	            }
+	            // Tạo đối tượng khách hàng tạm thời
+	            khachHang = new KhachHang();
+	            khachHang.setTenKhachHang(tenKhachHang);
+	            khachHang.setSoDienThoai(soDienThoai);
+	            khachHang.setDiaChi(diaChi);
+	        }
+
+	        // Tạo đơn hàng
+	        DonHang donHang = new DonHang();
+	        donHang.setKhachHang(khachHang);
+	        donHang.setTongGiaTri(cartService.getAmounts());
+
+	        // Lưu đơn hàng
+	        donHangService.taoDonHang(donHang, cartService.getAllItems());
+
+	        // Xóa giỏ hàng sau khi đặt hàng thành công
+	        cartService.clear();
+
+	        redirectAttributes.addFlashAttribute("successMessage", "Đặt hàng thành công!");
+	        return "redirect:/order-success";
+	    } catch (Exception e) {
+	        redirectAttributes.addFlashAttribute("errorMessage", "Lỗi khi đặt hàng: " + e.getMessage());
+	        return "redirect:/checkout";
+	    }
+	}
+
+
+    @GetMapping("/order-success")
+    public String orderSuccess() {
+        return "order-success";
+    }
+	 
 	 
 }
