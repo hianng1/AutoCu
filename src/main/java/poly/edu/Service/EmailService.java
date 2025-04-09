@@ -26,11 +26,12 @@ public class EmailService {
 	 * mailSender.send(message); }
 	 */
     // thông báo về mail
-    public void sendResetPasswordEmail(String recipientEmail, String newPassword) {
+	public void sendResetPasswordEmail(User user, /* String recipientEmail, */ String newPassword) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(recipientEmail);
+		/* message.setTo(recipientEmail); */
+        message.setTo(user.getEmail());
         message.setSubject("Khôi phục mật khẩu");
-        message.setText("Xin chào,\n\n" +
+        message.setText("Xin chào,"+user.getUsername()+"\n\n" +
                         "Mật khẩu mới của bạn là: " + newPassword + "\n" +
                         "Vui lòng đăng nhập và đổi mật khẩu.");
         // KHÔNG setFrom thủ công nếu đang dùng Gmail

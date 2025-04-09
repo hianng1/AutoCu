@@ -102,7 +102,7 @@ public class UserService {
             String newPassword = generateRandomPassword();
             user.setPassword(newPassword);
             userRepository.save(user);
-            emailService.sendResetPasswordEmail(user.getEmail(), newPassword);
+            emailService.sendResetPasswordEmail(user, newPassword);
             return "Mật khẩu mới đã được gửi vào email của bạn!";
         } else {
             return "Email không tồn tại trong hệ thống.";
