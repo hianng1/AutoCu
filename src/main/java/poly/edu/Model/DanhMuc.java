@@ -17,10 +17,10 @@ public class DanhMuc implements Serializable {
     @Column(name = "CategoryID")
     private Long categoryID;
 
-    @Column(name = "TenDanhMuc", nullable = false)
+    @Column(name = "TenDanhMuc", nullable = false, columnDefinition = "nvarchar(255)")
     private String tenDanhMuc;
 
-    @Column(name = "MoTa")
+    @Column(name = "MoTa", columnDefinition = "nvarchar(255)")
     private String moTa; // Thuộc tính tùy chọn
 
     @OneToMany(mappedBy = "danhMuc", cascade = CascadeType.ALL)

@@ -10,7 +10,7 @@ import poly.edu.Model.KhachHang;
 public interface KhachHangDAO extends JpaRepository<KhachHang, Long>{
 
     // Ví dụ: tìm xe theo tên xe
-    List<KhachHang> findBySoDienThoai(Integer soDienThoai);
+    List<KhachHang> findBySoDienThoai(String soDienThoai);
     List<KhachHang> findByEmail(String email);
     List<KhachHang> findByUserID(Long userID);
     Optional<KhachHang> findByTenKhachHang(String tenKhachHang);

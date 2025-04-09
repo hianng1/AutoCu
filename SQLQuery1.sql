@@ -55,16 +55,17 @@ VALUES
 
 INSERT INTO khach_hang (ten_khach_hang, email, so_dien_thoai, dia_chi, mat_khau, vai_tro)
 VALUES
-('Nguyen Van A', 'nguyenvana@example.com', 0912345678, '123 Đường ABC, Quận 1, TP.HCM', 'password123', 0),
-('Tran Thi B', 'tranthib@example.com', 0912345679, '456 Đường XYZ, Quận 2, TP.HCM', 'password123', 0),
-('Le Van C', 'levanc@example.com', 0912345680, '789 Đường DEF, Quận 3, TP.HCM', 'password123', 0),
-('Pham Thi D', 'phamthid@example.com', 0912345681, '321 Đường GHI, Quận 4, TP.HCM', 'password123', 0),
-('Hoang Van E', 'hoangvane@example.com', 0912345682, '654 Đường JKL, Quận 5, TP.HCM', 'password123', 0),
-('Vu Thi F', 'vuthif@example.com', 0912345683, '987 Đường MNO, Quận 6, TP.HCM', 'password123', 0),
-('Do Van G', 'dovang@example.com', 0912345684, '111 Đường PQR, Quận 7, TP.HCM', 'password123', 0),
-('Mai Thi H', 'maithih@example.com', 0912345685, '222 Đường STU, Quận 8, TP.HCM', 'password123', 0),
-('Dang Van I', 'dangvani@example.com', 0912345686, '333 Đường VWX, Quận 9, TP.HCM', 'password123', 0),
-('Bui Thi K', 'buithik@example.com', 0912345687, '444 Đường YZZ, Quận 10, TP.HCM', 'password123', 0);
+('Nguyen Van A', 'nguyenvana@example.com', '0912345678', '123 Đường ABC, Quận 1, TP.HCM', 'password123', 0),
+('Tran Thi B', 'tranthib@example.com', '0912345679', '456 Đường XYZ, Quận 2, TP.HCM', 'password123', 0),
+('Le Van C', 'levanc@example.com', '0912345680', '789 Đường DEF, Quận 3, TP.HCM', 'password123', 0),
+('Pham Thi D', 'phamthid@example.com', '0912345681', '321 Đường GHI, Quận 4, TP.HCM', 'password123', 0),
+('Hoang Van E', 'hoangvane@example.com', '0912345682', '654 Đường JKL, Quận 5, TP.HCM', 'password123', 0),
+('Vu Thi F', 'vuthif@example.com', '0912345683', '987 Đường MNO, Quận 6, TP.HCM', 'password123', 0),
+('Do Van G', 'dovang@example.com', '0912345684', '111 Đường PQR, Quận 7, TP.HCM', 'password123', 0),
+('Mai Thi H', 'maithih@example.com', '0912345685', '222 Đường STU, Quận 8, TP.HCM', 'password123', 0),
+('Dang Van I', 'dangvani@example.com', '0912345686', '333 Đường VWX, Quận 9, TP.HCM', 'password123', 0),
+('Bui Thi K', 'buithik@example.com', '0912345687', '444 Đường YZZ, Quận 10, TP.HCM', 'password123', 0);
+
 
 INSERT INTO phu_kien_oto(ten_phu_kien, mo_ta, gia, so_luong, hang_san_xuat, anh_dai_dien, CategoryID)
 VALUES

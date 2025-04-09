@@ -1,6 +1,7 @@
 package poly.edu.Model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
@@ -34,8 +35,8 @@ public class GioHang implements Serializable {
     @Column(name = "SoLuong", nullable = false)
     private int soLuong; // Số lượng sản phẩm trong giỏ
 
-    public double getGia() {
-        return this.phuKienOto != null ? this.phuKienOto.getGia() : 0.0;
+    public BigDecimal getGia() {
+        return (this.phuKienOto != null) ? BigDecimal.valueOf(this.phuKienOto.getGia()) : BigDecimal.ZERO;
     }
     
     @ManyToOne(cascade = CascadeType.ALL)

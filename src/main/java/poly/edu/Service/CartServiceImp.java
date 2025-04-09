@@ -2,6 +2,7 @@ package poly.edu.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,7 +74,10 @@ public class CartServiceImp implements CartService{
 	}
 	
 	@Override
-	public double getAmounts() {
-	    return maps.values().stream().mapToDouble(item -> item.getSoLuong() * item.getGia()).sum();
+	public BigDecimal getAmounts() {
+	    return maps.values().stream()
+	        .map(item -> BigDecimal.valueOf(item.getSoLuong()).multiply(item.getGia()))
+	        .reduce(BigDecimal.ZERO, BigDecimal::add);
 	}
+
 }

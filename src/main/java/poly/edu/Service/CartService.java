@@ -1,10 +1,12 @@
 package poly.edu.Service;
 
+import java.math.BigDecimal;
+
 import poly.edu.Model.GioHang;
 
 public interface CartService {
 
-	double getAmounts();
+	BigDecimal getAmounts();
 
 	int getCount();
 
