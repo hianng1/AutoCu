@@ -26,11 +26,11 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
     
-    @Column(name = "full_name", nullable = false) // Chỉ định đúng tên cột trong database
-    private String fullName;
+    @Column(name = "hovaten", nullable = false) // Chỉ định đúng tên cột trong database
+    private String hovaten;
 
-    @Column(name = "phone_number", nullable = true) // Chỉ định tên cột
-    private Integer phoneNumber;
+    @Column(name = "sodienthoai", nullable = true) // Chỉ định tên cột
+    private String sodienthoai;
     	
     
     

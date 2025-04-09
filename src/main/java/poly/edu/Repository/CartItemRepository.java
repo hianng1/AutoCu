@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import poly.edu.Model.GioHangChiTiet;
 
 @Repository
-public interface CartItemRepository extends JpaRepository<GioHangChiTiet, String> {
+public interface CartItemRepository extends JpaRepository<GioHangChiTiet, Long> {
 }

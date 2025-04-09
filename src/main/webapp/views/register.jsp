@@ -92,7 +92,7 @@
                         <div class="mb-3">
 						    <input type="text" 
 						           class="form-control form-control-lg" 
-						           name="fullName" 
+						           name="hovaten" 
 						           placeholder="Họ và tên" 
 						           required>
 						</div>
@@ -107,7 +107,7 @@
                         <div class="mb-3">
 						    <input type="text" 
 						       class="form-control form-control-lg" 
-						       name="phoneNumber" 
+						       name="sodienthoai" 
 						       placeholder="Số điện thoại (không bắt buộc)">
 						</div>
                         <button type="submit" 

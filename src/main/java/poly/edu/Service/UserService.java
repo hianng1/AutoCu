@@ -6,6 +6,7 @@ import poly.edu.Model.User;
 import poly.edu.Repository.UserRepository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -14,7 +15,7 @@ public class UserService {
     private UserRepository userRepository;
 
     // Đăng ký tài khoản
-    public String registerUser(String username, String password, String email, String fullName, Integer phoneNumber) {
+    public String registerUser(String username, String password, String email, String hovaten, String sodienthoai) {
         Optional<User> existingUser = userRepository.findByUsername(username);
 
         if (userRepository.existsByUsername(username)) {
@@ -23,7 +24,7 @@ public class UserService {
         if (userRepository.existsByEmail(email)) {
             return "Email đã được sử dụng!";
         }
-        if (fullName == null || fullName.trim().isEmpty()) {
+        if (hovaten == null || hovaten.trim().isEmpty()) {
             return "Họ tên không được để trống!";
         }
 
@@ -31,11 +32,11 @@ public class UserService {
         newUser.setUsername(username);
         newUser.setPassword(password); // Không mã hóa mật khẩu
         newUser.setEmail(email);
-        newUser.setFullName(fullName);
-        if (phoneNumber != null) { // Nếu người dùng nhập thì mới lưu
-            newUser.setPhoneNumber(phoneNumber);
+        newUser.setHovaten(hovaten);
+        if (sodienthoai != null) { // Nếu người dùng nhập thì mới lưu
+            newUser.setSodienthoai(sodienthoai);
         } else {
-            newUser.setPhoneNumber(null); // Không nhập thì để null
+            newUser.setSodienthoai(null); // Không nhập thì để null
         }
         newUser.setRole("USER"); // Mặc định là USER
 
@@ -48,4 +49,89 @@ public class UserService {
         Optional<User> user = userRepository.findByUsername(username);
         return user.filter(u -> u.getPassword().equals(password)); // Kiểm tra mật khẩu
     }
+    
+    
+    
+    
+    
+    
+    
+	/* gủi mail */
+ 
+	/*
+	 * @Autowired private EmailService emailService; // Đảm bảo rằng bạn đã cấu hình
+	 * dịch vụ email
+	 * 
+	 * // Kiểm tra email trong cơ sở dữ liệu và gửi email quên mật khẩu public
+	 * String handleForgotPassword(String email) { Optional<User> userOptional =
+	 * userRepository.findByEmail(email);
+	 * 
+	 * if (userOptional.isPresent()) { User user = userOptional.get(); // Tạo mật
+	 * khẩu mới ngẫu nhiên và cập nhật String newPassword =
+	 * generateRandomPassword(); user.setPassword(newPassword);
+	 * 
+	 * // Cập nhật mật khẩu mới vào cơ sở dữ liệu userRepository.save(user);
+	 * 
+	 * // Gửi email với mật khẩu mới emailService.sendResetPasswordEmail(user,
+	 * newPassword); return "Mật khẩu mới đã được gửi vào email của bạn!"; } else {
+	 * return "Email không tồn tại trong hệ thống."; } }
+	 * 
+	 * // Tạo mật khẩu ngẫu nhiên private String generateRandomPassword() { return
+	 * UUID.randomUUID().toString().substring(0, 8); // Mật khẩu ngẫu nhiên dài 8 ký
+	 * tự }
+	 * 
+	 * // Kiểm tra mật khẩu hiện tại và cập nhật mật khẩu mới public String
+	 * changePassword(Long userId, String currentPassword, String newPassword) {
+	 * Optional<User> userOptional = userRepository.findById(userId);
+	 * 
+	 * if (userOptional.isPresent()) { User user = userOptional.get(); if
+	 * (user.getPassword().equals(currentPassword)) { user.setPassword(newPassword);
+	 * userRepository.save(user); return "Mật khẩu đã được cập nhật thành công!"; }
+	 * else { return "Mật khẩu hiện tại không đúng!"; } } else { return
+	 * "Người dùng không tồn tại!"; } }
+	 */
+    // quên mật khẩu gửi mail
+    
+    @Autowired
+    private EmailService emailService;
+
+    public String handleForgotPassword(String email) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            String newPassword = generateRandomPassword();
+            user.setPassword(newPassword);
+            userRepository.save(user);
+            emailService.sendResetPasswordEmail(user.getEmail(), newPassword);
+            return "Mật khẩu mới đã được gửi vào email của bạn!";
+        } else {
+            return "Email không tồn tại trong hệ thống.";
+        }
+    }
+
+    public String changePassword(Long userId, String currentPassword, String newPassword) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            if (user.getPassword().equals(currentPassword)) {
+                user.setPassword(newPassword);
+                userRepository.save(user);
+                return "Mật khẩu đã được cập nhật thành công!";
+            } else {
+                return "Mật khẩu hiện tại không đúng!";
+            }
+        } else {
+            return "Người dùng không tồn tại!";
+        }
+    }
+
+    private String generateRandomPassword() {
+        return UUID.randomUUID().toString().substring(0, 8);
+    }
+    
+    
+    
+    
+    
+    
 }

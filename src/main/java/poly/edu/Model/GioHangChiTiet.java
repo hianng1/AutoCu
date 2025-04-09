@@ -15,9 +15,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GioHangChiTiet implements Serializable {
 	@Id
-	@GeneratedValue(strategy = GenerationType.UUID) // Hoặc GenerationType.IDENTITY nếu dùng số nguyên
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "CartItemID", updatable = false, nullable = false)
-	private String cartItemID;
+	private Long cartItemID;
 
 
     @ManyToOne(cascade = CascadeType.ALL)

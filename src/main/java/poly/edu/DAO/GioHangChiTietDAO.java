@@ -11,10 +11,10 @@ import poly.edu.Model.GioHangChiTiet;
 import poly.edu.Model.PhuKienOto;
 
 @Repository
-public interface GioHangChiTietDAO extends JpaRepository<GioHangChiTiet, String> {
+public interface GioHangChiTietDAO extends JpaRepository<GioHangChiTiet, Long> {
 
     // Tìm chi tiết giỏ hàng theo cartItemID
-    List<GioHangChiTiet> findByCartItemID(String cartItemID);
+    List<GioHangChiTiet> findByCartItemID(Long cartItemID);
 
     // Tìm sản phẩm trong giỏ hàng theo GioHang và PhuKienOto
     Optional<GioHangChiTiet> findByGioHangAndPhuKienOto(GioHang gioHang, PhuKienOto phuKienOto);
