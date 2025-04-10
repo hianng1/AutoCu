@@ -78,11 +78,11 @@ public class HomeController {
     public String register(@RequestParam String username,
                            @RequestParam String password,
                            @RequestParam String email,
-                           @RequestParam String fullName,
-                           @RequestParam(required = false) Integer phoneNumber, // không bắt buộc nhập
+                           @RequestParam String hovaten,
+                           @RequestParam(required = false) String sodienthoai, // không bắt buộc nhập
                            Model model,
                            RedirectAttributes redirectAttributes) {
-        String result = userService.registerUser(username, password, email,fullName,phoneNumber);
+        String result = userService.registerUser(username, password, email,hovaten,sodienthoai);
 
         if (result.equals("Đăng ký thành công!")) {
             redirectAttributes.addFlashAttribute("message", "Đăng ký thành công! Vui lòng đăng nhập.");
