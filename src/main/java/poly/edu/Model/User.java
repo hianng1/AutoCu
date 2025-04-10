@@ -30,8 +30,8 @@ public class User {
     private String sodienthoai;
 
     @Column(name = "hovaten") // Thêm cột họ và tên
-    private String hovaten;
-
+    private String hovaten;	
+    
     public void setHovaten(String hovaten) {
         this.hovaten = hovaten;
     }
