@@ -111,34 +111,10 @@ prefix="c"%> <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt"%>
       <a class="hover:bg-orange-600 px-4 py-2 rounded" href="#"> Hỗ trợ </a>
       <a class="hover:bg-orange-600 px-4 py-2 rounded" href="#"> Liên hệ </a>
     </div>
-   <!--  <div   >
+    <div>
       <a class="hover:bg-orange-600 px-4 py-2 rounded" href="/login">
         <i class="fas fa-user"> </i> Đăng Nhập
       </a>
-    </div> -->
-    
-    
-    
-    
-    
-    
-    <!-- test -->
-    
-    
-    <div>
-  <c:choose>
-    <c:when test="${not empty sessionScope.loggedInUser}">
-      <a class="hover:bg-orange-600 px-4 py-2 rounded" href="#">
-        <i class="fas fa-user"></i> ${sessionScope.loggedInUser.username}
-      </a>
-      <a class="ml-2 text-red-600" href="/logout">Đăng Xuất</a>
-    </c:when>
-    <c:otherwise>
-      <a class="hover:bg-orange-600 px-4 py-2 rounded" href="/login">
-        <i class="fas fa-user"></i> Đăng Nhập
-      </a>
-    </c:otherwise>
-  </c:choose>
-</div>
+    </div>
   </div>
 </nav>
