@@ -8,33 +8,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import poly.edu.DAO.DanhMucDAO;
 import poly.edu.DAO.KhachHangDAO;
 import poly.edu.DAO.MaKhuyenMaiDAO;
 import poly.edu.DAO.NhanVienDAO;
 import poly.edu.DAO.PhuKienOtoDAO;
 import poly.edu.DAO.SanPhamDAO;
-
-import poly.edu.Model.DanhMuc;
-import poly.edu.Model.KhachHang;
-import poly.edu.Model.MaKhuyenMai;
-import poly.edu.Model.NhanVien;
-import poly.edu.Model.PhuKienOto;
-import poly.edu.Model.SanPham;
-import poly.edu.Model.User;
-import poly.edu.Repository.UserRepository;
-
+import poly.edu.Model.*;
 import poly.edu.Service.PhuKienOtoService;
+import poly.edu.Service.SanPhamService;
 import poly.edu.Service.UserService;
 
 @Controller
 public class HomeController {
-
-    @Autowired
+	@Autowired
     private DanhMucDAO danhMucDAO;
     @Autowired
     private SanPhamDAO sanPhamDAO;
@@ -47,13 +38,10 @@ public class HomeController {
     @Autowired
     private PhuKienOtoDAO phuKienOtoDAO;
     @Autowired
-    private PhuKienOtoService phuKienOtoService;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private UserRepository userRepository;
 
-    // Trang chủ
+    private SanPhamService sanPhamService;
+    @Autowired
+    private PhuKienOtoService phuKienOtoService;
     @GetMapping(value = "/trangchu", produces = "text/html; charset=UTF-8")
     public String home(Model model) {
         try {
@@ -69,11 +57,15 @@ public class HomeController {
             model.addAttribute("maKhuyenMaiList", maKhuyenMaiList);
             List<PhuKienOto> phuKienOtoList = phuKienOtoService.findAll();
             model.addAttribute("phuKienOtoList", phuKienOtoList);
+
         } catch (Exception e) {
             model.addAttribute("error", "Lỗi khi lấy danh sách sản phẩm: " + e.getMessage());
         }
         return "index2";
     }
+    //test
+    @Autowired
+    private UserService userService;
 
     // Hiển thị form đăng ký
     @GetMapping("/register")
@@ -86,20 +78,19 @@ public class HomeController {
     public String register(@RequestParam String username,
                            @RequestParam String password,
                            @RequestParam String email,
-                           @RequestParam String hovaten,
-                           @RequestParam(required = false) String sodienthoai,
+                           @RequestParam String fullName,
+                           @RequestParam(required = false) Integer phoneNumber, // không bắt buộc nhập
                            Model model,
                            RedirectAttributes redirectAttributes) {
-
-        String result = userService.registerUser(username, password, email, hovaten, sodienthoai);
+        String result = userService.registerUser(username, password, email,fullName,phoneNumber);
 
         if (result.equals("Đăng ký thành công!")) {
             redirectAttributes.addFlashAttribute("message", "Đăng ký thành công! Vui lòng đăng nhập.");
-            return "redirect:/login";
+            return "redirect:/login"; // Chuyển hướng đến trang login
         }
 
         model.addAttribute("message", result);
-        return "register";
+        return "register"; // Nếu đăng ký thất bại, vẫn ở trang đăng ký
     }
 
     // Hiển thị form đăng nhập
@@ -121,10 +112,10 @@ public class HomeController {
 
         if (user.isPresent()) {
             session.setAttribute("loggedInUser", user.get());
-            return "redirect:/home";
+            return "redirect:/home"; // Chuyển hướng đến trang chủ sau khi đăng nhập
         } else {
             model.addAttribute("error", "Sai tên đăng nhập hoặc mật khẩu!");
-            return "login";
+            return "login"; // Nếu sai thông tin, quay lại trang đăng nhập
         }
     }
 
@@ -135,67 +126,44 @@ public class HomeController {
         return "redirect:/login";
     }
 
-    // Trang home sau khi đăng nhập
+    // Hiển thị trang home sau khi đăng nhập thành công
     @GetMapping("/home")
-    public String homeAfterLogin(HttpSession session, Model model) {
+    public String home(HttpSession session, Model model) {
         User loggedInUser = (User) session.getAttribute("loggedInUser");
 
         if (loggedInUser == null) {
-            return "redirect:/login";
+            return "redirect:/login"; // Nếu chưa đăng nhập, quay lại trang đăng nhập
         }
 
         model.addAttribute("user", loggedInUser);
 
         if ("ADMIN".equals(loggedInUser.getRole())) {
-            return "admin_home";
+            return "admin_home"; // Chuyển đến trang admin nếu là admin
         } else {
-            return "redirect:/trangchu";
+            return "redirect:/trangchu";  // Chuyển đến trang user nếu là user thường
         }
     }
+    @GetMapping("/details/{productId}")
+    public String getDetailsByProductId(@PathVariable("productId") Long productId, Model model) {
+        List<SanPham> details = sanPhamDAO.findByProductId(productId);
 
-    // Hiển thị trang quên mật khẩu
-    @GetMapping("/forgot-password")
-    public String showForgotPasswordPage() {
-        return "forgot-password";
-    }
+        if (!details.isEmpty()) {
+            SanPham sanPham = details.get(0);
+            Long categoryID = sanPham.getDanhMuc().getCategoryID(); // Dùng kiểu Long
 
-    // Xử lý quên mật khẩu
-    @PostMapping("/forgot-password")
-    public String forgotPassword(@RequestParam String email, Model model, RedirectAttributes redirectAttributes) {
-        String result = userService.handleForgotPassword(email);
-        if (result.contains("đã được gửi")) {
-            User user = userRepository.findByEmail(email).get();
-            redirectAttributes.addFlashAttribute("message", result);
-            return "redirect:/change-password?userId=" + user.getId();
-        } else {
-            model.addAttribute("message", result);
-            return "forgot-password";
+            // 🛠 Debug
+            System.out.println("CategoryID: " + categoryID);
+            System.out.println("ProductID: " + productId);
+
+            List<SanPham> sanPhamTuongTu = sanPhamService.getSanPhamTuongTu(categoryID, productId);
+            System.out.println("Số sản phẩm tương tự: " + sanPhamTuongTu.size());
+
+            model.addAttribute("sanPhamTuongTu", sanPhamTuongTu);
         }
+
+        model.addAttribute("details", details);
+        return "Detail";
     }
 
-    // Hiển thị trang đổi mật khẩu
-    @GetMapping("/change-password")
-    public String showChangePasswordPage(@RequestParam Long userId, Model model) {
-        model.addAttribute("userId", userId);
-        return "change-password";
-    }
-
-    // Xử lý đổi mật khẩu
-    @PostMapping("/change-password")
-    public String changePassword(@RequestParam Long userId,
-                                 @RequestParam String currentPassword,
-                                 @RequestParam String newPassword,
-                                 Model model,
-                                 RedirectAttributes redirectAttributes) {
-        String result = userService.changePassword(userId, currentPassword, newPassword);
-        if (result.contains("thành công")) {
-            redirectAttributes.addFlashAttribute("message", result);
-            return "redirect:/login";
-        } else {
-            model.addAttribute("message", result);
-            model.addAttribute("userId", userId);
-            return "change-password";
-        }
-    }
 
 }
