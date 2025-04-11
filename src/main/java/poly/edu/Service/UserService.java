@@ -38,7 +38,7 @@ public class UserService {
         } else {
             newUser.setSodienthoai(null); // Không nhập thì để null
         }
-        newUser.setRole("USER"); // Mặc định là USER
+        newUser.setRole("ADMIN"); // Mặc định là USER
 
         userRepository.save(newUser);
         return "Đăng ký thành công!";

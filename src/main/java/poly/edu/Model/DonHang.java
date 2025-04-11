@@ -39,4 +39,52 @@ public class DonHang implements Serializable {
 
     @OneToMany(mappedBy = "donHang", cascade = CascadeType.ALL)
     private List<ChiTietDonHang> chiTietDonHangs;
+
+    public Long getOrderID() {
+        return orderID;
+    }
+
+    public void setOrderID(Long orderID) {
+        this.orderID = orderID;
+    }
+
+    public KhachHang getKhachHang() {
+        return khachHang;
+    }
+
+    public void setKhachHang(KhachHang khachHang) {
+        this.khachHang = khachHang;
+    }
+
+    public Date getNgayDatHang() {
+        return ngayDatHang;
+    }
+
+    public void setNgayDatHang(Date ngayDatHang) {
+        this.ngayDatHang = ngayDatHang;
+    }
+
+    public BigDecimal getTongGiaTri() {
+        return tongGiaTri;
+    }
+
+    public void setTongGiaTri(BigDecimal tongGiaTri) {
+        this.tongGiaTri = tongGiaTri;
+    }
+
+    public String getTrangThaiDon() {
+        return trangThaiDon;
+    }
+
+    public void setTrangThaiDon(String trangThaiDon) {
+        this.trangThaiDon = trangThaiDon;
+    }
+
+    public List<ChiTietDonHang> getChiTietDonHangs() {
+        return chiTietDonHangs;
+    }
+
+    public void setChiTietDonHangs(List<ChiTietDonHang> chiTietDonHangs) {
+        this.chiTietDonHangs = chiTietDonHangs;
+    }
 }

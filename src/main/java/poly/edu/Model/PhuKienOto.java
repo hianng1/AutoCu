@@ -6,37 +6,102 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
+	@Entity
 @Table(name = "PhuKienOto")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class PhuKienOto implements Serializable {
+	@Data
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public class PhuKienOto implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "AccessoryID")
-    private Long accessoryID;
+	    @Id
+	    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	    @Column(name = "AccessoryID")
+	    private Long accessoryID;
 
     @Column(name = "TenPhuKien", nullable = false, columnDefinition = "nvarchar(255)")
-    private String tenPhuKien;
+	    private String tenPhuKien;
 
     @Column(name = "MoTa", columnDefinition = "nvarchar(max)")
     private String moTa;
 
-    @Column(name = "Gia", nullable = false)
-    private Double gia;
-    
-    @Column(name = "SoLuong", nullable = false)
-    private Integer soLuong;
+	    @Column(name = "Gia", nullable = false)
+	    private Double gia;
+	    
+	    @Column(name = "SoLuong", nullable = false)
+	    private Integer soLuong;
 
     @Column(name = "HangSanXuat", nullable = false, columnDefinition = "nvarchar(255)")
-    private String hangSanXuat;
-    
+	    private String hangSanXuat;
+	    
     @Column(name = "AnhDaiDien", nullable = false, columnDefinition = "nvarchar(255)")
-    private String anhDaiDien;
+	    private String anhDaiDien;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+	    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "CategoryID", nullable = false, referencedColumnName = "CategoryID")
-    private DanhMuc danhMuc;
-}
+	    private DanhMuc danhMuc;
+
+		public Long getAccessoryID() {
+			return accessoryID;
+		}
+
+		public void setAccessoryID(Long accessoryID) {
+			this.accessoryID = accessoryID;
+		}
+
+		public String getTenPhuKien() {
+			return tenPhuKien;
+		}
+
+		public void setTenPhuKien(String tenPhuKien) {
+			this.tenPhuKien = tenPhuKien;
+		}
+
+		public String getMoTa() {
+			return moTa;
+		}
+
+		public void setMoTa(String moTa) {
+			this.moTa = moTa;
+		}
+
+		public Double getGia() {
+			return gia;
+		}
+
+		public void setGia(Double gia) {
+			this.gia = gia;
+		}
+
+		public Integer getSoLuong() {
+			return soLuong;
+		}
+
+		public void setSoLuong(Integer soLuong) {
+			this.soLuong = soLuong;
+		}
+
+		public String getHangSanXuat() {
+			return hangSanXuat;
+		}
+
+		public void setHangSanXuat(String hangSanXuat) {
+			this.hangSanXuat = hangSanXuat;
+		}
+
+		public String getAnhDaiDien() {
+			return anhDaiDien;
+		}
+
+		public void setAnhDaiDien(String anhDaiDien) {
+			this.anhDaiDien = anhDaiDien;
+		}
+
+		public DanhMuc getDanhMuc() {
+			return danhMuc;
+		}
+
+		public void setDanhMuc(DanhMuc danhMuc) {
+			this.danhMuc = danhMuc;
+		}
+	}
+
