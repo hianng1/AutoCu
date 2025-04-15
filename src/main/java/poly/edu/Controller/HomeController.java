@@ -30,12 +30,6 @@ import poly.edu.Service.UserService;
 @Controller
 public class HomeController {
 	
-	
-
-	
-	
-	
-	
 	@Autowired
     private DanhMucDAO danhMucDAO;
     @Autowired
@@ -76,6 +70,15 @@ public class HomeController {
         }
         return "index2";
     }
+    @GetMapping("/checkout")
+    public String checkoutPage(Model model) {
+        // Gán dữ liệu nếu cần
+		/* model.addAttribute("title", "Trang thanh toán"); */
+        
+        // Trả về file templates/checkout.html
+        return "checkout";
+    }
+    
     //test
     @Autowired
     private UserService userService;
@@ -92,19 +95,30 @@ public class HomeController {
                            @RequestParam String password,
                            @RequestParam String email,
                            @RequestParam String hovaten,
-                           @RequestParam(required = false) String sodienthoai, // không bắt buộc nhập
+                           @RequestParam(required = true) String sodienthoai,
+                           @RequestParam String soNha,
+                           @RequestParam String phuongXa,
+                           @RequestParam String quanHuyen,
+                           @RequestParam String tinhThanh,
                            Model model,
                            RedirectAttributes redirectAttributes) {
-        String result = userService.registerUser(username, password, email,hovaten,sodienthoai);
-
-        if (result.equals("Đăng ký thành công!")) {
+        // Kết hợp các phần thông tin địa chỉ để tạo thành địa chỉ đầy đủ
+        String diaChiFull = String.join(", ", soNha, phuongXa, quanHuyen, tinhThanh);
+        
+        // Gọi service để thực hiện đăng ký
+        String result = userService.registerUser(username, password, email, hovaten, sodienthoai, diaChiFull);
+        
+        // Kiểm tra kết quả trả về từ service
+        if ("Đăng ký thành công!".equals(result)) {
             redirectAttributes.addFlashAttribute("message", "Đăng ký thành công! Vui lòng đăng nhập.");
-            return "redirect:/login"; // Chuyển hướng đến trang login
+            return "redirect:/login"; // Chuyển hướng đến trang login nếu đăng ký thành công
         }
 
+        // Nếu đăng ký thất bại, gửi thông báo lỗi tới model và trả về trang đăng ký
         model.addAttribute("message", result);
         return "register"; // Nếu đăng ký thất bại, vẫn ở trang đăng ký
     }
+
 
     // Hiển thị form đăng nhập
     @GetMapping("/login")

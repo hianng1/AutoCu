@@ -26,13 +26,13 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(name = "sodienthoai") // Thêm cột số điện thoại
+    @Column(name = "sodienthoai", unique = true, nullable = false) // Thêm cột số điện thoại
     private String sodienthoai;
 
-    @Column(name = "hovaten") // Thêm cột họ và tên
+    @Column(name = "hovaten", columnDefinition = "nvarchar(255)") // Thêm cột họ và tên
     private String hovaten;	
     
-    public void setHovaten(String hovaten) {
-        this.hovaten = hovaten;
-    }
+    @Column(name = "DiaChi", nullable = false, length = 255, columnDefinition = "nvarchar(255)")
+    private String diaChi;
+    
 }

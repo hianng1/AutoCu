@@ -1,132 +1,101 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="java.util.List" %>
-<%@ page import="poly.edu.Model.PhuKienOto" %>
-<%@ page import="java.text.NumberFormat" %>
-<%@ page import="java.util.Locale" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>AutoCu - Chuyên xe cũ & phụ tùng</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký tài khoản - AutoCu</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <!-- Bootstrap CSS -->
-	<link
-		href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-		rel="stylesheet"
-		integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-		crossorigin="anonymous">
-	
-	<!-- Font Awesome CSS -->
-	<link rel="stylesheet"
-		href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-	    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
     <style>
-      .card:hover {
-        transform: translateY(-5px);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-      }
-      .card-img-top {
-	    width: 100%;
-	    height: 180px; 
-	    object-fit: cover;
-	  }
-	  img {
-		  width: 100%;
-		  height: 200px;
-		  object-fit: cover; /* Giữ tỷ lệ ảnh */
-		}
-		button:hover {
-		  transition: background-color 0.3s ease;
-		}
-	
+        .card:hover {
+            transform: translateY(-5px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        .card-img-top, img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        button:hover {
+            transition: background-color 0.3s ease;
+        }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <jsp:include page="/common/header.jsp" />
-    <!-- <h2>Đăng Ký</h2>
-    <form action="/register" method="post">
-        <input type="text" name="username" placeholder="Tên đăng nhập" required><br>
-        <input type="password" name="password" placeholder="Mật khẩu" required><br>
-        <input type="email" name="email" placeholder="Email" required><br>
-        <button type="submit">Đăng ký</button>
-    </form>
-    <a href="/login">Đăng nhập</a> -->
-    <div class="container-fluid d-flex justify-content-center align-items-center">
-        <div class="col-md-6 col-lg-4">
-            <div class="card shadow-lg">
-                <div class="card-body p-5">
-                    <h2 class="card-title text-center mb-4">Đăng Ký</h2>
-                    <form action="/register" method="post">
-                        <div class="mb-3">
-                            <input type="text" 
-                                   class="form-control form-control-lg" 
-                                   name="username" 
-                                   placeholder="Tên đăng nhập" 
-                                   required>
-                        </div>
-                        <div class="mb-3">
-                            <input type="password" 
-                                   class="form-control form-control-lg" 
-                                   name="password" 
-                                   placeholder="Mật khẩu" 
-                                   required>
-                        </div>
-                        <div class="mb-3">
-						    <input type="text" 
-						           class="form-control form-control-lg" 
-						           name="hovaten" 
-						           placeholder="Họ và tên" 
-						           required>
-						</div>
-                        
-                        <div class="mb-4">
-                            <input type="email" 
-                                   class="form-control form-control-lg" 
-                                   name="email" 
-                                   placeholder="Email" 
-                                   required>
-                        </div>
-                        <div class="mb-3">
-						    <input type="text" 
-						       class="form-control form-control-lg" 
-						       name="sodienthoai" 
-						       placeholder="Số điện thoại (không bắt buộc)">
-						</div>
-                        <button type="submit" 
-                                class="btn btn-primary btn-lg w-100 mb-3">
-                            Đăng ký
-                        </button>
-                    </form>
-                    <div class="text-center">
-                        <span class="text-muted">Đã có tài khoản?</span>
-                        <a href="/login" class="link-primary text-decoration-none">
-                            Đăng nhập ngay
-                        </a>
+
+    <main class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card shadow-sm">
+                    <div class="card-body p-4">
+                        <h2 class="card-title text-center mb-4">Đăng Ký Tài Khoản</h2>
+                        <form id="registerForm" action="/register" method="post" class="needs-validation" novalidate>
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Tên đăng nhập</label>
+                                <input type="text" class="form-control" id="username" name="username" required>
+                                <div class="invalid-feedback">Vui lòng nhập tên đăng nhập</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Mật khẩu</label>
+                                <input type="password" class="form-control" name="password" required>
+                                <div class="invalid-feedback">Vui lòng nhập mật khẩu</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Họ và tên</label>
+                                <input type="text" class="form-control" name="hovaten" required>
+                                <div class="invalid-feedback">Vui lòng nhập họ và tên</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                                <div class="invalid-feedback">Vui lòng nhập email hợp lệ</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Số điện thoại</label>
+                                <input type="tel" class="form-control" id="phone" name="sodienthoai" pattern="[0-9]{10,11}" required>
+                                <div class="invalid-feedback">Vui lòng nhập số điện thoại hợp lệ (10-11 số)</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="soNha" class="form-label">Số nhà/Đường</label>
+                                <input type="text" class="form-control" id="soNha" name="soNha" required>
+                                <div class="invalid-feedback">Vui lòng nhập số nhà</div>
+                            </div>
+								<div class="mb-3">
+								    <label for="tinhThanh" class="form-label">Tỉnh/Thành phố</label>
+								    <input type="text" class="form-control" id="tinhThanh" name="tinhThanh" required>
+								    <div class="invalid-feedback">Vui lòng nhập tỉnh/thành phố</div>
+								</div>
+									
+								<div class="mb-3">
+								    <label for="quanHuyen" class="form-label">Quận/Huyện</label>
+								    <input type="text" class="form-control" id="quanHuyen" name="quanHuyen" required>
+								    <div class="invalid-feedback">Vui lòng nhập quận/huyện</div>
+								</div>
+								
+								<div class="mb-3">
+								    <label for="phuongXa" class="form-label">Phường/Xã</label>
+								    <input type="text" class="form-control" id="phuongXa" name="phuongXa" required>
+								    <div class="invalid-feedback">Vui lòng nhập phường/xã</div>
+								</div>
+
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-user-plus me-2"></i> Đăng ký
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
-    <!-- Footer -->
     <jsp:include page="/common/footer.jsp" />
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -15,7 +15,7 @@ public class UserService {
     private UserRepository userRepository;
 
     // Đăng ký tài khoản
-    public String registerUser(String username, String password, String email, String hovaten, String sodienthoai) {
+    public String registerUser(String username, String password, String email, String hovaten, String sodienthoai, String diaChi) {
         Optional<User> existingUser = userRepository.findByUsername(username);
 
         if (userRepository.existsByUsername(username)) {
@@ -38,7 +38,8 @@ public class UserService {
         } else {
             newUser.setSodienthoai(null); // Không nhập thì để null
         }
-        newUser.setRole("ADMIN"); // Mặc định là USER
+        newUser.setDiaChi(diaChi);
+        newUser.setRole("USER"); // Mặc định là USER
 
         userRepository.save(newUser);
         return "Đăng ký thành công!";
