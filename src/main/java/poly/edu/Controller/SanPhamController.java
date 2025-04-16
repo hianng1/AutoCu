@@ -54,32 +54,40 @@ public class SanPhamController {
     }
 
     // Xử lý lưu sản phẩm
+ // Xử lý lưu hoặc cập nhật sản phẩm
     @PostMapping("/saveSanPham")
     public String saveSanPham(@ModelAttribute SanPham sanPham,
-                              @RequestParam("categoryID") Long categoryID, // Sửa thành Long
+                              @RequestParam("categoryID") Long categoryID, 
                               @RequestParam("file") MultipartFile file) {
         try {
+            // Kiểm tra nếu có thay đổi ảnh
             if (!file.isEmpty()) {
-                // Lưu file vào thư mục upload
                 String fileName = file.getOriginalFilename();
                 Path filePath = Paths.get(uploadDir, fileName);
                 Files.write(filePath, file.getBytes());
-
-                // Lưu đường dẫn ảnh vào database
-                sanPham.setAnhDaiDien(fileName);
+                sanPham.setAnhDaiDien(fileName);  // Cập nhật tên ảnh
             }
 
             // Gán danh mục cho sản phẩm
             DanhMuc danhMuc = danhMucRepository.findById(categoryID).orElse(null);
             sanPham.setDanhMuc(danhMuc);
 
-            // Lưu sản phẩm vào database
-            sanPhamRepository.save(sanPham);
+            // Kiểm tra xem có phải là cập nhật hay tạo mới
+            if (sanPham.getProductID() != null) {
+                // Nếu productID đã có, cập nhật sản phẩm
+                System.out.println("Cập nhật sản phẩm với ID: " + sanPham.getProductID());
+                sanPhamRepository.save(sanPham); 
+            } else {
+                // Nếu productID không có, tạo mới sản phẩm
+                System.out.println("Tạo mới sản phẩm");
+                sanPhamRepository.save(sanPham);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return "redirect:/sanpham";
     }
+
 
 
     // Hiển thị form sửa sản phẩm

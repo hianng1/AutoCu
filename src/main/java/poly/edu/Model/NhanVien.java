@@ -33,7 +33,8 @@ public class NhanVien implements Serializable {
 
     @Column(name = "VaiTro", nullable = false)
     private Boolean vaiTro; // True: Quản lý, False: Nhân viên bình thường
-
+    @OneToMany(mappedBy = "nhanVien", cascade = CascadeType.REMOVE)
+    private List<TonKho> tonKhos;
     public Long getStaffID() {
         return staffID;
     }

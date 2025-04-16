@@ -126,40 +126,43 @@
             </div>
         </nav>
 <main class="col-md-9 ms-sm-auto col-lg-10 main-content">
-    <h2>Danh sách sản phẩm</h2>
-    <a href="${pageContext.request.contextPath}/sanpham/them" class="btn btn-primary mb-3">Thêm sản phẩm</a>
-    <table class="table table-bordered">
-        <thead>
+ <h2 class="mb-4 text-primary">Danh sách phụ kiện ô tô</h2>
+
+    <div class="mb-3">
+        <a href="/phukien/form" class="btn btn-success">+ Thêm phụ kiện</a>
+    </div>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
             <tr>
-                <th>Mã</th>
-                <th>Tên</th>
+                <th>ID</th>
+                <th>Tên phụ kiện</th>
                 <th>Giá</th>
-                <th>Số ghế</th>
-                <th>Hãng</th>
+                <th>Số lượng</th>
+                <th>Hãng sản xuất</th>
                 <th>Ảnh</th>
+                <th>Danh mục</th>
                 <th>Hành động</th>
             </tr>
         </thead>
         <tbody>
-            <c:forEach var="sp" items="${dsSanPham}">
+            <c:forEach items="${items}" var="item">
                 <tr>
-                    <td>${sp.productID}</td>
-                    <td>${sp.tenSanPham}</td>
-                    
-                    <td>
-    <fmt:formatNumber value="${sp.gia}" type="number" groupingUsed="true" maxFractionDigits="0" />
-</td>
-                    <td>${sp.soGhe}</td>
-                    <td>${sp.hangXe}</td>
-                    <td>   <img src="/imgs/${sp.anhDaiDien}" 
+                    <td>${item.accessoryID}</td>
+                    <td>${item.tenPhuKien}</td>
+                    <td>${item.gia} ₫</td>
+                    <td>${item.soLuong}</td>
+                    <td>${item.hangSanXuat}</td>
+                   
+                     <td>   <img src="/imgs/${item.anhDaiDien}" 
 				     class="card-img-top object-cover" 
-				     alt="${sp.anhDaiDien}" 
+				     alt="${item.anhDaiDien}" 
 				     style="height: 40px; width: 70px;" >
 						</td>
-                   
+                    <td>${item.danhMuc.tenDanhMuc}</td>
                     <td>
-                        <a href="${pageContext.request.contextPath}/sanpham/sua/${sp.productID}" class="btn btn-warning btn-sm">Sửa</a>
-                        <a href="${pageContext.request.contextPath}/sanpham/xoa/${sp.productID}" class="btn btn-danger btn-sm">Xóa</a>
+                        <a href="/phukien/edit/${item.accessoryID}" class="btn btn-sm btn-warning">Sửa</a>
+                        <a href="/phukien/delete/${item.accessoryID}" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</a>
                     </td>
                 </tr>
             </c:forEach>

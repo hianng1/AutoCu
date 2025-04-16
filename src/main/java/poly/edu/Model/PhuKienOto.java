@@ -1,6 +1,8 @@
 package poly.edu.Model;
 
 import java.io.Serializable;
+import java.util.List;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,6 +13,7 @@ import lombok.NoArgsConstructor;
 	@Data
 	@NoArgsConstructor
 	@AllArgsConstructor
+	
 	public class PhuKienOto implements Serializable {
 
 	    @Id
@@ -39,7 +42,8 @@ import lombok.NoArgsConstructor;
 	    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "CategoryID", nullable = false, referencedColumnName = "CategoryID")
 	    private DanhMuc danhMuc;
-
+	    @OneToMany(mappedBy = "phuKienOTo", cascade = CascadeType.REMOVE)
+	    private List<TonKho> tonKhos;
 		public Long getAccessoryID() {
 			return accessoryID;
 		}
