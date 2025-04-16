@@ -43,7 +43,7 @@ public class DonHangService {
         BigDecimal tongGiaTri = calculateTotalAndCheckInventory(collection);
 
         // 4. Lưu đơn hàng với tổng giá trị
-        donHang.setTongGiaTri(tongGiaTri);
+        donHang.setTongThanhToan(tongGiaTri);
         DonHang savedDonHang = donHangRepository.save(donHang);
 
         // 5. Xử lý chi tiết đơn hàng và cập nhật tồn kho
@@ -56,7 +56,7 @@ public class DonHangService {
     }
 
     private void validateInput(DonHang donHang, Collection<GioHang> collection) {
-        if (donHang.getKhachHang() == null) {
+        if (donHang.getUser() == null) {
             throw new IllegalArgumentException("Thông tin khách hàng không được để trống");
         }
         
@@ -67,7 +67,7 @@ public class DonHangService {
 
     private void prepareDonHangInfo(DonHang donHang) {
         donHang.setNgayDatHang(new Date());
-        donHang.setTrangThaiDon("Chờ xử lý");
+        donHang.setTrangThai("DANG_XU_LY");
         donHang.setDaThanhToan(false); // Mặc định chưa thanh toán
     }
 
@@ -119,4 +119,28 @@ public class DonHangService {
 	 */
 
     // Các phương thức bổ sung có thể thêm ở đây
+    
+    @Transactional
+    public DonHang save(DonHang donHang, Collection<GioHang> collection) {
+        // 1. Validate dữ liệu đầu vào
+        validateInput(donHang, collection);
+
+        // 2. Chuẩn bị thông tin đơn hàng
+        prepareDonHangInfo(donHang);
+
+        // 3. Tính toán tổng giá trị đơn hàng và kiểm tra tồn kho
+        BigDecimal tongGiaTri = calculateTotalAndCheckInventory(collection);
+
+        // 4. Lưu đơn hàng với tổng giá trị
+        donHang.setTongThanhToan(tongGiaTri);
+        DonHang savedDonHang = donHangRepository.save(donHang);
+
+        // 5. Xử lý chi tiết đơn hàng và cập nhật tồn kho
+        processOrderDetails(collection, savedDonHang);
+
+        // 6. Xóa các mục trong giỏ hàng đã được đặt
+    	/* clearCartItems(gioHangItems); */
+
+        return savedDonHang;
+    }
 }

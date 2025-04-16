@@ -1,90 +1,99 @@
 package poly.edu.Model;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+
 @Entity
-@Table(name = "DonHang") // Tên bảng trong CSDL
+@Table(name = "DonHang")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class DonHang implements Serializable {
     @Id
-    @Column(name = "OrderID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "OrderID")
     private Long orderID;
 
-    @ManyToOne
-    @JoinColumn(name = "UserID", nullable = false, referencedColumnName = "UserID") // Liên kết với bảng KhachHang
-    private KhachHang khachHang;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id", nullable = false)
+    private User user;
 
-    @Temporal(TemporalType.DATE)
+    @Column(name = "HoTen", nullable = false, length = 100)
+    private String hoTen;
+
+    @Column(name = "SoDienThoai", nullable = false, length = 20)
+    private String soDienThoai;
+
+    @Column(name = "DiaChi", nullable = false, columnDefinition = "NVARCHAR(255)")
+    private String diaChi;
+
+    @Column(name = "GhiChu", columnDefinition = "NVARCHAR(500)")
+    private String ghiChu;
+
+    @Column(name = "PhuongThucVanChuyen", nullable = false, length = 50)
+    private String phuongThucVanChuyen; // "standard" hoặc "fast"
+
+    @Column(name = "PhuongThucThanhToan", nullable = false, length = 50)
+    private String phuongThucThanhToan; // "cod", "bank", "vnpay"
+
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "NgayDatHang", nullable = false)
-    private Date ngayDatHang;
+    private Date ngayDatHang = new Date();
 
-    @Column(name = "TrangThaiDon", nullable = false)
-    private String trangThaiDon; // Ví dụ: "Chờ xử lý", "Đang giao", "Hoàn thành"
+    @Column(name = "TrangThai", nullable = false, length = 50)
+    private String trangThai = "CHO_XAC_NHAN"; // Các trạng thái: CHO_XAC_NHAN, DANG_XU_LY, DANG_GIAO, DA_GIAO, DA_HUY
 
-    @Column(name = "TongGiaTri", precision = 19, scale = 2)
-    private BigDecimal tongGiaTri;
+    @Column(name = "TongTienHang", precision = 19, scale = 2, nullable = false)
+    private BigDecimal tongTienHang; // Tổng tiền hàng (chưa bao gồm phí vận chuyển)
+
+    @Column(name = "PhiVanChuyen", precision = 19, scale = 2, nullable = false)
+    private BigDecimal phiVanChuyen = BigDecimal.ZERO;
+
+    @Column(name = "TongThanhToan", precision = 19, scale = 2, nullable = false)
+    private BigDecimal tongThanhToan; // Tổng số tiền phải thanh toán
 
     @Column(name = "DaThanhToan", nullable = false)
-    private boolean daThanhToan = false; // Mặc định là chưa thanh toán
+    private boolean daThanhToan = false;
 
-    @OneToMany(mappedBy = "donHang", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "donHang", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ChiTietDonHang> chiTietDonHangs;
 
-    public Long getOrderID() {
-        return orderID;
+    // Phương thức tiện ích
+    public void tinhTongTien() {
+        this.tongTienHang = BigDecimal.ZERO;
+        if (chiTietDonHangs != null) {
+            for (ChiTietDonHang ct : chiTietDonHangs) {
+                BigDecimal gia = ct.getDonGia() != null ? ct.getDonGia() : BigDecimal.ZERO;
+                BigDecimal thanhTien = gia.multiply(BigDecimal.valueOf(ct.getSoLuong()));
+                this.tongTienHang = this.tongTienHang.add(thanhTien);
+            }
+        }
+        this.tongThanhToan = this.tongTienHang.add(this.phiVanChuyen);
     }
 
-    public void setOrderID(Long orderID) {
-        this.orderID = orderID;
-    }
+    // Enum cho trạng thái đơn hàng
+    public enum TrangThai {
+        CHO_XAC_NHAN("Chờ xác nhận"),
+        DANG_XU_LY("Đang xử lý"),
+        DANG_GIAO("Đang giao"),
+        DA_GIAO("Đã giao"),
+        DA_HUY("Đã hủy");
 
-    public KhachHang getKhachHang() {
-        return khachHang;
-    }
+        private final String moTa;
 
-    public void setKhachHang(KhachHang khachHang) {
-        this.khachHang = khachHang;
-    }
+        TrangThai(String moTa) {
+            this.moTa = moTa;
+        }
 
-    public Date getNgayDatHang() {
-        return ngayDatHang;
-    }
-
-    public void setNgayDatHang(Date ngayDatHang) {
-        this.ngayDatHang = ngayDatHang;
-    }
-
-    public BigDecimal getTongGiaTri() {
-        return tongGiaTri;
-    }
-
-    public void setTongGiaTri(BigDecimal tongGiaTri) {
-        this.tongGiaTri = tongGiaTri;
-    }
-
-    public String getTrangThaiDon() {
-        return trangThaiDon;
-    }
-
-    public void setTrangThaiDon(String trangThaiDon) {
-        this.trangThaiDon = trangThaiDon;
-    }
-
-    public List<ChiTietDonHang> getChiTietDonHangs() {
-        return chiTietDonHangs;
-    }
-
-    public void setChiTietDonHangs(List<ChiTietDonHang> chiTietDonHangs) {
-        this.chiTietDonHangs = chiTietDonHangs;
+        public String getMoTa() {
+            return moTa;
+        }
     }
 }

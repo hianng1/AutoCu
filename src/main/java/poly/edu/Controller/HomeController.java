@@ -70,14 +70,6 @@ public class HomeController {
         }
         return "index2";
     }
-    @GetMapping("/checkout")
-    public String checkoutPage(Model model) {
-        // Gán dữ liệu nếu cần
-		/* model.addAttribute("title", "Trang thanh toán"); */
-        
-        // Trả về file templates/checkout.html
-        return "checkout";
-    }
     
     //test
     @Autowired

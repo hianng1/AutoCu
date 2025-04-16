@@ -35,84 +35,9 @@ public class KhachHang implements Serializable {
     @Column(name = "VaiTro", nullable = false)
     private Boolean vaiTro; // `true` = Admin, `false` = User
 
-    // Quan hệ với bảng DonHang
-    @OneToMany(mappedBy = "khachHang", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DonHang> donHangs;
-
     // Quan hệ với bảng GioHang
     @OneToOne
     @JoinColumn(name = "UserID")
     private GioHang gioHang;
 
-    public Long getUserID() {
-        return userID;
-    }
-
-    public void setUserID(Long userID) {
-        this.userID = userID;
-    }
-
-    public String getTenKhachHang() {
-        return tenKhachHang;
-    }
-
-    public void setTenKhachHang(String tenKhachHang) {
-        this.tenKhachHang = tenKhachHang;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getSoDienThoai() {
-        return soDienThoai;
-    }
-
-    public void setSoDienThoai(String soDienThoai) {
-        this.soDienThoai = soDienThoai;
-    }
-
-    public String getMatKhau() {
-        return matKhau;
-    }
-
-    public void setMatKhau(String matKhau) {
-        this.matKhau = matKhau;
-    }
-
-    public String getDiaChi() {
-        return diaChi;
-    }
-
-    public void setDiaChi(String diaChi) {
-        this.diaChi = diaChi;
-    }
-
-    public Boolean getVaiTro() {
-        return vaiTro;
-    }
-
-    public void setVaiTro(Boolean vaiTro) {
-        this.vaiTro = vaiTro;
-    }
-
-    public List<DonHang> getDonHangs() {
-        return donHangs;
-    }
-
-    public void setDonHangs(List<DonHang> donHangs) {
-        this.donHangs = donHangs;
-    }
-
-    public GioHang getGioHang() {
-        return gioHang;
-    }
-
-    public void setGioHang(GioHang gioHang) {
-        this.gioHang = gioHang;
-    }
 }

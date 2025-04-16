@@ -7,12 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 import poly.edu.Model.PhuKienOto;
+import poly.edu.Repository.PhuKienOtoRepository;
 import poly.edu.DAO.PhuKienOtoDAO;
 
 @Service
 @Transactional
 public class PhuKienOtoServiceImp implements PhuKienOtoService {
-    
+    @Autowired
+    private PhuKienOtoRepository PKrepo;
+	
     @Autowired
     private PhuKienOtoDAO phuKienOtoDAO;
 
@@ -48,4 +51,25 @@ public class PhuKienOtoServiceImp implements PhuKienOtoService {
         }
         return null;
     }
+
+    @Override
+    public void updateStock(Long accessoryId, int soLuong) {
+        // Tìm phụ kiện theo ID từ repository
+        Optional<PhuKienOto> accessory = PKrepo.findById(accessoryId);
+
+        if (accessory.isPresent()) {
+            // Lấy đối tượng phụ kiện
+            PhuKienOto existingAccessory = accessory.get();
+            
+            // Cập nhật số lượng của phụ kiện
+            existingAccessory.setSoLuong(existingAccessory.getSoLuong() + soLuong);
+
+            // Lưu lại phụ kiện đã cập nhật vào cơ sở dữ liệu
+            PKrepo.save(existingAccessory);
+        } else {
+            throw new IllegalArgumentException("Không tìm thấy phụ kiện với ID: " + accessoryId);
+        }
+    }
+
+
 }

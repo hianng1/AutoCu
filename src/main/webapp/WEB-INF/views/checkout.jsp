@@ -205,4 +205,31 @@
         </div>
     </div>
 
-    <jsp:include page
+     <jsp:include page="/common/footer.jsp" />
+    
+    <script>
+        // Tự động cập nhật phí vận chuyển và tổng tiền khi người dùng thay đổi phương thức vận chuyển
+        const standardShipping = document.getElementById('standardShipping');
+        const fastShipping = document.getElementById('fastShipping');
+        const shippingFeeElement = document.getElementById('shippingFee');
+        const totalPriceElement = document.getElementById('totalPrice');
+        const subtotal = ${subtotal}; // giá trị từ server
+
+        function updateTotal() {
+            let shippingFee = 0;
+            if (fastShipping.checked) {
+                shippingFee = 30000;
+            }
+            shippingFeeElement.textContent = shippingFee.toLocaleString('vi-VN') + '₫';
+            const total = subtotal + shippingFee;
+            totalPriceElement.textContent = total.toLocaleString('vi-VN') + '₫';
+        }
+
+        standardShipping.addEventListener('change', updateTotal);
+        fastShipping.addEventListener('change', updateTotal);
+
+        // Khởi tạo khi load trang
+        updateTotal();
+    </script>
+</body>
+</html>
