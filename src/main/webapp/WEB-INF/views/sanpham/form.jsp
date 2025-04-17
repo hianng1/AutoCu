@@ -224,13 +224,18 @@ body {
     </select>
 </div>
 
-    <div class="mb-3">
-        <label>Chọn ảnh:</label>
+ 
+
+  <div class="mb-3">
+        <label>Chọn ảnh chính:</label>
         <input type="file" name="file" accept="image/*" />
         <c:if test="${not empty sanPham.anhDaiDien}">
-            <img src="${pageContext.request.contextPath}/${sanPham.anhDaiDien}" width="100" />
+            <img src="${pageContext.request.contextPath}/imgs/${sanPham.anhDaiDien}" width="100" />
         </c:if>
     </div>
+
+  
+    
     <div class="mb-3">
         <label>Danh mục</label>
         <select name="categoryID" class="form-control">

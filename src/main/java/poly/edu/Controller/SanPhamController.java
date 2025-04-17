@@ -1,8 +1,11 @@
 package poly.edu.Controller;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,8 +20,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import poly.edu.Model.DanhMuc;
+import poly.edu.Model.HinhAnhSanPham;
 import poly.edu.Model.SanPham;
 import poly.edu.Repository.DanhMucRepository;
+import poly.edu.Repository.HinhAnhSanPhamRepository;
 import poly.edu.Repository.SanPhamRepository;
 import poly.edu.Service.SanPhamService;
 
@@ -34,6 +39,10 @@ public class SanPhamController {
     
     @Autowired
     private DanhMucRepository danhMucRepository;
+    
+    @Autowired
+    private HinhAnhSanPhamRepository hinhAnhSanPhamRepository;
+
 
     @Value("${upload.path}") // Đường dẫn lưu ảnh (cấu hình trong application.properties)
     private String uploadDir;
@@ -87,6 +96,8 @@ public class SanPhamController {
         }
         return "redirect:/sanpham";
     }
+
+    
 
 
 

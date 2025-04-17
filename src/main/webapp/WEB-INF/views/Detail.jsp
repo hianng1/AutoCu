@@ -235,51 +235,122 @@
 <body class="bg-light">
 
 <jsp:include page="/common/header.jsp" />
-
 <div class="container bg-white shadow-sm mt-4 p-4 rounded">
 
     <!-- Tiêu đề và giá -->
-    <div class="row mb-3">
+    <div class="row mb-4 align-items-center">
         <div class="col-md-9">
-            <h4 class="product-title">Xe ${details[0].tenSanPham} - 
-                <fmt:formatNumber value="${details[0].gia}" type="number"/> Triệu</h4>
+            <h4 class="fw-bold text-primary mb-0">
+                Xe ${details[0].tenSanPham} - 
+                <span class="text-danger">
+                    <fmt:formatNumber value="${details[0].gia}" type="number"/> Triệu
+                </span>
+            </h4>
         </div>
         <div class="col-md-3 text-end text-muted">
-            <small>Đăng ngày ${now}</small>
+            <small><i class="far fa-calendar-alt me-1"></i>Đăng ngày ${now}</small>
         </div>
     </div>
 
-    <!-- Chi tiết trái + ảnh phải -->
+    <!-- Nội dung: Bảng thông số & Hình ảnh -->
     <div class="row">
+
         <!-- Thông số -->
-        <div class="col-md-6">
-            <h5 class="mb-3">Thông số kỹ thuật</h5>
-            <table class="table table-bordered table-specs">
+        <div class="col-md-6 mb-4">
+            <h5 class="fw-semibold mb-3">Thông số kỹ thuật</h5>
+            <table class="table table-bordered table-striped">
                 <tbody>
-                  
                     <tr><td><strong>Động cơ</strong></td><td>${details[0].nhienLieu} ${details[0].truyenDong}</td></tr>
                     <tr><td><strong>Số ghế</strong></td><td>${details[0].soGhe}</td></tr>
                     <tr><td><strong>Số cửa</strong></td><td>5 cửa</td></tr>
                     <tr><td><strong>Kiểu dáng</strong></td><td>${details[0].danhMuc.tenDanhMuc}</td></tr>
-                   
-                  
                     <tr><td><strong>Hãng xe</strong></td><td>${details[0].hangXe}</td></tr>
                     <tr><td><strong>Kho</strong></td><td>${details[0].soLuongTrongKho} chiếc</td></tr>
                     <tr><td><strong>Địa điểm lấy xe</strong></td><td>${details[0].diaDiemLayXe}</td></tr>
                 </tbody>
             </table>
+
+            <!-- Khung liên hệ -->
+            <div class="border rounded p-3 d-flex justify-content-between align-items-center mt-4 bg-light">
+               <div class="d-flex align-items-center gap-2">
+    <i class="fas fa-phone fa-lg" style="color: #ffa64d;"></i>
+    <div>
+        <strong>Liên hệ chúng tôi</strong><br>
+        <span>Zalo<br>0988.8888.88</span>
+    </div>
+</div>
+
+<!-- Messenger -->
+<div class="d-flex align-items-center gap-2">
+    <i class="fab fa-facebook-messenger fa-lg" style="color: #ffa64d;"></i>
+    <div>
+        <strong>Messenger</strong><br>
+        <span>AUTOCU</span>
+    </div>
+</div>
+
+                <!-- Form button -->
+             <div>
+  <button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#formModal">
+    <i class="fas fa-file-alt me-1"></i> Tư vấn xe
+  </button>
+</div>
+<div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content p-4 shadow-sm rounded-4">
+      <!-- Nút đóng -->
+      <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+
+      <!-- Tiêu đề -->
+      <h5 class="modal-title fw-bold mb-3" id="formModalLabel">Nhận thông tin xe</h5>
+
+      <!-- Form -->
+      <form>
+        <div class="mb-3">
+          <label class="form-label fw-bold">Họ Tên*</label>
+          <input type="text" class="form-control" required>
         </div>
 
-        <!-- Ảnh -->
-        <div class="col-md-6">
-            <img src="<c:url value='/imgs/${details[0].anhDaiDien}' />" class="main-img mb-2" alt="${details[0].tenSanPham}">
-            <div class="d-flex flex-wrap">
-                <c:forEach var="image" items="${details}">
-                    <img src="<c:url value='/imgs/${image.anhDaiDien}' />" class="small-thumb" alt="ảnh phụ">
+        <div class="mb-3">
+          <label class="form-label fw-bold">Email*</label>
+          <input type="email" class="form-control">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-bold">Số điện thoại</label>
+          <input type="text" class="form-control">
+        </div>
+
+        <!-- Nút gửi -->
+        <div class="text-center">
+          <button type="submit" class="btn btn-warning text-white fw-bold px-4 py-2 rounded-pill" style="background-color: #ffa64d; border: none;">
+            GỬI THÔNG TIN
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+            </div>
+        </div>
+
+        <!-- Hình ảnh -->
+        <div class="col-md-6 text-center">
+            <!-- Ảnh chính -->
+            <img src="<c:url value='/imgs/${details[0].anhDaiDien}' />" class="img-fluid rounded shadow-sm mb-3" alt="${details[0].tenSanPham}" style="max-height: 400px; object-fit: cover;">
+
+            <!-- Ảnh phụ -->
+            <div class="d-flex flex-wrap justify-content-center">
+                <c:forEach var="image" items="${hinhAnhList}" varStatus="status">
+                    <c:if test="${status.index < 5}">
+                        <img src="<c:url value='/imgs/${image.fileName}' />" class="rounded border me-2 mb-2" alt="Ảnh phụ"
+                             style="width: 80px; height: 60px; object-fit: cover; cursor: pointer;">
+                    </c:if>
                 </c:forEach>
             </div>
         </div>
     </div>
+
 
     <!-- Mô tả -->
     <div class="row mt-4">
@@ -352,6 +423,31 @@ Với ưu điểm về không gian, vận hành và chi phí sử dụng hợp l
 
 
 <jsp:include page="/common/footer.jsp" />
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const mainImg = document.querySelector(".main-img");
+        const thumbs = document.querySelectorAll(".small-thumb");
+
+        let currentIndex = 0;
+
+        // Đổi ảnh khi click vào thumbnail
+        thumbs.forEach(function (thumb, index) {
+            thumb.addEventListener("click", function () {
+                mainImg.src = thumb.src;
+                currentIndex = index; // cập nhật chỉ số ảnh hiện tại
+            });
+        });
+
+        // Tự động chuyển ảnh mỗi 5 giây
+        setInterval(function () {
+            if (thumbs.length > 0) {
+                currentIndex = (currentIndex + 1) % thumbs.length;
+                mainImg.src = thumbs[currentIndex].src;
+            }
+        }, 5000);
+    });
+</script>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
