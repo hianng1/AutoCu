@@ -166,7 +166,7 @@ body {
 
   <div class="mb-3">
     <label>Địa điểm lấy xe</label>
-    <input type="text" name="diaDiemLayXe1" value="${sanPham.diaDiemLayXe}" class="form-control" list="diaDiemLayXeList">
+    <input type="text" name="diaDiemLayXe" value="${sanPham.diaDiemLayXe}" class="form-control" list="diaDiemLayXeList">
     <datalist id="diaDiemLayXeList">
         <option value="Hà Nội" />
         <option value="Hồ Chí Minh" />
