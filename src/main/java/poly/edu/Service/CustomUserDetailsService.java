@@ -29,5 +29,4 @@ public class CustomUserDetailsService implements UserDetailsService {
             List.of(new SimpleGrantedAuthority("ROLE_" + user.getVaiTro())) // Thêm ROLE_ vào trước
         );
     }
-
 }

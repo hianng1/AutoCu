@@ -88,6 +88,23 @@
             padding: 1.5rem;
             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
         }
+        .customer-info {
+            background-color: #f3f4f6;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .customer-info p {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+        .customer-info i {
+            margin-right: 0.5rem;
+            color: #4b5563;
+            width: 20px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -154,45 +171,86 @@
                     </c:forEach>
                 </div>
 
-				<!-- Tổng tiền và nút thanh toán -->
-				<div class="total-section">
-				    <h2 class="text-xl font-semibold text-gray-800 mb-4">Tổng Đơn Hàng</h2>
-				    <div class="space-y-2 mb-4">
-				        <div class="flex justify-between text-gray-600">
-				            <span>Tạm tính</span>
-				            <span><fmt:formatNumber value="${TOTAL}" pattern="#,##0" /> đ</span>
-				        </div>
-				        <div class="flex justify-between text-gray-600">
-				            <span>Phí vận chuyển</span>
-				            <span>Miễn phí</span>
-				        </div>
-				        <div class="flex justify-between text-gray-600">
-				            <span>Thuế VAT (10%)</span>
-				            <span><fmt:formatNumber value="${TOTAL * 0.1}" pattern="#,##0" /> đ</span>
-				        </div>
-				        <div class="border-t pt-2 mt-2">
-				            <div class="flex justify-between font-semibold text-lg">
-				                <span>Tổng cộng</span>
-				                <span class="price">
-				                    <fmt:formatNumber value="${TOTAL * 1.1}" pattern="#,##0" /> đ
-				                </span>
-				            </div>
-				        </div>
-				    </div>
-				    
-				    <div class="space-y-3">
-				        <a href="/checkout" class="block w-full text-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">
-				            Tiến hành thanh toán
-				        </a>
-				        <a href="/trangchu" class="block w-full text-center px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors">
-				            Tiếp tục mua sắm
-				        </a>
-				        <a href="/cart/clear" class="block w-full text-center px-6 py-3 text-red-600 font-semibold hover:text-red-700 transition-colors">
-				            Xóa giỏ hàng
-				        </a>
-				    </div>
-				</div>
+                <!-- Tổng tiền và nút thanh toán -->
+                <div class="total-section">
+                    <!-- Thông tin khách hàng -->
+                    <div class="customer-info">
+			    <!-- Debug session -->
+			    <div style="display:none;">
+			        Session user: ${sessionScope.loggedInUser}<br>
+			        Model user: ${userInfo}
+			    </div>
+			    
+			    <h3 class="font-semibold text-gray-800 mb-3 flex items-center">
+			        <i class="fas fa-user-circle"></i>
+			        Thông tin giao hàng
+			    </h3>
+			    
+			    <c:choose>
+			        <c:when test="${not empty userInfo}">
+			            <p>
+			                <i class="fas fa-user"></i>
+			                <span class="font-medium">${userInfo.hovaten}</span>
+			            </p>
+			            <p>
+			                <i class="fas fa-phone"></i>
+			                <span>${userInfo.sodienthoai}</span>
+			            </p>
+			            <p>
+			                <i class="fas fa-map-marker-alt"></i>
+			                <span>${userInfo.diaChi}</span>
+			            </p>
+			            <a href="/profile" class="text-blue-600 text-sm hover:text-blue-800 inline-flex items-center mt-2">
+			                <i class="fas fa-edit mr-1"></i>
+			                Cập nhật thông tin
+			            </a>
+			        </c:when>
+			        <c:otherwise>
+			            <p class="text-red-500">Vui lòng đăng nhập để hiển thị thông tin giao hàng</p>
+			            <a href="/account/login" class="text-blue-600 text-sm hover:text-blue-800 inline-flex items-center mt-2">
+			                <i class="fas fa-sign-in-alt mr-1"></i>
+			                Đăng nhập ngay
+			            </a>
+			        </c:otherwise>
+			    </c:choose>
+			</div>
 
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Tổng Đơn Hàng</h2>
+                    <div class="space-y-2 mb-4">
+                        <div class="flex justify-between text-gray-600">
+                            <span>Tạm tính</span>
+                            <span><fmt:formatNumber value="${TOTAL}" pattern="#,##0" /> đ</span>
+                        </div>
+                        <div class="flex justify-between text-gray-600">
+                            <span>Phí vận chuyển</span>
+                            <span>Miễn phí</span>
+                        </div>
+                        <div class="flex justify-between text-gray-600">
+                            <span>Thuế VAT (10%)</span>
+                            <span><fmt:formatNumber value="${TOTAL * 0.1}" pattern="#,##0" /> đ</span>
+                        </div>
+                        <div class="border-t pt-2 mt-2">
+                            <div class="flex justify-between font-semibold text-lg">
+                                <span>Tổng cộng</span>
+                                <span class="price">
+                                    <fmt:formatNumber value="${TOTAL * 1.1}" pattern="#,##0" /> đ
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <a href="/checkout" class="block w-full text-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">
+                            Tiến hành thanh toán
+                        </a>
+                        <a href="/trangchu" class="block w-full text-center px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors">
+                            Tiếp tục mua sắm
+                        </a>
+                        <a href="/cart/clear" class="block w-full text-center px-6 py-3 text-red-600 font-semibold hover:text-red-700 transition-colors">
+                            Xóa giỏ hàng
+                        </a>
+                    </div>
+                </div>
             </div>
         </c:if>
     </div>
