@@ -241,8 +241,8 @@
                     
                     <div class="space-y-3">
                         <a href="/checkout" class="block w-full text-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">
-                            Tiến hành thanh toán
-                        </a>
+						    Tiến hành thanh toán
+						</a>
                         <a href="/trangchu" class="block w-full text-center px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors">
                             Tiếp tục mua sắm
                         </a>
@@ -254,6 +254,38 @@
             </div>
         </c:if>
     </div>
+    
+    <!-- Modal Xác nhận thanh toán -->
+	<div id="confirmModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-4 z-50">
+	    <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+	        <h3 class="text-lg font-semibold text-gray-900 mb-4">Xác nhận thanh toán</h3>
+	        <p class="text-gray-600 mb-6">Bạn có chắc chắn muốn thanh toán đơn hàng này?</p>
+	        <div class="flex justify-end space-x-3">
+	            <button id="cancelBtn" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
+	                Hủy bỏ
+	            </button>
+	            <button id="confirmBtn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+	                Xác nhận
+	            </button>
+	        </div>
+	    </div>
+	</div>
+	
+	<!-- Modal Thành công -->
+	<div id="successModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-4 z-50">
+	    <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6 text-center">
+	        <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
+	            <svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+	                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+	            </svg>
+	        </div>
+	        <h3 class="text-lg font-semibold text-gray-900 mb-2">Thanh toán thành công!</h3>
+	        <p class="text-gray-600 mb-6">Cảm ơn bạn đã mua hàng.</p>
+	        <button id="closeSuccessBtn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+	            Đóng
+	        </button>
+	    </div>
+	</div>
 
     <jsp:include page="/common/footer.jsp" />
 
@@ -267,6 +299,59 @@
                 form.submit();
             }
         }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Lấy các phần tử
+            const checkoutBtn = document.querySelector('a[href="/checkout"]');
+            const confirmModal = document.getElementById('confirmModal');
+            const successModal = document.getElementById('successModal');
+            const cancelBtn = document.getElementById('cancelBtn');
+            const confirmBtn = document.getElementById('confirmBtn');
+            const closeSuccessBtn = document.getElementById('closeSuccessBtn');
+            
+            // Ngăn chặn hành vi mặc định của nút thanh toán
+            checkoutBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                confirmModal.classList.remove('hidden');
+            });
+            
+            // Xử lý nút hủy
+            cancelBtn.addEventListener('click', function() {
+                confirmModal.classList.add('hidden');
+            });
+            
+            // Xử lý nút xác nhận
+            confirmBtn.addEventListener('click', function() {
+                confirmModal.classList.add('hidden');
+                
+                // Gửi yêu cầu thanh toán (AJAX)
+                fetch('/checkout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Hiển thị modal thành công
+                        successModal.classList.remove('hidden');
+                    } else {
+                        alert('Có lỗi xảy ra khi thanh toán');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Có lỗi xảy ra khi thanh toán');
+                });
+            });
+            
+            // Xử lý nút đóng modal thành công
+            closeSuccessBtn.addEventListener('click', function() {
+                successModal.classList.add('hidden');
+                // Có thể chuyển hướng về trang chủ hoặc làm mới trang
+                window.location.href = '/trangchu';
+            });
+        });
     </script>
 </body>
 </html>
