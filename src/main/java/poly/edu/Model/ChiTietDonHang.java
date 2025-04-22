@@ -1,7 +1,7 @@
 package poly.edu.Model;
 
 import java.io.Serializable;
-import java.util.List;
+import java.math.BigDecimal;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,61 +9,46 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "ChiTietDonHang") // Tên bảng trong CSDL
+@Table(name = "ChiTietDonHang")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChiTietDonHang implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Tự động tăng ID nếu cần
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "OrderItemID")
     private Long orderItemID;
 
-    @ManyToOne
-    @JoinColumn(name = "OrderID", nullable = false, referencedColumnName = "OrderID") // Liên kết với bảng DonHang
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "OrderID", nullable = false, referencedColumnName = "OrderID")
     private DonHang donHang;
 
-
-    @ManyToOne
-    @JoinColumn(name = "AccessoryID", nullable = false, referencedColumnName = "AccessoryID") // Liên kết với bảng SanPham
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "AccessoryID", referencedColumnName = "AccessoryID")
     private PhuKienOto phuKienOto;
 
-    @ManyToOne
-    @JoinColumn(name = "ProductID", nullable = false, referencedColumnName = "ProductID") // Liên kết với bảng SanPham
-    private SanPham sanPham;
+    @Column(name = "TenSanPham", nullable = false, length = 255)
+    private String tenSanPham;
 
     @Column(name = "SoLuong", nullable = false)
     private Integer soLuong;
 
-    public Long getOrderItemID() {
-        return orderItemID;
-    }
+    @Column(name = "DonGia", precision = 19, scale = 2, nullable = false)
+    private BigDecimal donGia;
 
-    public void setOrderItemID(Long orderItemID) {
-        this.orderItemID = orderItemID;
-    }
+    @Column(name = "ThanhTien", precision = 19, scale = 2, nullable = false)
+    private BigDecimal thanhTien;
 
-    public DonHang getDonHang() {
-        return donHang;
-    }
-
-    public void setDonHang(DonHang donHang) {
-        this.donHang = donHang;
-    }
-
-    public SanPham getSanPham() {
-        return sanPham;
-    }
-
-    public void setSanPham(SanPham sanPham) {
-        this.sanPham = sanPham;
-    }
-
-    public Integer getSoLuong() {
-        return soLuong;
-    }
-
-    public void setSoLuong(Integer soLuong) {
-        this.soLuong = soLuong;
+    // Tự động cập nhật thành tiền khi persist hoặc update
+    @PrePersist
+    @PreUpdate
+    public void capNhatThanhTien() {
+        if (donGia == null) {
+            donGia = BigDecimal.ZERO;
+        }
+        if (soLuong == null) {
+            soLuong = 0;
+        }
+        thanhTien = donGia.multiply(BigDecimal.valueOf(soLuong));
     }
 }

@@ -1,8 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="java.util.List" %>
-<%@ page import="poly.edu.Model.PhuKienOto" %>
-<%@ page import="java.text.NumberFormat" %>
-<%@ page import="java.util.Locale" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
@@ -11,11 +7,12 @@
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>AutoCu - Chuyên xe cũ & phụ tùng</title>
+    <title>AutoCu - Giỏ hàng</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="_csrf" content="${_csrf.token}"/>
+    <meta name="_csrf_header" content="${_csrf.headerName}"/>
     
     <style>
         body {
@@ -88,6 +85,23 @@
             padding: 1.5rem;
             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
         }
+        .customer-info {
+            background-color: #f3f4f6;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .customer-info p {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+        .customer-info i {
+            margin-right: 0.5rem;
+            color: #4b5563;
+            width: 20px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -128,6 +142,7 @@
                                 <div class="quantity-control">
                                     <form action="/cart/update" method="post" class="flex items-center">
                                         <input type="hidden" name="id" value="${item.phuKienOto.accessoryID}"/>
+                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                                         <button type="button" class="quantity-btn" onclick="updateQuantity(this, -1)">
                                             <i class="fas fa-minus"></i>
                                         </button>
@@ -154,61 +169,160 @@
                     </c:forEach>
                 </div>
 
-				<!-- Tổng tiền và nút thanh toán -->
-				<div class="total-section">
-				    <h2 class="text-xl font-semibold text-gray-800 mb-4">Tổng Đơn Hàng</h2>
-				    <div class="space-y-2 mb-4">
-				        <div class="flex justify-between text-gray-600">
-				            <span>Tạm tính</span>
-				            <span><fmt:formatNumber value="${TOTAL}" pattern="#,##0" /> đ</span>
-				        </div>
-				        <div class="flex justify-between text-gray-600">
-				            <span>Phí vận chuyển</span>
-				            <span>Miễn phí</span>
-				        </div>
-				        <div class="flex justify-between text-gray-600">
-				            <span>Thuế VAT (10%)</span>
-				            <span><fmt:formatNumber value="${TOTAL * 0.1}" pattern="#,##0" /> đ</span>
-				        </div>
-				        <div class="border-t pt-2 mt-2">
-				            <div class="flex justify-between font-semibold text-lg">
-				                <span>Tổng cộng</span>
-				                <span class="price">
-				                    <fmt:formatNumber value="${TOTAL * 1.1}" pattern="#,##0" /> đ
-				                </span>
-				            </div>
-				        </div>
-				    </div>
-				    
-				    <div class="space-y-3">
-				        <a href="/checkout" class="block w-full text-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">
-				            Tiến hành thanh toán
-				        </a>
-				        <a href="/trangchu" class="block w-full text-center px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors">
-				            Tiếp tục mua sắm
-				        </a>
-				        <a href="/cart/clear" class="block w-full text-center px-6 py-3 text-red-600 font-semibold hover:text-red-700 transition-colors">
-				            Xóa giỏ hàng
-				        </a>
-				    </div>
-				</div>
+                <!-- Tổng tiền và nút thanh toán -->
+                <div class="total-section">
+                    <!-- Thông tin khách hàng -->
+                    <div class="customer-info">
+                        <h3 class="font-semibold text-gray-800 mb-3 flex items-center">
+                            <i class="fas fa-user-circle"></i>
+                            Thông tin giao hàng
+                        </h3>
+                        
+                        <c:choose>
+                            <c:when test="${not empty userInfo}">
+                                <p>
+                                    <i class="fas fa-user"></i>
+                                    <span class="font-medium">${userInfo.hovaten}</span>
+                                </p>
+                                <p>
+                                    <i class="fas fa-phone"></i>
+                                    <span>${userInfo.sodienthoai}</span>
+                                </p>
+                                <p>
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>${userInfo.diaChi}</span>
+                                </p>
+                                <a href="/profile" class="text-blue-600 text-sm hover:text-blue-800 inline-flex items-center mt-2">
+                                    <i class="fas fa-edit mr-1"></i>
+                                    Cập nhật thông tin
+                                </a>
+                            </c:when>
+                            <c:otherwise>
+                                <p class="text-red-500">Vui lòng đăng nhập để hiển thị thông tin giao hàng</p>
+                                <a href="/account/login" class="text-blue-600 text-sm hover:text-blue-800 inline-flex items-center mt-2">
+                                    <i class="fas fa-sign-in-alt mr-1"></i>
+                                    Đăng nhập ngay
+                                </a>
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
 
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Tổng Đơn Hàng</h2>
+                    <div class="space-y-2 mb-4">
+                        <div class="flex justify-between text-gray-600">
+                            <span>Tạm tính</span>
+                            <span><fmt:formatNumber value="${TOTAL}" pattern="#,##0" /> đ</span>
+                        </div>
+                        <div class="flex justify-between text-gray-600">
+                            <span>Phí vận chuyển</span>
+                            <span>Miễn phí</span>
+                        </div>
+                        <div class="flex justify-between text-gray-600">
+                            <span>Thuế VAT (10%)</span>
+                            <span><fmt:formatNumber value="${TOTAL * 0.1}" pattern="#,##0" /> đ</span>
+                        </div>
+                        <div class="border-t pt-2 mt-2">
+                            <div class="flex justify-between font-semibold text-lg">
+                                <span>Tổng cộng</span>
+                                <span class="price">
+                                    <fmt:formatNumber value="${TOTAL * 1.1}" pattern="#,##0" /> đ
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <form id="checkoutForm">
+					    <input type="hidden" name="hoTen" value="${userInfo != null ? userInfo.hovaten : ''}">
+					    <input type="hidden" name="soDienThoai" value="${userInfo != null ? userInfo.sodienthoai : ''}">
+					    <input type="hidden" name="diaChi" value="${userInfo != null ? userInfo.diaChi : ''}">
+					    <input type="hidden" name="tongTienHang" value="${TOTAL}">
+					    <input type="hidden" name="phiVanChuyen" value="0">
+					    <input type="hidden" name="tongThanhToan" value="${TOTAL * 1.1}">
+					    
+					    <div class="space-y-3">
+					        <button type="button" id="submitBtn" class="w-full text-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">
+					            Tiến hành thanh toán
+					        </button>
+					        <a href="/trangchu" class="block w-full text-center px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors">
+					            Tiếp tục mua sắm
+					        </a>
+					        <a href="/cart/clear" class="block w-full text-center px-6 py-3 text-red-600 font-semibold hover:text-red-700 transition-colors">
+					            Xóa giỏ hàng
+					        </a>
+					    </div>
+					</form>
+					
+					<!-- Thêm thông báo -->
+					<div id="notification" class="hidden fixed top-4 right-4 p-4 rounded-lg shadow-lg"></div>
+                </div>
             </div>
         </c:if>
     </div>
-
+    
     <jsp:include page="/common/footer.jsp" />
-
     <script>
-        function updateQuantity(button, change) {
-            const form = button.closest('form');
-            const input = form.querySelector('input[name="soLuong"]');
-            const newValue = parseInt(input.value) + change;
-            if (newValue >= 1) {
-                input.value = newValue;
-                form.submit();
-            }
-        }
-    </script>
+	document.getElementById('submitBtn').addEventListener('click', async function(e) {
+	    e.preventDefault();
+	    
+	    const form = document.getElementById('checkoutForm');
+	    const formData = new FormData(form);
+	    const submitBtn = document.getElementById('submitBtn');
+	    
+	    // Disable nút để tránh nhiều lần click
+	    submitBtn.disabled = true;
+	    submitBtn.innerHTML = 'Đang xử lý...';
+	    
+	    try {
+	        const response = await fetch('/don-hang/xu-ly-thanh-toan', {
+	            method: 'POST',
+	            headers: {
+	                'Content-Type': 'application/json',
+	            },
+	            body: JSON.stringify(Object.fromEntries(formData))
+	        });
+	        
+	        const result = await response.json();
+	        
+	        if (response.ok) {
+	            showNotification('Đặt hàng thành công!', 'success');
+	            // Có thể làm gì đó sau khi đặt hàng thành công, ví dụ: xóa giỏ hàng hiển thị
+	            console.log('Đơn hàng đã được tạo:', result);
+	            
+	            // Xóa giỏ hàng sau khi đặt hàng thành công (nếu cần)
+	            // await fetch('/cart/clear', { method: 'POST' });
+	        } else {
+	            showNotification('Lỗi: ' + (result.message || 'Đặt hàng không thành công'), 'error');
+	            console.error('Lỗi:', result);
+	        }
+	    } catch (error) {
+	        showNotification('Lỗi kết nối: ' + error.message, 'error');
+	        console.error('Lỗi:', error);
+	    } finally {
+	        submitBtn.disabled = false;
+	        submitBtn.innerHTML = 'Tiến hành thanh toán';
+	    }
+	});
+	
+	function showNotification(message, type) {
+	    const notification = document.getElementById('notification');
+	    notification.textContent = message;
+	    
+	    // Xóa tất cả các class liên quan đến màu sắc trước đó
+	    notification.classList.remove('bg-green-500', 'bg-red-500', 'text-white');
+	    
+	    // Thêm class tương ứng với loại thông báo
+	    if (type === 'success') {
+	        notification.classList.add('bg-green-500', 'text-white');
+	    } else {
+	        notification.classList.add('bg-red-500', 'text-white');
+	    }
+	    
+	    notification.classList.remove('hidden');
+	    
+	    setTimeout(() => {
+	        notification.classList.add('hidden');
+	    }, 5000);
+	}
+	</script>
 </body>
 </html>

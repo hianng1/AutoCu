@@ -10,4 +10,8 @@ public interface PhuKienOtoService {
     PhuKienOto findById(Long id);
     List<PhuKienOto> findAll();
     PhuKienOto update(PhuKienOto p);
+    
+    // Thêm phương thức cập nhật số lượng tồn kho
+    void updateStock(Long accessoryId, int soLuong);
 }
+

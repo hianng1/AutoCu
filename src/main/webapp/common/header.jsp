@@ -1,5 +1,4 @@
-
- <%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%> <%@ taglib uri="http://java.sun.com/jstl/core_rt"
 prefix="c"%> <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt"%>
 <div class="bg-gray-100 py-2 text-sm">
@@ -84,7 +83,7 @@ prefix="c"%> <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt"%>
           </a>
         </div>
         <!-- <p class="text-gray-500 text-sm">
-        0 items - <span class="font-semibold">0.00 VND</span>
+            0 items - <span class="font-semibold">0.00 VND</span>
           </p> -->
       </div>
     </div>
