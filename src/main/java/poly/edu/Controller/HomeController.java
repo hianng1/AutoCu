@@ -166,31 +166,32 @@ public class HomeController {
         return "Admin/quantri";
     }
     
-    
-    
     @GetMapping("/details/{productId}")
     public String getDetailsByProductId(@PathVariable("productId") Long productId, Model model) {
         List<SanPham> details = sanPhamDAO.findByProductId(productId);
 
         if (!details.isEmpty()) {
             SanPham sanPham = details.get(0);
-            Long categoryID = sanPham.getDanhMuc().getCategoryID(); // Dùng kiểu Long
+            Long categoryID = sanPham.getDanhMuc().getCategoryID();
+
+            // Lấy danh sách ảnh sản phẩm
+            List<HinhAnhSanPham> hinhAnhList = sanPham.getHinhAnhSanPhams();
 
             // 🛠 Debug
             System.out.println("CategoryID: " + categoryID);
             System.out.println("ProductID: " + productId);
+            System.out.println("Số ảnh: " + hinhAnhList.size());
 
             List<SanPham> sanPhamTuongTu = sanPhamService.getSanPhamTuongTu(categoryID, productId);
-            System.out.println("Số sản phẩm tương tự: " + sanPhamTuongTu.size());
 
             model.addAttribute("sanPhamTuongTu", sanPhamTuongTu);
+            model.addAttribute("hinhAnhList", hinhAnhList); // ✅ truyền danh sách ảnh
         }
 
         model.addAttribute("details", details);
         return "Detail";
     }
 
-    
     
     
     

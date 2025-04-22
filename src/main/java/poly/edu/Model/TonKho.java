@@ -27,6 +27,8 @@ public class TonKho implements Serializable {
     @JoinColumn(name = "StaffID", nullable = true, referencedColumnName = "StaffID") // Nhân viên phụ trách kho
     private NhanVien nhanVien;
 
+
+
     @Column(name = "ViTriKho", nullable = false, columnDefinition = "nvarchar(255)")
     private String viTriKho;
 

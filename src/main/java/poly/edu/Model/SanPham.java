@@ -1,7 +1,12 @@
 package poly.edu.Model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -42,6 +47,7 @@ public class SanPham implements Serializable {
     @Column(name = "SoLuongTrongKho")
     private Integer soLuongTrongKho;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     @Column(name = "NgaySanXuat")
     private Date ngaySanXuat;
@@ -52,10 +58,16 @@ public class SanPham implements Serializable {
     @Column(name = "AnhDaiDien")
     private String anhDaiDien;
 
-    @ManyToOne(cascade = CascadeType.MERGE) // Thêm cascade
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "CategoryID", nullable = false, referencedColumnName = "CategoryID")
     private DanhMuc danhMuc;
 
+    @OneToMany(mappedBy = "sanPham", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<HinhAnhSanPham> hinhAnhSanPhams = new ArrayList<>();
+
+
+   
+    
     public Long getProductID() {
         return productID;
     }

@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+
+ <%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%> <%@ taglib uri="http://java.sun.com/jstl/core_rt"
 prefix="c"%> <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt"%>
 <div class="bg-gray-100 py-2 text-sm">
@@ -83,48 +84,43 @@ prefix="c"%> <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt"%>
           </a>
         </div>
         <!-- <p class="text-gray-500 text-sm">
-            0 items - <span class="font-semibold">0.00 VND</span>
+        0 items - <span class="font-semibold">0.00 VND</span>
           </p> -->
       </div>
     </div>
   </div>
 </header>
 <!-- Navigation -->
-<nav class="bg-orange-500 text-white py-2">
-  <div class="container mx-auto flex justify-between items-center">
-    <div class="flex space-x-4">
-      <a href="/trangchu">
-        <button
-          class="bg-orange-500 text-white px-4 py-2 rounded flex items-center space-x-2 hover:bg-orange-600"
-        >
-          <i class="fas fa-home"></i>
-          <span> Trang Chủ </span>
-        </button>
-      </a>
-      <a class="hover:bg-orange-600 px-4 py-2 rounded" href="#"> Xe oto cũ </a>
-
-      <a class="hover:bg-orange-600 px-4 py-2 rounded" href="#">
-        Phụ kiện xe
-      </a>
-      <a class="hover:bg-orange-600 px-4 py-2 rounded" href="#"> Thuê xe </a>
-      <a class="hover:bg-orange-600 px-4 py-2 rounded" href="#"> Tin xe hơi </a>
-      <a class="hover:bg-orange-600 px-4 py-2 rounded" href="#"> Hỗ trợ </a>
-      <a class="hover:bg-orange-600 px-4 py-2 rounded" href="#"> Liên hệ </a>
+<nav class="bg-orange-500 text-white">
+  <div class="container mx-auto flex justify-between items-center whitespace-nowrap">
+    
+    <!-- Menu chính - Tất cả trên 1 dòng -->
+    <div class="flex items-center flex-nowrap">
+      <a href="/trangchu" class="px-4 py-3 hover:bg-orange-600 inline-block"><i class="fas fa-home"></i> Trang Chủ</a>
+      <a href="#" class="px-4 py-3 hover:bg-orange-600 inline-block">Xe oto cũ</a>
+      <a href="#" class="px-4 py-3 hover:bg-orange-600 inline-block">Phụ kiện xe</a>
+      <a href="#" class="px-4 py-3 hover:bg-orange-600 inline-block">Thuê xe</a>
+      <a href="#" class="px-4 py-3 hover:bg-orange-600 inline-block">Tin xe hơi</a>
+      <a href="#" class="px-4 py-3 hover:bg-orange-600 inline-block">Hỗ trợ</a>
+      <a href="#" class="px-4 py-3 hover:bg-orange-600 inline-block">Liên hệ</a>
     </div>
-    <div>
-  <c:choose>
-    <c:when test="${not empty sessionScope.loggedInUser}">
-      <a class="hover:bg-orange-600 px-4 py-2 rounded" href="#">
-        <i class="fas fa-user"></i> ${sessionScope.loggedInUser.username}
-      </a>
-      <a class="ml-2 text-red-600" href="/logout">Đăng Xuất</a>
-    </c:when>
-    <c:otherwise>
-      <a class="hover:bg-orange-600 px-4 py-2 rounded" href="/login">
-        <i class="fas fa-user"></i> Đăng Nhập
-      </a>
-    </c:otherwise>
-  </c:choose>
-</div>
+
+    <!-- Đăng nhập / tên người dùng -->
+    <div class="flex items-center flex-shrink-0 bg-orange-600 ml-4">
+	  <c:choose>
+	    <c:when test="${not empty sessionScope.loggedInUser}">
+	      <a href="/profile" class="px-4 py-3 font-medium hover:bg-orange-700">
+	        <i class="fas fa-user"></i> ${sessionScope.loggedInUser.username}
+	      </a>
+	      <a href="/logout" class="px-4 py-3 hover:bg-orange-700">
+	        <i class="fas fa-sign-out-alt"></i> Đăng Xuất
+	      </a>
+	    </c:when>
+	    <c:otherwise>
+	      <a href="/login" class="px-4 py-3 hover:bg-orange-700">Đăng Nhập</a>
+	    </c:otherwise>
+	  </c:choose>
+	</div>
+
   </div>
 </nav>
