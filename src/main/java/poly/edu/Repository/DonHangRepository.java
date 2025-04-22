@@ -10,12 +10,16 @@ import poly.edu.Model.User;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface DonHangRepository extends JpaRepository<DonHang, Long> {
-
-    // Tìm đơn hàng theo người dùng
+	Optional<DonHang> findByOrderIDAndUser(Long orderID, User user);
+    
+	// Tìm đơn hàng theo người dùng
     List<DonHang> findByUser(User user);
+    
+    List<DonHang> findAllByUser(User user);
 
     // Tìm đơn hàng theo người dùng (phân trang)
     Page<DonHang> findByUser(User user, Pageable pageable);

@@ -6,30 +6,31 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import poly.edu.Model.GioHang;
-import poly.edu.Model.KhachHang;
 import poly.edu.Model.PhuKienOto;
+import poly.edu.Model.User;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface GioHangRepository extends JpaRepository<GioHang, Long> {
+    @Query("SELECT gh FROM GioHang gh WHERE gh.user = :user")
+    List<GioHang> findByUser(@Param("user") User user);
 
-    // Tìm giỏ hàng theo khách hàng
-    Optional<GioHang> findByKhachHang(KhachHang khachHang);
+    void deleteAllByUser(User user);
 
-    // Tìm giỏ hàng theo ID khách hàng
-    @Query("SELECT gh FROM GioHang gh WHERE gh.khachHang.userID = :userId")
-    Optional<GioHang> findByKhachHangId(@Param("userId") Long userId);
+    // Tìm giỏ hàng theo ID user
+    @Query("SELECT gh FROM GioHang gh WHERE gh.user.id = :userId")
+    Optional<GioHang> findByUserId(@Param("userId") Long userId);
 
-    // Tìm tất cả sản phẩm trong giỏ hàng của một khách hàng
-    @Query("SELECT gh FROM GioHang gh WHERE gh.khachHang.userID = :userId")
-    List<GioHang> findAllByKhachHangId(@Param("userId") Long userId);
+    // Tìm tất cả sản phẩm trong giỏ hàng của một user
+    @Query("SELECT gh FROM GioHang gh WHERE gh.user.id = :userId")
+    List<GioHang> findAllByUserId(@Param("userId") Long userId);
 
-    // Tìm giỏ hàng chứa sản phẩm cụ thể của khách hàng
-    @Query("SELECT gh FROM GioHang gh WHERE gh.khachHang.userID = :userId AND gh.phuKienOto.accessoryID = :accessoryId")
-    Optional<GioHang> findByKhachHangAndPhuKien(@Param("userId") Long userId, 
-                                              @Param("accessoryId") Long accessoryId);
+    // Tìm giỏ hàng chứa sản phẩm cụ thể của user
+    @Query("SELECT gh FROM GioHang gh WHERE gh.user.id = :userId AND gh.phuKienOto.accessoryID = :accessoryId")
+    Optional<GioHang> findByUserAndPhuKien(@Param("userId") Long userId, 
+                                         @Param("accessoryId") Long accessoryId);
 
     // Cập nhật số lượng sản phẩm trong giỏ hàng
     @Modifying
@@ -38,14 +39,14 @@ public interface GioHangRepository extends JpaRepository<GioHang, Long> {
 
     // Xóa sản phẩm khỏi giỏ hàng
     @Modifying
-    @Query("DELETE FROM GioHang gh WHERE gh.cartID = :cartId AND gh.khachHang.userID = :userId")
+    @Query("DELETE FROM GioHang gh WHERE gh.cartID = :cartId AND gh.user.id = :userId")
     void deleteByCartIdAndUserId(@Param("cartId") Long cartId, @Param("userId") Long userId);
 
-    // Xóa tất cả sản phẩm trong giỏ hàng của khách hàng
+    // Xóa tất cả sản phẩm trong giỏ hàng của user
     @Modifying
-    @Query("DELETE FROM GioHang gh WHERE gh.khachHang.userID = :userId")
+    @Query("DELETE FROM GioHang gh WHERE gh.user.id = :userId")
     void deleteAllByUserId(@Param("userId") Long userId);
 
     // Kiểm tra sản phẩm đã tồn tại trong giỏ hàng chưa
-    boolean existsByKhachHangAndPhuKienOto(KhachHang khachHang, PhuKienOto phuKienOto);
+    boolean existsByUserAndPhuKienOto(User user, PhuKienOto phuKienOto);
 }

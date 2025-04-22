@@ -7,140 +7,115 @@ import poly.edu.Model.*;
 import poly.edu.Repository.*;
 
 import java.math.BigDecimal;
-import java.util.Collection;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class DonHangService {
-    
-    private final DonHangRepository donHangRepository;
-    private final ChiTietDonHangRepository chiTietDonHangRepository;
-    private final PhuKienOtoRepository phuKienOtoRepository;
-    private final GioHangRepository gioHangRepository;
+	@Autowired
+	private UserRepository userRepo;
 
     @Autowired
-    public DonHangService(DonHangRepository donHangRepository,
-                         ChiTietDonHangRepository chiTietDonHangRepository,
-                         PhuKienOtoRepository phuKienOtoRepository,
-                         GioHangRepository gioHangRepository) {
-        this.donHangRepository = donHangRepository;
-        this.chiTietDonHangRepository = chiTietDonHangRepository;
-        this.phuKienOtoRepository = phuKienOtoRepository;
-        this.gioHangRepository = gioHangRepository;
-    }
+    private DonHangRepository donHangRepository;
 
-    @Transactional
-    public DonHang taoDonHang(DonHang donHang, Collection<GioHang> collection) {
-        // 1. Validate dữ liệu đầu vào
-        validateInput(donHang, collection);
+    @Autowired
+    private ChiTietDonHangRepository chiTietDonHangRepository;
 
-        // 2. Chuẩn bị thông tin đơn hàng
-        prepareDonHangInfo(donHang);
+    @Autowired
+    private PhuKienOtoRepository phuKienOtoRepository;
 
-        // 3. Tính toán tổng giá trị đơn hàng và kiểm tra tồn kho
-        BigDecimal tongGiaTri = calculateTotalAndCheckInventory(collection);
+    public DonHang taoDonHangTam(
+        User user,
+        String hoTen,
+        String soDienThoai,
+        String diaChi,
+        String ghiChu,
+        String phuongThucVanChuyen,
+        String phuongThucThanhToan,
+        List<GioHang> cartItems
+    ) {
+        DonHang donHang = new DonHang();
 
-        // 4. Lưu đơn hàng với tổng giá trị
-        donHang.setTongThanhToan(tongGiaTri);
-        DonHang savedDonHang = donHangRepository.save(donHang);
-
-        // 5. Xử lý chi tiết đơn hàng và cập nhật tồn kho
-        processOrderDetails(collection, savedDonHang);
-
-        // 6. Xóa các mục trong giỏ hàng đã được đặt
-		/* clearCartItems(gioHangItems); */
-
-        return savedDonHang;
-    }
-
-    private void validateInput(DonHang donHang, Collection<GioHang> collection) {
-        if (donHang.getUser() == null) {
-            throw new IllegalArgumentException("Thông tin khách hàng không được để trống");
+        // Set thông tin người dùng nếu có
+        if (user != null) {
+            donHang.setUser(user);
+            hoTen = (hoTen == null || hoTen.isEmpty()) ? user.getHovaten() : hoTen;
+            soDienThoai = (soDienThoai == null || soDienThoai.isEmpty()) ? user.getSodienthoai() : soDienThoai;
+            diaChi = (diaChi == null || diaChi.isEmpty()) ? user.getDiaChi() : diaChi;
         }
-        
-        if (collection == null || collection.isEmpty()) {
-            throw new IllegalArgumentException("Giỏ hàng không có sản phẩm để đặt hàng");
+
+        donHang.setHoTen(hoTen);
+        donHang.setSoDienThoai(soDienThoai);
+        donHang.setDiaChi(diaChi);
+        donHang.setGhiChu(ghiChu);
+        donHang.setPhuongThucVanChuyen(phuongThucVanChuyen);
+        donHang.setPhuongThucThanhToan(phuongThucThanhToan);
+        donHang.setTrangThai("CHO_XAC_NHAN");
+        donHang.setDaThanhToan(false);
+        donHang.setPhiVanChuyen(BigDecimal.ZERO);
+
+        // Thêm chi tiết đơn hàng
+        List<ChiTietDonHang> chiTietDonHangs = new ArrayList<>();
+
+        for (GioHang item : cartItems) {
+            PhuKienOto phuKien = phuKienOtoRepository.findById(item.getPhuKienOto().getAccessoryID())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy phụ kiện với ID: " + item.getPhuKienOto().getAccessoryID()));
+
+            ChiTietDonHang chiTiet = new ChiTietDonHang();
+            chiTiet.setDonHang(donHang);
+            chiTiet.setPhuKienOto(phuKien);
+            chiTiet.setTenSanPham(phuKien.getTenPhuKien());
+            chiTiet.setSoLuong(item.getSoLuong());
+            chiTiet.setDonGia(BigDecimal.valueOf(phuKien.getGia()));
+
+            chiTietDonHangs.add(chiTiet);
         }
+
+        donHang.setChiTietDonHangs(chiTietDonHangs);
+        donHang.tinhTongTien();
+
+        return donHangRepository.save(donHang);
     }
+    public void luuDonHang(DonHangRequest request, String username) {
+        User user = userRepo.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
 
-    private void prepareDonHangInfo(DonHang donHang) {
-        donHang.setNgayDatHang(new Date());
-        donHang.setTrangThai("DANG_XU_LY");
-        donHang.setDaThanhToan(false); // Mặc định chưa thanh toán
+        DonHang donHang = new DonHang();
+        donHang.setUser(user);
+        donHang.setHoTen(request.getHoTen());
+        donHang.setSoDienThoai(request.getSoDienThoai());
+        donHang.setDiaChi(request.getDiaChi());
+        donHang.setGhiChu(request.getGhiChu());
+        donHang.setPhuongThucVanChuyen(request.getPhuongThucVanChuyen());
+        donHang.setPhuongThucThanhToan(request.getPhuongThucThanhToan());
+        donHang.setTongTienHang(BigDecimal.valueOf(request.getTongTienHang())); 
+        donHang.setPhiVanChuyen(BigDecimal.valueOf( request.getPhiVanChuyen())); 
+        donHang.setTongThanhToan(BigDecimal.valueOf(request.getTongThanhToan()));
+        donHang.setNgayDatHang(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
+
+        donHangRepository.save(donHang);
     }
-
-    private BigDecimal calculateTotalAndCheckInventory(Collection<GioHang> collection) {
-        return collection.stream()
-                .map(item -> {
-                    PhuKienOto phuKien = phuKienOtoRepository.findById(item.getPhuKienOto().getAccessoryID())
-                            .orElseThrow(() -> new RuntimeException("Phụ kiện không tồn tại: ID " + item.getPhuKienOto().getAccessoryID()));
-                    
-                    if (phuKien.getSoLuong() < item.getSoLuong()) {
-                        throw new RuntimeException("Số lượng tồn kho không đủ cho sản phẩm: " + phuKien.getTenPhuKien());
-                    }
-                    
-                    return BigDecimal.valueOf(phuKien.getGia()).multiply(BigDecimal.valueOf(item.getSoLuong()));
-                })
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-
-    private void processOrderDetails(Collection<GioHang> collection, DonHang donHang) {
-        List<ChiTietDonHang> chiTietDonHangs = collection.stream()
-                .map(item -> {
-                    PhuKienOto phuKien = phuKienOtoRepository.findById(item.getPhuKienOto().getAccessoryID())
-                            .orElseThrow(() -> new RuntimeException("Phụ kiện không tồn tại"));
-                    
-                    // Cập nhật số lượng tồn kho
-                    phuKien.setSoLuong(phuKien.getSoLuong() - item.getSoLuong());
-                    phuKienOtoRepository.save(phuKien);
-                    
-                    // Tạo chi tiết đơn hàng
-                    ChiTietDonHang chiTiet = new ChiTietDonHang();
-                    chiTiet.setDonHang(donHang);
-                    chiTiet.setPhuKienOto(phuKien);
-                    chiTiet.setSoLuong(item.getSoLuong());
-                    
-                    return chiTiet;
-                })
-                .collect(Collectors.toList());
-        
-        // Lưu tất cả chi tiết đơn hàng cùng lúc
-        chiTietDonHangRepository.saveAll(chiTietDonHangs);
-    }
-
-	/*
-	 * private void clearCartItems(List<GioHang> gioHangItems) { List<Long>
-	 * cartItemIds = gioHangItems.stream() .map(GioHang::getId)
-	 * .collect(Collectors.toList());
-	 * 
-	 * gioHangRepository.deleteAllById(cartItemIds); }
-	 */
-
-    // Các phương thức bổ sung có thể thêm ở đây
     
-    @Transactional
-    public DonHang save(DonHang donHang, Collection<GioHang> collection) {
-        // 1. Validate dữ liệu đầu vào
-        validateInput(donHang, collection);
+    @Autowired
+    private UserRepository userRepository;
 
-        // 2. Chuẩn bị thông tin đơn hàng
-        prepareDonHangInfo(donHang);
+    public DonHang getDonHangByIdAndUser(Long orderId, String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng: " + username));
 
-        // 3. Tính toán tổng giá trị đơn hàng và kiểm tra tồn kho
-        BigDecimal tongGiaTri = calculateTotalAndCheckInventory(collection);
-
-        // 4. Lưu đơn hàng với tổng giá trị
-        donHang.setTongThanhToan(tongGiaTri);
-        DonHang savedDonHang = donHangRepository.save(donHang);
-
-        // 5. Xử lý chi tiết đơn hàng và cập nhật tồn kho
-        processOrderDetails(collection, savedDonHang);
-
-        // 6. Xóa các mục trong giỏ hàng đã được đặt
-    	/* clearCartItems(gioHangItems); */
-
-        return savedDonHang;
+        return donHangRepository.findByOrderIDAndUser(orderId, user)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy đơn hàng với ID: " + orderId + " cho người dùng: " + username));
     }
+    
+    public List<DonHang> getDonHangByUser(String username) {
+        User user = userRepository.findByUsername(username)
+            .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng: " + username));
+
+        return donHangRepository.findAllByUser(user);
+    }
+
 }

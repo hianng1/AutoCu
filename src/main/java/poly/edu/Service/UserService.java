@@ -13,7 +13,10 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
-
+    
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
     // Đăng ký tài khoản
     public String registerUser(String username, String password, String email, String hovaten, String sodienthoai, String diaChi) {
         Optional<User> existingUser = userRepository.findByUsername(username);
@@ -50,48 +53,6 @@ public class UserService {
         Optional<User> user = userRepository.findByUsername(username);
         return user.filter(u -> u.getPassword().equals(password)); // Kiểm tra mật khẩu
     }
-    
-    
-    
-    
-    
-    
-    
-	/* gủi mail */
- 
-	/*
-	 * @Autowired private EmailService emailService; // Đảm bảo rằng bạn đã cấu hình
-	 * dịch vụ email
-	 * 
-	 * // Kiểm tra email trong cơ sở dữ liệu và gửi email quên mật khẩu public
-	 * String handleForgotPassword(String email) { Optional<User> userOptional =
-	 * userRepository.findByEmail(email);
-	 * 
-	 * if (userOptional.isPresent()) { User user = userOptional.get(); // Tạo mật
-	 * khẩu mới ngẫu nhiên và cập nhật String newPassword =
-	 * generateRandomPassword(); user.setPassword(newPassword);
-	 * 
-	 * // Cập nhật mật khẩu mới vào cơ sở dữ liệu userRepository.save(user);
-	 * 
-	 * // Gửi email với mật khẩu mới emailService.sendResetPasswordEmail(user,
-	 * newPassword); return "Mật khẩu mới đã được gửi vào email của bạn!"; } else {
-	 * return "Email không tồn tại trong hệ thống."; } }
-	 * 
-	 * // Tạo mật khẩu ngẫu nhiên private String generateRandomPassword() { return
-	 * UUID.randomUUID().toString().substring(0, 8); // Mật khẩu ngẫu nhiên dài 8 ký
-	 * tự }
-	 * 
-	 * // Kiểm tra mật khẩu hiện tại và cập nhật mật khẩu mới public String
-	 * changePassword(Long userId, String currentPassword, String newPassword) {
-	 * Optional<User> userOptional = userRepository.findById(userId);
-	 * 
-	 * if (userOptional.isPresent()) { User user = userOptional.get(); if
-	 * (user.getPassword().equals(currentPassword)) { user.setPassword(newPassword);
-	 * userRepository.save(user); return "Mật khẩu đã được cập nhật thành công!"; }
-	 * else { return "Mật khẩu hiện tại không đúng!"; } } else { return
-	 * "Người dùng không tồn tại!"; } }
-	 */
-    // quên mật khẩu gửi mail
     
     @Autowired
     private EmailService emailService;

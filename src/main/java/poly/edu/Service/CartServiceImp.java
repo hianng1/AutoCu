@@ -8,14 +8,16 @@ import java.util.List;
 
 import org.hibernate.mapping.Collection;
 import org.hibernate.sql.ast.tree.expression.Collation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import jakarta.servlet.http.HttpSession;
-import poly.edu.Model.GioHang;
 import poly.edu.Model.*;
+import poly.edu.Repository.GioHangRepository;
+import poly.edu.Repository.UserRepository;
 
 @SessionScope
 @Service
@@ -79,5 +81,28 @@ public class CartServiceImp implements CartService{
 	        .map(item -> BigDecimal.valueOf(item.getSoLuong()).multiply(item.getGia()))
 	        .reduce(BigDecimal.ZERO, BigDecimal::add);
 	}
+	
+	  @Autowired private GioHangRepository ghRepo;
+	  
+	  @Override public List<GioHang> getGioHangByUser(User user) { return
+	  ghRepo.findByUser(user); }
+	 
 
+	/*
+	 * @Autowired private GioHangRepository gioHangRepository;
+	 * 
+	 * @Override public List<GioHang> getGioHangByUser(String username) { // Triển
+	 * khai logic lấy giỏ hàng theo username return
+	 * gioHangRepository.findByUser_Username(username); }
+	 */
+	  @Autowired
+	  private GioHangRepository gioHangRepository;
+	  @Autowired
+		private UserRepository userRepo;
+	  public void xoaGioHangSauKhiDatHang(String username) {
+		    User user = userRepo.findByUsername(username)
+		            .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng: " + username));
+
+		    gioHangRepository.deleteAllByUser(user);
+		}
 }

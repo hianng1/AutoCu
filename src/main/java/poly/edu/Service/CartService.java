@@ -1,10 +1,13 @@
 package poly.edu.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import poly.edu.Model.GioHang;
+import poly.edu.Model.User;
 
 public interface CartService {
+	List<GioHang> getGioHangByUser(User user);
 
 	BigDecimal getAmounts();
 
@@ -19,5 +22,6 @@ public interface CartService {
 	void remove(Long id);
 
 	void add(GioHang item);
-
+	
+	void xoaGioHangSauKhiDatHang(String username);
 }
