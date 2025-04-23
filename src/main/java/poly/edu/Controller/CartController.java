@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -61,50 +62,84 @@ public class CartController {
 	KhachHangRepository khachHangRepository;
 	 
 
-	// Hiển thị giỏ hàng
 	@GetMapping("views")
 	public String viewsCart(Model model, HttpServletRequest request) {
-	    // Lấy thông tin giỏ hàng
-	    model.addAttribute("CART_ITEMS", cartService.getAllItems());
-	    model.addAttribute("TOTAL", cartService.getAmounts());
-	    
-	    // Lấy thông tin người dùng từ session - sửa thành loggedInUser
 	    jakarta.servlet.http.HttpSession session = request.getSession();
-	    User user = (User) session.getAttribute("loggedInUser"); // Thay đổi ở đây
+	    List<GioHang> cart = (List<GioHang>) session.getAttribute("cart");
+
+	    if (cart == null) {
+	        cart = new ArrayList<>();
+	    }
+
+	    model.addAttribute("CART_ITEMS", cart);
+
+	    // Tính tổng tiền
+	    BigDecimal total = BigDecimal.ZERO;
+	    for (GioHang item : cart) {
+	    	BigDecimal gia = BigDecimal.valueOf(item.getPhuKienOto().getGia());
+	        total = total.add(gia.multiply(BigDecimal.valueOf(item.getSoLuong())));
+	    }
+
+	    model.addAttribute("TOTAL", total);
+
+	    // Thêm thông tin người dùng
+	    User user = (User) session.getAttribute("loggedInUser");
 	    if (user != null) {
 	        model.addAttribute("userInfo", user);
 	    }
-	    
+
 	    return "cart";
 	}
-
-	// Thêm phụ kiện vào giỏ hàng
-	/*
-	 * @GetMapping("/add/{id}") public String addCart(@PathVariable("id") Long id) {
-	 * PhuKienOto pk = phuKienOtoService.findById(id); if (pk != null) { GioHang
-	 * item = new GioHang(); item.setPhuKienOto(pk); item.setSoLuong(1); // Đặt số
-	 * lượng ban đầu cartService.add(item); } return "redirect:/cart/views"; }
-	 */
 	@GetMapping("/add/{id}")
 	public String addCart(@PathVariable("id") Long id, HttpServletRequest request,
-			RedirectAttributes redirectAttributes) {
-		PhuKienOto pk = phuKienOtoService.findById(id);
-		if (pk != null) {
-			GioHang item = new GioHang();
-			item.setPhuKienOto(pk);
-			item.setSoLuong(1);
-			cartService.add(item);
+	                      RedirectAttributes redirectAttributes) {
+	    PhuKienOto pk = phuKienOtoService.findById(id);
+	    if (pk != null) {
+	        jakarta.servlet.http.HttpSession session = request.getSession();
+	        User user = (User) session.getAttribute("loggedInUser");
 
-			// Thêm thông báo thành công
-			redirectAttributes.addFlashAttribute("successMessage", "Đã thêm vào giỏ hàng!");
-		} else {
-			redirectAttributes.addFlashAttribute("errorMessage", "Sản phẩm không tồn tại!");
-		}
+	        if (user == null) {
+	            redirectAttributes.addFlashAttribute("errorMessage", "Bạn cần đăng nhập để thêm giỏ hàng!");
+	            return "redirect:/login";
+	        }
 
-		// Lấy URL trang trước đó từ header "Referer"
-		String referer = request.getHeader("Referer");
-		return "redirect:" + (referer != null ? referer : "/trangchu");
+	        // Lấy giỏ hàng từ session (nếu có), nếu không thì tạo mới
+	        List<GioHang> cart = (List<GioHang>) session.getAttribute("cart");
+	        if (cart == null) {
+	            cart = new ArrayList<>();
+	        }
+
+	        // Kiểm tra sản phẩm đã có trong giỏ chưa
+	        boolean existed = false;
+	        for (GioHang item : cart) {
+	            if (item.getPhuKienOto().getAccessoryID().equals(pk.getAccessoryID())) {
+	                item.setSoLuong(item.getSoLuong() + 1);
+	                existed = true;
+	                break;
+	            }
+	        }
+
+	        if (!existed) {
+	            GioHang item = new GioHang();
+	            item.setPhuKienOto(pk);
+	            item.setSoLuong(1);
+	            item.setUser(user);
+	            cart.add(item);
+	        }
+
+	        // Cập nhật lại giỏ hàng vào session
+	        session.setAttribute("cart", cart);
+
+	        redirectAttributes.addFlashAttribute("successMessage", "Đã thêm vào giỏ hàng!");
+	    } else {
+	        redirectAttributes.addFlashAttribute("errorMessage", "Sản phẩm không tồn tại!");
+	    }
+
+	    String referer = request.getHeader("Referer");
+	    return "redirect:" + (referer != null ? referer : "/trangchu");
 	}
+
+
 
 	@PostMapping("update")
 	public String update(@RequestParam("id") long id, @RequestParam("soLuong") Integer soLuong) {

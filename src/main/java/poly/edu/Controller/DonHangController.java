@@ -5,13 +5,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import poly.edu.Model.*;
 import poly.edu.Repository.UserRepository;
 import poly.edu.Service.CartService;
 import poly.edu.Service.DonHangService;
 import poly.edu.Service.UserService;
 
-import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -34,12 +36,13 @@ public class DonHangController {
 
     // Hiển thị trang thanh toán
     @GetMapping("/thanh-toan")
-    public String showCheckoutPage(HttpSession session, Model model) {
+    public String showCheckoutPage(HttpServletRequest request, Model model) {
         try {
-            User user = (User) session.getAttribute("user");
+            HttpSession session = request.getSession();
+            User user = (User) session.getAttribute("loggedInUser");
 
             if (user == null) {
-                return "redirect:/login"; // hoặc trả lỗi tùy nhu cầu
+                return "redirect:/login";
             }
 
             List<GioHang> cartItems = gioHangService.getGioHangByUser(user);
@@ -66,8 +69,9 @@ public class DonHangController {
 
     @PostMapping("/xu-ly-thanh-toan")
     @ResponseBody
-    public ResponseEntity<?> processPayment(HttpSession session, @RequestBody DonHangRequest donHangRequest) {
+    public ResponseEntity<?> processPayment(HttpServletRequest request, @RequestBody DonHangRequest donHangRequest) {
         try {
+            HttpSession session = request.getSession();
             User user = (User) session.getAttribute("loggedInUser");
 
             if (user == null) {
@@ -107,8 +111,9 @@ public class DonHangController {
     }
 
     @GetMapping("/thanh-cong/{orderId}")
-    public String showOrderSuccess(@PathVariable Long orderId, HttpSession session, Model model) {
+    public String showOrderSuccess(@PathVariable Long orderId, HttpServletRequest request, Model model) {
         try {
+            HttpSession session = request.getSession();
             User user = (User) session.getAttribute("loggedInUser");
 
             if (user == null) return "redirect:/dang-nhap";
@@ -123,8 +128,9 @@ public class DonHangController {
     }
 
     @GetMapping("/danh-sach")
-    public String orderList(HttpSession session, Model model) {
+    public String orderList(HttpServletRequest request, Model model) {
         try {
+            HttpSession session = request.getSession();
             User user = (User) session.getAttribute("loggedInUser");
 
             if (user == null) return "redirect:/dang-nhap";
@@ -139,8 +145,9 @@ public class DonHangController {
     }
 
     @GetMapping("/chi-tiet/{orderId}")
-    public String orderDetail(@PathVariable Long orderId, HttpSession session, Model model) {
+    public String orderDetail(@PathVariable Long orderId, HttpServletRequest request, Model model) {
         try {
+            HttpSession session = request.getSession();
             User user = (User) session.getAttribute("loggedInUser");
 
             if (user == null) return "redirect:/dang-nhap";
@@ -151,6 +158,17 @@ public class DonHangController {
         } catch (Exception e) {
             model.addAttribute("error", "Lỗi khi tải chi tiết đơn hàng: " + e.getMessage());
             return "redirect:/don-hang/danh-sach";
+        }
+    }
+
+    @ControllerAdvice
+    public class GlobalExceptionHandler {
+        @ExceptionHandler(IllegalStateException.class)
+        public ResponseEntity<?> handleSessionException(IllegalStateException ex, HttpServletRequest request) {
+            System.err.println("ERROR URL: " + request.getRequestURL());
+            System.err.println("Query Params: " + request.getQueryString());
+            ex.printStackTrace();
+            return ResponseEntity.badRequest().body("Invalid request");
         }
     }
 }
