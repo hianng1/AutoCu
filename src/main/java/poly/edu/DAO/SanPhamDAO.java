@@ -2,19 +2,21 @@ package poly.edu.DAO;
 
 
 import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
 import poly.edu.Model.SanPham;
 
 public interface SanPhamDAO extends JpaRepository<SanPham, Long> {
-    
+
     // Tìm sản phẩm theo hãng xe
     List<SanPham> findByHangXe(String hangXe);
-    
+
     // Tìm sản phẩm theo tên xe
     List<SanPham> findByTenSanPham(String tenSanPham);
-    
+
     // Tìm sản phẩm theo ID
     @Query("SELECT d FROM SanPham d WHERE d.productID = :ProductID")
     List<SanPham> findByProductId(@Param("ProductID") Long ProductID);

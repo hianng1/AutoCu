@@ -1,11 +1,8 @@
 package poly.edu.Controller;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import poly.edu.Model.DanhMuc;
-import poly.edu.Model.HinhAnhSanPham;
 import poly.edu.Model.SanPham;
 import poly.edu.Repository.DanhMucRepository;
 import poly.edu.Repository.HinhAnhSanPhamRepository;
@@ -30,16 +26,16 @@ import poly.edu.Service.SanPhamService;
 @Controller
 @RequestMapping("/sanpham")
 public class SanPhamController {
-    
+
     @Autowired
     private SanPhamService sanPhamService;
-    
+
     @Autowired
     private SanPhamRepository sanPhamRepository;
-    
+
     @Autowired
     private DanhMucRepository danhMucRepository;
-    
+
     @Autowired
     private HinhAnhSanPhamRepository hinhAnhSanPhamRepository;
 
@@ -66,7 +62,7 @@ public class SanPhamController {
  // Xử lý lưu hoặc cập nhật sản phẩm
     @PostMapping("/saveSanPham")
     public String saveSanPham(@ModelAttribute SanPham sanPham,
-                              @RequestParam("categoryID") Long categoryID, 
+                              @RequestParam("categoryID") Long categoryID,
                               @RequestParam("file") MultipartFile file) {
         try {
             // Kiểm tra nếu có thay đổi ảnh
@@ -85,7 +81,7 @@ public class SanPhamController {
             if (sanPham.getProductID() != null) {
                 // Nếu productID đã có, cập nhật sản phẩm
                 System.out.println("Cập nhật sản phẩm với ID: " + sanPham.getProductID());
-                sanPhamRepository.save(sanPham); 
+                sanPhamRepository.save(sanPham);
             } else {
                 // Nếu productID không có, tạo mới sản phẩm
                 System.out.println("Tạo mới sản phẩm");
@@ -97,7 +93,7 @@ public class SanPhamController {
         return "redirect:/sanpham";
     }
 
-    
+
 
 
 

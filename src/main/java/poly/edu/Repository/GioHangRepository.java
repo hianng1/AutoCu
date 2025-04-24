@@ -1,23 +1,26 @@
 package poly.edu.Repository;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
 import poly.edu.Model.GioHang;
 import poly.edu.Model.PhuKienOto;
 import poly.edu.Model.User;
 
-import java.util.List;
-import java.util.Optional;
-
 @Repository
 public interface GioHangRepository extends JpaRepository<GioHang, Long> {
+	GioHang findByUserAndPhuKienOto(User user, PhuKienOto phuKienOto);
+
     @Query("SELECT gh FROM GioHang gh WHERE gh.user = :user")
     List<GioHang> findByUser(@Param("user") User user);
 
-    void deleteAllByUser(User user);
+    int deleteAllByUser(User user);
 
     // Tìm giỏ hàng theo ID user
     @Query("SELECT gh FROM GioHang gh WHERE gh.user.id = :userId")
@@ -29,7 +32,7 @@ public interface GioHangRepository extends JpaRepository<GioHang, Long> {
 
     // Tìm giỏ hàng chứa sản phẩm cụ thể của user
     @Query("SELECT gh FROM GioHang gh WHERE gh.user.id = :userId AND gh.phuKienOto.accessoryID = :accessoryId")
-    Optional<GioHang> findByUserAndPhuKien(@Param("userId") Long userId, 
+    Optional<GioHang> findByUserAndPhuKien(@Param("userId") Integer userId,
                                          @Param("accessoryId") Long accessoryId);
 
     // Cập nhật số lượng sản phẩm trong giỏ hàng

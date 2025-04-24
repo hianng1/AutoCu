@@ -208,11 +208,30 @@
                             <fmt:formatNumber value="${phukien.gia}" pattern="#,##0" /> VND
                         </p>
 
-                        <form action="/addToCart" method="post">
+                        <%-- <form action="/addToCart" method="post">
                             <input type="hidden" name="productId" value="${phukien.accessoryID}" />
                             <input type="hidden" name="quantity" value="1" />
                             <a class="btn btn-primary w-full bg-black text-yellow-400 py-2 rounded-full font-semibold mt-3 hover:bg-gray-800" href="/cart/add/${phukien.accessoryID}">Thêm vào giỏ</a>
-                        </form>
+                        </form> --%>
+                        
+                        <form action="/cart/add/${phukien.accessoryID}" method="post">
+		                     <%-- Controller add method uses @PathVariable("id") -> product ID goes in URL path --%>
+		                     <%-- No need for productId input here if using path variable --%>
+		                     <%-- <input type="hidden" name="productId" value="${phukien.accessoryID}" /> --%>
+		
+		                    <%-- Input cho số lượng (mặc định 1) --%>
+		                    <%-- Controller add method uses @RequestParam("quantity") -> quantity needs to be a request parameter --%>
+		                    <input type="hidden" name="quantity" value="1" />
+		
+		                    <%-- Nếu bạn dùng Spring Security và CSRF, bỏ comment dòng dưới --%>
+		                    <%-- <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> --%>
+		
+		                    <%-- Nút submit form --%>
+		                    <%-- Thay thẻ <a> bằng thẻ <button type="submit"> --%>
+		                    <button type="submit" class="btn btn-primary w-full bg-black text-yellow-400 py-2 rounded-full font-semibold mt-3 hover:bg-gray-800">
+		                        Thêm vào giỏ
+		                    </button>
+		                </form>
 
                     </div>
                 </div>
@@ -413,6 +432,22 @@
         </div>
     </div>
 </section>
+<div class="container mx-auto px-4 py-2"> <%-- Sử dụng container và padding phù hợp với layout --%>
+    <c:if test="${not empty success}">
+        <%-- Sử dụng class CSS của bạn để hiển thị thông báo thành công (ví dụ: màu xanh) --%>
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <span class="block sm:inline">${success}</span>
+            <%-- Tùy chọn: thêm nút đóng thông báo --%>
+            <%-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> --%>
+        </div>
+    </c:if>
+    <%-- Tùy chọn: Bạn cũng có thể thêm khối tương tự cho thông báo lỗi (error) hoặc thông báo chung (message) nếu HomeController hoặc các redirect khác gửi chúng đến trang chủ --%>
+     <c:if test="${not empty error}">
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <span class="block sm:inline">${error}</span>
+        </div>
+    </c:if>
+</div>
 
 <!-- Notification Section -->
 <c:if test="${not empty successMessage}">

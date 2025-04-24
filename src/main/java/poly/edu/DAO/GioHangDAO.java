@@ -6,8 +6,6 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import poly.edu.Model.GioHang;
-import poly.edu.Model.KhachHang;
-import poly.edu.Model.PhuKienOto;
 import poly.edu.Model.User;
 
 public interface GioHangDAO extends JpaRepository<GioHang, Long>{
@@ -15,5 +13,5 @@ public interface GioHangDAO extends JpaRepository<GioHang, Long>{
     // Ví dụ: tìm xe theo hãng xe
     List<GioHang> findBycartID(Long cartID);
     Optional<GioHang> findByUser(User user);
-    
+
 }

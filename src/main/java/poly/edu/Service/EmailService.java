@@ -37,16 +37,16 @@ public class EmailService {
         // KHÔNG setFrom thủ công nếu đang dùng Gmail
         mailSender.send(message);
     }
-    
+
     // Gửi email xác nhận yêu cầu hỗ trợ
     public void sendSupportRequestEmail(String name, String email, String phone, String subject, String message) {
         // Email gửi cho khách hàng
         sendConfirmationEmailToCustomer(name, email, subject);
-        
+
         // Email gửi cho admin
         sendNotificationEmailToAdmin(name, email, phone, subject, message);
     }
-    
+
     // Gửi email xác nhận cho khách hàng
     private void sendConfirmationEmailToCustomer(String name, String email, String subject) {
         SimpleMailMessage message = new SimpleMailMessage();
@@ -58,10 +58,10 @@ public class EmailService {
                 "Nếu bạn cần hỗ trợ khẩn cấp, vui lòng liên hệ hotline: +84 382 948 198\n\n" +
                 "Trân trọng,\n" +
                 "Đội ngũ hỗ trợ khách hàng AutoCu");
-        
+
         mailSender.send(message);
     }
-    
+
     // Gửi email thông báo cho admin
     private void sendNotificationEmailToAdmin(String name, String email, String phone, String subject, String messageContent) {
         SimpleMailMessage message = new SimpleMailMessage();
@@ -74,10 +74,10 @@ public class EmailService {
                 "Chủ đề: " + subject + "\n\n" +
                 "Nội dung tin nhắn:\n" + messageContent + "\n\n" +
                 "Vui lòng xử lý yêu cầu này trong thời gian sớm nhất.");
-        
+
         mailSender.send(message);
     }
-    
+
 	/*
 	 * // Gửi email xác nhận sau khi đổi mật khẩu thành công public void
 	 * sendPasswordChangeConfirmationEmail(User user) { SimpleMailMessage message =
@@ -87,7 +87,7 @@ public class EmailService {
 	 * + user.getUsername() + ",\n\n" +
 	 * "Mật khẩu của bạn đã được thay đổi thành công.\n" +
 	 * "Vui lòng liên hệ với chúng tôi nếu bạn gặp bất kỳ vấn đề nào.");
-	 * 
+	 *
 	 * mailSender.send(message); }
 	 */
 }

@@ -2,19 +2,25 @@ package poly.edu.Controller;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import jakarta.validation.Valid;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import poly.edu.Model.PhuKienOto;
+
+import jakarta.validation.Valid;
 import poly.edu.Model.DanhMuc;
+import poly.edu.Model.PhuKienOto;
 import poly.edu.Repository.DanhMucRepository;
 import poly.edu.Repository.PhuKienOtoRepository;
-
-import java.util.List;
 @Controller
 @RequestMapping("/phukien")
 public class PhuKienOtoController {

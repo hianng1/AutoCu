@@ -1,121 +1,60 @@
+// poly.edu.Service.DonHangService
 package poly.edu.Service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import poly.edu.Model.*;
-import poly.edu.Repository.*;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
-@Service
-@Transactional
-public class DonHangService {
-	@Autowired
-	private UserRepository userRepo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-    @Autowired
-    private DonHangRepository donHangRepository;
+import poly.edu.Model.DonHang;
+import poly.edu.Model.DonHang.TrangThai; // Import Enum TrangThai
+import poly.edu.Model.User;
 
-    @Autowired
-    private ChiTietDonHangRepository chiTietDonHangRepository;
+public interface DonHangService {
 
-    @Autowired
-    private PhuKienOtoRepository phuKienOtoRepository;
+    // Phương thức save (thêm mới hoặc cập nhật)
+    DonHang save(DonHang order);
 
-    public DonHang taoDonHangTam(
-        User user,
-        String hoTen,
-        String soDienThoai,
-        String diaChi,
-        String ghiChu,
-        String phuongThucVanChuyen,
-        String phuongThucThanhToan,
-        List<GioHang> cartItems
-    ) {
-        DonHang donHang = new DonHang();
+    // Phương thức tìm theo ID
+    Optional<DonHang> findById(Long id);
 
-        // Set thông tin người dùng nếu có
-        if (user != null) {
-            donHang.setUser(user);
-            hoTen = (hoTen == null || hoTen.isEmpty()) ? user.getHovaten() : hoTen;
-            soDienThoai = (soDienThoai == null || soDienThoai.isEmpty()) ? user.getSodienthoai() : soDienThoai;
-            diaChi = (diaChi == null || diaChi.isEmpty()) ? user.getDiaChi() : diaChi;
-        }
+    // Phương thức xóa theo ID
+    void deleteById(Long id); // Thêm phương thức xóa
 
-        donHang.setHoTen(hoTen);
-        donHang.setSoDienThoai(soDienThoai);
-        donHang.setDiaChi(diaChi);
-        donHang.setGhiChu(ghiChu);
-        donHang.setPhuongThucVanChuyen(phuongThucVanChuyen);
-        donHang.setPhuongThucThanhToan(phuongThucThanhToan);
-        donHang.setTrangThai("CHO_XAC_NHAN");
-        donHang.setDaThanhToan(false);
-        donHang.setPhiVanChuyen(BigDecimal.ZERO);
+    // Phương thức tìm tất cả
+    List<DonHang> findAll();
 
-        // Thêm chi tiết đơn hàng
-        List<ChiTietDonHang> chiTietDonHangs = new ArrayList<>();
+    // Phương thức tìm theo ID và người dùng
+    Optional<DonHang> findByOrderIDAndUser(Long orderID, User user);
 
-        for (GioHang item : cartItems) {
-            PhuKienOto phuKien = phuKienOtoRepository.findById(item.getPhuKienOto().getAccessoryID())
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy phụ kiện với ID: " + item.getPhuKienOto().getAccessoryID()));
+    // Tìm đơn hàng theo người dùng
+    List<DonHang> findByUser(User user);
 
-            ChiTietDonHang chiTiet = new ChiTietDonHang();
-            chiTiet.setDonHang(donHang);
-            chiTiet.setPhuKienOto(phuKien);
-            chiTiet.setTenSanPham(phuKien.getTenPhuKien());
-            chiTiet.setSoLuong(item.getSoLuong());
-            chiTiet.setDonGia(BigDecimal.valueOf(phuKien.getGia()));
+    // Tìm đơn hàng theo người dùng (phân trang)
+    Page<DonHang> findByUser(User user, Pageable pageable);
 
-            chiTietDonHangs.add(chiTiet);
-        }
+    // Tìm đơn hàng theo trạng thái (sử dụng Enum TrangThai)
+    List<DonHang> findByTrangThai(TrangThai trangThai); // Sử dụng Enum
 
-        donHang.setChiTietDonHangs(chiTietDonHangs);
-        donHang.tinhTongTien();
+    // Tìm đơn hàng trong khoảng thời gian
+    List<DonHang> findByNgayDatHangBetween(Date startDate, Date endDate);
 
-        return donHangRepository.save(donHang);
-    }
-    public void luuDonHang(DonHangRequest request, String username) {
-        User user = userRepo.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
+    // Tìm đơn hàng theo người dùng và trạng thái (sử dụng Enum TrangThai)
+    List<DonHang> findByUserAndTrangThai(User user, TrangThai trangThai); // Sử dụng Enum
 
-        DonHang donHang = new DonHang();
-        donHang.setUser(user);
-        donHang.setHoTen(request.getHoTen());
-        donHang.setSoDienThoai(request.getSoDienThoai());
-        donHang.setDiaChi(request.getDiaChi());
-        donHang.setGhiChu(request.getGhiChu());
-        donHang.setPhuongThucVanChuyen(request.getPhuongThucVanChuyen());
-        donHang.setPhuongThucThanhToan(request.getPhuongThucThanhToan());
-        donHang.setTongTienHang(BigDecimal.valueOf(request.getTongTienHang())); 
-        donHang.setPhiVanChuyen(BigDecimal.valueOf( request.getPhiVanChuyen())); 
-        donHang.setTongThanhToan(BigDecimal.valueOf(request.getTongThanhToan()));
-        donHang.setNgayDatHang(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
+    // Đếm số đơn hàng theo trạng thái (sử dụng Enum TrangThai)
+    Long countByTrangThai(TrangThai trangThai); // Sử dụng Enum
 
-        donHangRepository.save(donHang);
-    }
-    
-    @Autowired
-    private UserRepository userRepository;
+    // Tìm đơn hàng với tổng thanh toán cao nhất (Top N)
+    List<DonHang> findTopByOrderByTongThanhToanDesc(Pageable pageable);
 
-    public DonHang getDonHangByIdAndUser(Long orderId, String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng: " + username));
+    // Thống kê doanh thu theo tháng
+    List<Object[]> getMonthlyRevenue(int year);
 
-        return donHangRepository.findByOrderIDAndUser(orderId, user)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy đơn hàng với ID: " + orderId + " cho người dùng: " + username));
-    }
-    
-    public List<DonHang> getDonHangByUser(String username) {
-        User user = userRepository.findByUsername(username)
-            .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng: " + username));
+    // Tìm đơn hàng có chứa sản phẩm phụ kiện cụ thể
+    List<DonHang> findByProductId(Long accessoryID);
 
-        return donHangRepository.findAllByUser(user);
-    }
-
+    // ... Thêm các phương thức Service khác nếu cần logic nghiệp vụ phức tạp hơn
 }

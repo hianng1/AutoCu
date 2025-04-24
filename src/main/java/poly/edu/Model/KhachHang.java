@@ -1,9 +1,18 @@
 package poly.edu.Model;
 
 import java.io.Serializable;
-import java.util.List;
-import jakarta.persistence.*;
-import lombok.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "KhachHang") // Tên bảng trong CSDL
@@ -24,7 +33,7 @@ public class KhachHang implements Serializable {
     private String email;
 
     @Column(name = "SoDienThoai", unique = true, nullable = true, length = 15, columnDefinition = "nvarchar(15)")
-    private String soDienThoai; 
+    private String soDienThoai;
 
     @Column(name = "MatKhau", nullable = false, length = 255)
     private String matKhau;

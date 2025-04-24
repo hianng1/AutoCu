@@ -14,5 +14,5 @@ public interface KhachHangDAO extends JpaRepository<KhachHang, Long>{
     List<KhachHang> findByEmail(String email);
     List<KhachHang> findByUserID(Long userID);
     Optional<KhachHang> findByTenKhachHang(String tenKhachHang);
-    
+
 }

@@ -5,17 +5,18 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import jakarta.transaction.Transactional;
+import poly.edu.DAO.PhuKienOtoDAO;
 import poly.edu.Model.PhuKienOto;
 import poly.edu.Repository.PhuKienOtoRepository;
-import poly.edu.DAO.PhuKienOtoDAO;
 
 @Service
 @Transactional
 public class PhuKienOtoServiceImp implements PhuKienOtoService {
     @Autowired
     private PhuKienOtoRepository PKrepo;
-	
+
     @Autowired
     private PhuKienOtoDAO phuKienOtoDAO;
 
@@ -54,22 +55,23 @@ public class PhuKienOtoServiceImp implements PhuKienOtoService {
 
     @Override
     public void updateStock(Long accessoryId, int soLuong) {
-        // Tìm phụ kiện theo ID từ repository
-        Optional<PhuKienOto> accessory = PKrepo.findById(accessoryId);
-
-        if (accessory.isPresent()) {
-            // Lấy đối tượng phụ kiện
-            PhuKienOto existingAccessory = accessory.get();
-            
-            // Cập nhật số lượng của phụ kiện
-            existingAccessory.setSoLuong(existingAccessory.getSoLuong() + soLuong);
-
-            // Lưu lại phụ kiện đã cập nhật vào cơ sở dữ liệu
-            PKrepo.save(existingAccessory);
+        // Ví dụ triển khai updateStock: tìm entity, cập nhật, rồi save
+        Optional<PhuKienOto> optionalProduct = PKrepo.findById(accessoryId);
+        if (optionalProduct.isPresent()) {
+            PhuKienOto product = optionalProduct.get();
+            product.setSoLuong(soLuong); // Cập nhật số lượng mới
+            save(product); // Lưu thay đổi
         } else {
-            throw new IllegalArgumentException("Không tìm thấy phụ kiện với ID: " + accessoryId);
+            // Xử lý trường hợp không tìm thấy sản phẩm (ví dụ: log lỗi hoặc throw exception)
+             throw new RuntimeException("Không tìm thấy phụ kiện với ID: " + accessoryId + " để cập nhật tồn kho.");
         }
     }
+
+	@Override
+	public PhuKienOto save(PhuKienOto p) {
+		// TODO Auto-generated method stub
+		return PKrepo.save(p);
+	}
 
 
 }

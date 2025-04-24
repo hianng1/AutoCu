@@ -1,16 +1,17 @@
 package poly.edu.Controller;
 
-import org.springframework.dao.DataIntegrityViolationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
 import poly.edu.Model.User;
 import poly.edu.Repository.UserRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Controller
 public class ThemNhanVienController {
@@ -36,7 +37,7 @@ public class ThemNhanVienController {
                               @RequestParam(value = "soDienThoai", required = false) String soDienThoai,
                               Model model) {
 
-     
+
 
         String hovaten = ho + " " + ten;
         User newUser = new User();

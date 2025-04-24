@@ -1,13 +1,16 @@
 package poly.edu.Controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import poly.edu.DAO.UserDAO;
 import poly.edu.Model.User;
-
-import java.util.Optional;
 
 @Controller
 public class SuaNhanVienController {
@@ -17,7 +20,7 @@ public class SuaNhanVienController {
 
     @GetMapping("/suanhanvien")
     public String showEditEmployeePage(@RequestParam("id") Integer userId, Model model) {
-    	
+
         Optional<User> userOptional = userDAO.findById(userId);
         if (userOptional.isPresent()) {
             User user = userOptional.get();

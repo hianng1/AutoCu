@@ -1,9 +1,8 @@
 package poly.edu.Controller;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Optional; // Có thể bỏ nếu không còn dùng Optional<User> trong controller này
 
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,7 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import jakarta.servlet.http.HttpSession;
+// Bỏ import jakarta.servlet.http.HttpSession; // Không còn quản lý session thủ công ở đây
+
 import poly.edu.DAO.DanhMucDAO;
 import poly.edu.DAO.KhachHangDAO;
 import poly.edu.DAO.MaKhuyenMaiDAO;
@@ -21,15 +21,22 @@ import poly.edu.DAO.NhanVienDAO;
 import poly.edu.DAO.PhuKienOtoDAO;
 import poly.edu.DAO.SanPhamDAO;
 import poly.edu.DAO.UserDAO;
-import poly.edu.Model.*;
+import poly.edu.Model.DanhMuc;
+import poly.edu.Model.HinhAnhSanPham;
+import poly.edu.Model.KhachHang;
+import poly.edu.Model.MaKhuyenMai;
+import poly.edu.Model.NhanVien;
+import poly.edu.Model.PhuKienOto;
+import poly.edu.Model.SanPham;
+import poly.edu.Model.User;
 import poly.edu.Repository.UserRepository;
 import poly.edu.Service.PhuKienOtoService;
 import poly.edu.Service.SanPhamService;
-import poly.edu.Service.UserService;
+import poly.edu.Service.UserService; // Giữ lại nếu UserService có các phương thức khác được dùng
 
 @Controller
 public class HomeController {
-	
+
 	@Autowired
     private DanhMucDAO danhMucDAO;
     @Autowired
@@ -43,11 +50,20 @@ public class HomeController {
     @Autowired
     private PhuKienOtoDAO phuKienOtoDAO;
     @Autowired
-
     private SanPhamService sanPhamService;
     @Autowired
     private PhuKienOtoService phuKienOtoService;
-    @GetMapping(value = "/trangchu", produces = "text/html; charset=UTF-8")
+
+    // Sử dụng UserService cho các tác vụ khác (đăng ký, quên/đổi mật khẩu)
+    @Autowired
+    private UserService userService;
+     @Autowired
+    private UserRepository userRepository; // Giữ lại nếu cần cho forgot password
+
+
+    // Trang chủ công khai (có thể hiển thị thông tin chung)
+    // SecurityConfig sẽ quyết định ai có quyền truy cập
+    @GetMapping(value = {"/", "/trangchu"}, produces = "text/html; charset=UTF-8") // Map cả "/" và "/trangchu"
     public String home(Model model) {
         try {
             List<SanPham> sanPhamList = sanPhamDAO.findAll();
@@ -63,44 +79,49 @@ public class HomeController {
             List<PhuKienOto> phuKienOtoList = phuKienOtoService.findAll();
             model.addAttribute("phuKienOtoList", phuKienOtoList);
 
+            // Bạn có thể lấy thông tin người dùng đã đăng nhập ở đây nếu cần hiển thị trên trang chủ
+            // Bằng cách sử dụng SecurityContextHolder, giống như trong CartController
+            // Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            // if (authentication != null && authentication.isAuthenticated() && !"anonymousUser".equals(authentication.getPrincipal())) {
+            //      String username = authentication.getName();
+            //      User loggedInUser = userService.findByUsername(username); // Cần UserService hoặc UserRepository
+            //      model.addAttribute("userInfo", loggedInUser);
+            // }
 
-            
         } catch (Exception e) {
             model.addAttribute("error", "Lỗi khi lấy danh sách sản phẩm: " + e.getMessage());
         }
-        return "index2";
+        return "index2"; // Trả về view index2.jsp (theo cấu hình properties)
     }
-    
-    //test
-    @Autowired
-    private UserService userService;
 
+
+    // --- Đăng ký ---
     // Hiển thị form đăng ký
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
         return "register";
     }
 
-    // Xử lý đăng ký
+    // Xử lý đăng ký (Vẫn giữ lại vì Spring Security không xử lý đăng ký mặc định)
     @PostMapping("/register")
     public String register(@RequestParam String username,
-                           @RequestParam String password,
-                           @RequestParam String email,
-                           @RequestParam String hovaten,
-                           @RequestParam(required = true) String sodienthoai,
-                           @RequestParam String soNha,
-                           @RequestParam String phuongXa,
-                           @RequestParam String quanHuyen,
-                           @RequestParam String tinhThanh,
-                           Model model,
-                           RedirectAttributes redirectAttributes) {
+                            @RequestParam String password,
+                            @RequestParam String email,
+                            @RequestParam String hovaten,
+                            @RequestParam(required = true) String sodienthoai,
+                            @RequestParam String soNha,
+                            @RequestParam String phuongXa,
+                            @RequestParam String quanHuyen,
+                            @RequestParam String tinhThanh,
+                            Model model,
+                            RedirectAttributes redirectAttributes) {
         // Kết hợp các phần thông tin địa chỉ để tạo thành địa chỉ đầy đủ
         String diaChiFull = String.join(", ", soNha, phuongXa, quanHuyen, tinhThanh);
-        
+
         // Gọi service để thực hiện đăng ký
+        // Lưu ý: UserService.registerUser cần mã hóa mật khẩu trước khi lưu vào DB
         String result = userService.registerUser(username, password, email, hovaten, sodienthoai, diaChiFull);
-        
-        // Kiểm tra kết quả trả về từ service
+
         if ("Đăng ký thành công!".equals(result)) {
             redirectAttributes.addFlashAttribute("message", "Đăng ký thành công! Vui lòng đăng nhập.");
             return "redirect:/login"; // Chuyển hướng đến trang login nếu đăng ký thành công
@@ -108,139 +129,46 @@ public class HomeController {
 
         // Nếu đăng ký thất bại, gửi thông báo lỗi tới model và trả về trang đăng ký
         model.addAttribute("message", result);
+        // Giữ lại các giá trị đã nhập để người dùng không phải nhập lại (tùy chọn, cần thêm logic)
+        // model.addAttribute("username", username);
+        // ... các field khác ...
         return "register"; // Nếu đăng ký thất bại, vẫn ở trang đăng ký
     }
 
-
+    // --- Đăng nhập ---
     // Hiển thị form đăng nhập
+    // Spring Security sẽ chuyển hướng đến đây nếu cần xác thực hoặc đăng nhập thất bại
     @GetMapping("/login")
-    public String showLoginForm(@RequestParam(value = "message", required = false) String message, Model model) {
+    public String showLoginForm(@RequestParam(value = "message", required = false) String message,
+                                @RequestParam(value = "error", required = false) String error, // Thêm param error từ Spring Security
+                                @RequestParam(value = "logout", required = false) String logout, // Thêm param logout từ Spring Security
+                                Model model) {
         if (message != null && !message.isEmpty()) {
             model.addAttribute("message", message);
         }
-        return "login";
+         // Xử lý thông báo lỗi từ Spring Security khi đăng nhập thất bại
+         if (error != null) {
+             model.addAttribute("error", "Sai tên đăng nhập hoặc mật khẩu!"); // Hoặc thông báo tùy chỉnh
+         }
+         // Xử lý thông báo đăng xuất thành công từ Spring Security
+         if (logout != null) {
+             model.addAttribute("message", "Bạn đã đăng xuất thành công.");
+         }
+        return "login"; // Trả về view login.jsp
     }
 
-    // Xử lý đăng nhập
-    @PostMapping("/login")
-    public String login(@RequestParam String username,
-                        @RequestParam String password,
-                        HttpSession session,
-                        Model model) {
-        Optional<User> user = userService.authenticate(username, password);
+    // *** XÓA PHƯƠNG THỨC @PostMapping("/login") xử lý login thủ công ***
+    // Spring Security Filter Chain sẽ xử lý request POST đến /login (hoặc /j_spring_security_check)
 
-        if (user.isPresent()) {
-            session.setAttribute("loggedInUser", user.get());
-            return "redirect:/home"; // Chuyển hướng đến trang chủ sau khi đăng nhập
-        } else {
-            model.addAttribute("error", "Sai tên đăng nhập hoặc mật khẩu!");
-            return "login"; // Nếu sai thông tin, quay lại trang đăng nhập
-        }
-    }
+    // *** XÓA PHƯƠNG THỨC @GetMapping("/logout") xử lý logout thủ công ***
+    // Spring Security Filter Chain sẽ xử lý request GET/POST đến /logout
 
-    // Xử lý đăng xuất
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/login";
-    }
+    // *** XÓA PHƯƠNG THỨC @GetMapping("/home") sau khi login thành công ***
+    // SecurityConfig.defaultSuccessUrl sẽ xử lý chuyển hướng sau login
 
-    // Hiển thị trang home sau khi đăng nhập thành công
-    @GetMapping("/home")
-    public String home(HttpSession session, Model model) {
-        User loggedInUser = (User) session.getAttribute("loggedInUser");
-
-        if (loggedInUser == null) {
-            return "redirect:/login"; // Nếu chưa đăng nhập, quay lại trang đăng nhập
-        }
-
-        model.addAttribute("user", loggedInUser);
-
-        if ("ADMIN".equals(loggedInUser.getRole())) {
-            return "redirect:/quantri"; // Chuyển đến trang admin nếu là admin
-        } else {
-            return "redirect:/trangchu";  // Chuyển đến trang user nếu là user thường
-        }
-    }
-    @Autowired
-    private UserDAO userDAO;
-	
-    @GetMapping
-    public String danhSachNguoiDung(Model model) {
-    	List<User> users = userDAO.findAll(); // Lấy *tất cả* user
-        model.addAttribute("users", users);
-        return "Admin/quantri";
-    }
-    
-    @GetMapping("/details/{productId}")
-    public String getDetailsByProductId(@PathVariable("productId") Long productId, Model model) {
-        List<SanPham> details = sanPhamDAO.findByProductId(productId);
-
-        if (!details.isEmpty()) {
-            SanPham sanPham = details.get(0);
-            Long categoryID = sanPham.getDanhMuc().getCategoryID();
-
-            // Lấy danh sách ảnh sản phẩm
-            List<HinhAnhSanPham> hinhAnhList = sanPham.getHinhAnhSanPhams();
-
-            // 🛠 Debug
-            System.out.println("CategoryID: " + categoryID);
-            System.out.println("ProductID: " + productId);
-            System.out.println("Số ảnh: " + hinhAnhList.size());
-
-            List<SanPham> sanPhamTuongTu = sanPhamService.getSanPhamTuongTu(categoryID, productId);
-
-            model.addAttribute("sanPhamTuongTu", sanPhamTuongTu);
-            model.addAttribute("hinhAnhList", hinhAnhList); // ✅ truyền danh sách ảnh
-        }
-
-        model.addAttribute("details", details);
-        return "Detail";
-    }
-
-    
-    
-    
-    // sử lý quên mật khẩu và đôi mật khẩu 
-    
-
- // Quên mật khẩu
-	/*
-	 * @PostMapping("/forgot-password") public String forgotPassword(@RequestParam
-	 * String email, Model model) { String result =
-	 * userService.handleForgotPassword(email); model.addAttribute("message",
-	 * result); return "forgot-password"; // Quay lại trang quên mật khẩu với thông
-	 * báo kết quả }
-	 * 
-	 * @PostMapping("/change-password") public String changePassword(@RequestParam
-	 * Long userId,
-	 * 
-	 * @RequestParam String currentPassword,
-	 * 
-	 * @RequestParam String newPassword, Model model) { String result =
-	 * userService.changePassword(userId, currentPassword, newPassword);
-	 * model.addAttribute("message", result); // Thêm thông báo kết quả vào model
-	 * model.addAttribute("userId", userId); // Truyền lại userId để giữ giá trị
-	 * trong form return "change-password"; // Quay lại trang đổi mật khẩu với thông
-	 * báo kết quả }
-	 * 
-	 * // Hiển thị trang đổi mật khẩu
-	 * 
-	 * @GetMapping("/change-password") public String
-	 * showChangePasswordPage(@RequestParam Long userId, Model model) {
-	 * model.addAttribute("userId", userId); // Truyền userId vào model để hiển thị
-	 * trong form return "change-password"; }
-	 * 
-	 * 
-	 * @GetMapping("/forgot-password") public String showForgotPasswordPage() {
-	 * return "forgot-password"; // Trả về trang quên mật khẩu }
-	 */
-    
-    
-// phần gửi mail với đổi mât khẩu 
-
-    @Autowired
-    private UserRepository userRepository;
+    // --- Quên và đổi mật khẩu (Giữ lại) ---
+    // Giữ nguyên các phương thức forgot-password và change-password
+    // (Vì đây là logic riêng của ứng dụng, không phải luồng xác thực chính của Spring Security)
 
     @GetMapping("/forgot-password")
     public String showForgotPasswordPage() {
@@ -249,11 +177,19 @@ public class HomeController {
 
     @PostMapping("/forgot-password")
     public String forgotPassword(@RequestParam String email, Model model, RedirectAttributes redirectAttributes) {
+        // Lưu ý: handleForgotPassword cần gửi email và có thể tạo token đặt lại mật khẩu
         String result = userService.handleForgotPassword(email);
         if (result.contains("đã được gửi")) {
-            User user = userRepository.findByEmail(email).get();
-            redirectAttributes.addFlashAttribute("message", result);
-            return "redirect:/change-password?userId=" + user.getId();
+            User user = userRepository.findByEmail(email); // Cần tìm user để lấy ID
+             if (user != null) {
+                 redirectAttributes.addFlashAttribute("message", result);
+                 // Chuyển hướng đến trang đổi mật khẩu, truyền userId hoặc token bảo mật hơn
+                 return "redirect:/change-password?userId=" + user.getId(); // Giả định getId() là getUserID()
+             } else {
+                 model.addAttribute("message", "Không tìm thấy người dùng với email này.");
+                 return "forgot-password";
+             }
+
         } else {
             model.addAttribute("message", result);
             return "forgot-password";
@@ -268,23 +204,70 @@ public class HomeController {
 
     @PostMapping("/change-password")
     public String changePassword(@RequestParam Long userId,
-                                 @RequestParam String currentPassword,
-                                 @RequestParam String newPassword,
-                                 Model model, RedirectAttributes redirectAttributes) {
-        String result = userService.changePassword(userId, currentPassword, newPassword);
+                                    @RequestParam String currentPassword, // Có thể không cần nếu luồng là "quên MK"
+                                    @RequestParam String newPassword,
+                                    Model model, RedirectAttributes redirectAttributes) {
+        // Lưu ý: changePassword cần kiểm tra mật khẩu hiện tại (nếu không phải luồng quên MK)
+        // và mã hóa mật khẩu mới trước khi lưu
+        String result = userService.changePassword(userId, currentPassword, newPassword); // Cần điều chỉnh service method
+
         if (result.contains("thành công")) {
             redirectAttributes.addFlashAttribute("message", result);
-            return "redirect:/login";
+            return "redirect:/login"; // Chuyển hướng về trang login sau khi đổi MK thành công
         } else {
             model.addAttribute("message", result);
             model.addAttribute("userId", userId);
+            // Có thể cần thêm các param khác nếu form đổi mật khẩu yêu cầu
             return "change-password";
         }
     }
-    
-    
-    
-    
-    
-    
+
+
+    // --- Các phương thức khác ---
+    @Autowired
+    private UserDAO userDAO; // Giữ lại nếu cần
+
+    @GetMapping("/quantri") // URL cho trang admin/quản trị
+     // SecurityConfig cần cấu hình để chỉ cho phép user có ROLE_ADMIN truy cập
+    public String danhSachNguoiDung(Model model) {
+        // Lấy thông tin user hiện tại từ SecurityContextHolder nếu cần hiển thị trên trang admin
+        // Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        // ... lấy user từ username ...
+        // model.addAttribute("userInfo", loggedInUser);
+
+        List<User> users = userDAO.findAll();
+        model.addAttribute("users", users);
+        return "Admin/quantri"; // Trả về view trang quản trị
+    }
+
+     // Trang chi tiết sản phẩm (có thể công khai)
+     @GetMapping("/products/{productId}") // URL chi tiết sản phẩm
+     public String getDetailsByProductId(@PathVariable("productId") Long productId, Model model) {
+         // Logic lấy chi tiết sản phẩm
+         // ... (code hiện tại của bạn) ...
+
+         List<SanPham> details = sanPhamDAO.findByProductId(productId);
+
+         if (!details.isEmpty()) {
+             SanPham sanPham = details.get(0);
+             Long categoryID = sanPham.getDanhMuc().getCategoryID();
+
+             List<HinhAnhSanPham> hinhAnhList = sanPham.getHinhAnhSanPhams();
+
+              // logger debug (nếu bạn muốn thêm logger lại)
+              // System.out.println("CategoryID: " + categoryID);
+              // System.out.println("ProductID: " + productId);
+              // System.out.println("Số ảnh: " + hinhAnhList.size());
+
+             List<SanPham> sanPhamTuongTu = sanPhamService.getSanPhamTuongTu(categoryID, productId);
+
+             model.addAttribute("sanPhamTuongTu", sanPhamTuongTu);
+             model.addAttribute("hinhAnhList", hinhAnhList);
+         }
+
+         model.addAttribute("details", details);
+         return "Detail";
+     }
+
+     // Các phương thức khác trong HomeController...
 }

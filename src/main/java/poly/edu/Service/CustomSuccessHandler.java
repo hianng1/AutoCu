@@ -19,7 +19,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 	                                    Authentication authentication) throws IOException, ServletException {
 	    Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-	    
+
 	    for (GrantedAuthority authority : authorities) {
 	        String role = authority.getAuthority();
 	        System.out.println("Đã đăng nhập với quyền: " + role); // In log kiểm tra

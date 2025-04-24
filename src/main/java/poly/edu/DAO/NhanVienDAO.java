@@ -12,5 +12,5 @@ public interface NhanVienDAO extends JpaRepository<NhanVien, Long>{
     // Ví dụ: tìm xe theo tên xe
     List<NhanVien> findByTenNhanVien(String tenNhanVien);
     List<NhanVien> findByStaffID(Long staffID);
-    
+
 }

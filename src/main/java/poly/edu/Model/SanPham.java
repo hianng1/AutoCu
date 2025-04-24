@@ -7,7 +7,19 @@ import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,19 +37,19 @@ public class SanPham implements Serializable {
 
     @Column(name = "TenSanPham", nullable = false, columnDefinition = "nvarchar(255)")
     private String tenSanPham;
-    
+
     @Column(name = "SoGhe")
     private Integer soGhe;
-    
+
     @Column(name = "TruyenDong", columnDefinition = "nvarchar(255)")
     private String truyenDong;
-    
+
     @Column(name = "NhienLieu", columnDefinition = "nvarchar(255)")
     private String nhienLieu;
-    
+
     @Column(name = "DiaDiemLayXe", columnDefinition = "nvarchar(255)")
     private String diaDiemLayXe;
-    
+
     @Column(name = "HangXe", columnDefinition = "nvarchar(255)")
     private String hangXe;
 
@@ -51,10 +63,10 @@ public class SanPham implements Serializable {
     @Temporal(TemporalType.DATE)
     @Column(name = "NgaySanXuat")
     private Date ngaySanXuat;
-    
+
     @Column(name = "BaoHanh", columnDefinition = "nvarchar(255)")
     private String baoHanh;
-    
+
     @Column(name = "AnhDaiDien")
     private String anhDaiDien;
 
@@ -66,8 +78,8 @@ public class SanPham implements Serializable {
     private List<HinhAnhSanPham> hinhAnhSanPhams = new ArrayList<>();
 
 
-   
-    
+
+
     public Long getProductID() {
         return productID;
     }

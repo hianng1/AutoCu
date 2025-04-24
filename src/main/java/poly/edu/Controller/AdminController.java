@@ -15,9 +15,9 @@ import poly.edu.Model.User;
 public class AdminController {
 	@Autowired
     private UserDAO userDAO;
-	
+
     @GetMapping
-    
+
     public String danhSachNguoiDung(Model model) {
     	List<User> users = userDAO.findAll(); // Lấy *tất cả* user
         model.addAttribute("users", users);
@@ -31,10 +31,10 @@ public class AdminController {
         public String editEmployeePage() {
             return "Admin/suanhanvien";
         }
-        
-        
-        
 
-       
+
+
+
+
 }
 
