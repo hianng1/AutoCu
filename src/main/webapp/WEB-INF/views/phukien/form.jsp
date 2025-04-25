@@ -10,82 +10,142 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chi tiết sản phẩm</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
+     <style>
         body {
             background-color: #f8f9fa;
         }
 
-        .sidebar {
-            background-color: #fff;
-            border-right: 1px solid #1677FF;
-            padding: 20px;
-        }
+        /* Sidebar */
+        /* Sidebar */
+#sidebar {
+    background-color: #343a40;
+    color: white;
+    padding: 20px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 300px; /* Độ rộng sidebar */
+    z-index: 1000;
+    box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+}
 
-        .sidebar .nav-link {
-            padding: 0.5rem 1rem;
-            color: #333;
-        }
+/* Tăng kích thước font chữ cho header sidebar */
+.sidebar-heading span {
+    font-size: 1.5rem;
+    color: #007bff;
+    font-weight: bold;
+}
 
-        .sidebar .nav-link:hover {
-            background-color: #1677FF;
-            color: #fff;
-        }
+/* Hiệu ứng cho link sidebar */
+.sidebar .nav-link {
+    padding: 0.75rem 1rem;
+    color: #adb5bd;
+    transition: background-color 0.3s, padding-left 0.3s;
+}
 
-        .sidebar-heading span,
-        .main-content h2 {
-            color: #1677FF;
-            font-weight: bold;
-        }
+.sidebar .nav-link:hover {
+    background-color: #007bff;
+    color: white;
+    padding-left: 1.5rem; /* Tăng khoảng cách khi hover */
+}
 
-        .main-content {
-            padding: 20px;
-        }
+.sidebar .nav-link i {
+    margin-right: 10px;
+}
 
-        .form-label {
-            font-weight: 500;
-        }
+/* Hiệu ứng collapse item */
+.sidebar .nav-item .collapse {
+    background-color: #495057;
+}
 
-        .form-control {
-            border-radius: 0.5rem;
-        }
+.sidebar .nav-item .collapse .nav-link {
+    color: #ccc;
+    padding-left: 2rem;
+}
 
-        button[type="submit"] {
-            margin-top: 20px;
-        }
+.sidebar .nav-item .collapse .nav-link:hover {
+    background-color: #6c757d;
+}
+
+.sidebar .nav-link.active {
+    background-color: #28a745;
+    color: white;
+}
+
+/* Thêm hiệu ứng cho các item có icon */
+.sidebar .nav-link i {
+    font-size: 1.2rem;
+}
+
     </style>
 </head>
 <body>
+
 <div class="container-fluid">
     <div class="row">
-        <nav class="col-md-3 col-lg-2 d-md-block sidebar">
-            <div class="position-sticky">
-                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1">
-                    <span>Quản lý user</span>
-                </h6>
-                <ul class="nav flex-column">
-                    <li class="nav-item"><a class="nav-link" href="#">Quản trị</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Tài khoản</a></li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" data-bs-target="#thongTinTaiKhoan">
-                            Thông tin tài khoản
-                        </a>
-                        <div class="collapse show" id="thongTinTaiKhoan">
-                            <ul class="nav flex-column ps-3">
-                                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/views/Admin/quantri.jsp">Quản Trị</a></li>
-                                <li class="nav-item"><a class="nav-link" href="#">Thông tin người dùng</a></li>
-                                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/views/Admin/themnhanvien.jsp">Thêm Nhân Viên</a></li>
-                                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/views/Admin/suanhanvien.jsp">Sửa Thông Tin User</a></li>
-                                <li class="nav-item"><a class="nav-link" href="#">Thay đổi mật khẩu</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="nav-item"><a class="nav-link" href="#">Quản lý user</a></li>
-                    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/sanpham">Quản lý Sản Phẩm</a></li>
-                </ul>
-            </div>
-        </nav>
+        <!-- Sidebar -->
+       <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block sidebar">
+    <div class="position-sticky">
+        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+            <span>Quản lý user</span>
+        </h6>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="${pageContext.request.contextPath}/quantri">
+                    <i class="fas fa-tachometer-alt"></i> Quản trị
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-user-circle"></i> Tài khoản
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#thongTinTaiKhoan">
+                    <i class="fas fa-cogs"></i> Thông tin tài khoản <i class="fas fa-caret-down"></i>
+                </a>
+                <div class="collapse show" id="thongTinTaiKhoan">
+                    <ul class="nav flex-column ps-3">
+                        <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/khachhang">Danh sách khách hàng</a></li>
+                        <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/themnhanvien">Thêm Nhân Viên</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/quantri">
+                    <i class="fas fa-users"></i> Quản lý user
+                </a>
+            </li>
+          <li class="nav-item">
+    <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#quanLySanPham">
+        <i class="fas fa-box"></i> Quản lý Sản Phẩm <i class="fas fa-caret-down"></i>
+    </a>
+    <div class="collapse" id="quanLySanPham">
+        <ul class="nav flex-column ps-3">
+            <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/sanpham">Quản lý sản phẩm</a></li>
+            <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/phukien/list">Quản lý phụ kiện</a></li>
+        </ul>
+    </div>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#thongKe">
+        <i class="fas fa-chart-bar"></i> Thống kê <i class="fas fa-caret-down"></i>
+    </a>
+    <div class="collapse" id="thongKe">
+        <ul class="nav flex-column ps-3">
+            <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/thongke/banhang">Thống kê bán hàng</a></li>
+            <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/donhang">Thống kê đơn hàng</a></li>
+           
+        </ul>
+    </div>
+</li>
 
-        <main class="col-md-9 ms-sm-auto col-lg-10 main-content">
+
+        </ul>
+    </div>
+</nav>
+        <main class="col-md-9 ms-sm-auto col-lg-9 main-content">
             <h2>Form Phụ kiện Ô tô</h2>
             <form:form method="post" modelAttribute="phuKienOto" action="/phukien/save" enctype="multipart/form-data">
                 <form:hidden path="accessoryID"/>

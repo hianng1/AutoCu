@@ -145,96 +145,40 @@
 
         </ul>
     </div>
+</nav>
 
 
-        </nav>
+        <!-- Main Content -->
+        <main class="col-md-3 ms-sm-auto col-lg-9 main-content">
+           
+    <h3>Chi tiết đơn hàng #${donHang.orderID}</h3>
+    <p><strong>Ngày đặt:</strong> ${donHang.ngayDatHang}</p>
+    <p><strong>Trạng thái:</strong> ${donHang.trangThai.moTa}</p>
 
-        <!-- Main content -->
-        <main class="col-md-9 ms-sm-auto col-lg-9 ms-5 ">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h2>Danh sách Khách Hàng đã đặt hàng</h2>
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search"
-                           placeholder="Tìm Kiếm" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </form>
-            </div>
+    <table class="table table-bordered mt-3">
+        <thead class="table-light">
+        <tr>
+            <th>ID</th>
+            <th>Tên sản phẩm</th>
+            <th>Số lượng</th>
+            <th>Đơn giá</th>
+            <th>Thành tiền</th>
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach items="${chiTietDonHangs}" var="ct">
+            <tr>
+                <td>${ct.orderItemID}</td>
+                <td>${ct.tenSanPham}</td>
+                <td>${ct.soLuong}</td>
+                <td>${ct.donGia}</td>
+                <td>${ct.thanhTien}</td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
 
-            <div class="table-responsive">
-                <table class="table table-striped table-bordered">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Họ và tên</th>
-                        <th>Email</th>
-                        <th>Số điện thoại</th>
-                        <th>Địa chỉ</th>
-                        <th>Mật khẩu</th>
-                        <th class="hidden-role">Vai trò</th>
-                        <th></th> <!-- Cột cho các action -->
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach var="khachHang" items="${khachHangs}">
-                        <tr>
-                            <td>${khachHang.userID}</td>
-                            <td>${khachHang.tenKhachHang}</td>  <!-- Corrected -->
-                            <td>${khachHang.email}</td>
-                            <td>${khachHang.soDienThoai}</td>  <!-- Corrected -->
-                            <td>${khachHang.diaChi}</td>  <!-- Corrected -->
-                            <td>${khachHang.matKhau}</td>  <!-- Corrected -->
-                            <td class="hidden-role">${khachHang.vaiTro}</td>  <!-- Corrected -->
-                    <td>
-    <div class="dropdown">
-        <button class="btn btn-sm btn-light dropdown-toggle"
-                type="button" id="dropdownMenuButton${khachHang.userID}"
-                data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="fas fa-ellipsis-v"></i>
-        </button>
-        <ul class="dropdown-menu"
-            aria-labelledby="dropdownMenuButton${khachHang.userID}">
-            <li>
-                <form action="${pageContext.request.contextPath}/xoakhachhang" method="post">
-                    <input type="hidden" name="userID" value="${khachHang.userID}">
-                    <button type="submit" class="dropdown-item" onclick="return confirm('Bạn có chắc chắn muốn xóa khách hàng này?')">Xóa</button>
-                </form>
-            </li>
-        </ul>
-    </div>
-</td>
-            
-        </ul>
-    </div>
-</td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Phân trang (nếu cần) -->
-            <nav aria-label="Page navigation">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item"><a class="page-link" href="#">Trang
-                        đầu</a></li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">4</a></li>
-                    <li class="page-item"><a class="page-link" href="#">Trang
-                        cuối</a></li>
-                </ul>
-            </nav>
-        </main>
-    </div>
-</div>
-
-<!-- Bootstrap JavaScript -->
-<script
-        src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-<script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <a href="${pageContext.request.contextPath}/donhang" class="btn btn-secondary">Quay lại</a>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

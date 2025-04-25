@@ -145,96 +145,88 @@
 
         </ul>
     </div>
+</nav>
 
 
-        </nav>
+        <!-- Main Content -->
+        <main class="col-md-3 ms-sm-auto col-lg-9 main-content">
+           
 
-        <!-- Main content -->
-        <main class="col-md-9 ms-sm-auto col-lg-9 ms-5 ">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h2>Danh sách Khách Hàng đã đặt hàng</h2>
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search"
-                           placeholder="Tìm Kiếm" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </form>
-            </div>
+<div class="container py-4">
+    <h2 class="mb-4 text-primary">Quản lý Đơn Hàng</h2>
 
-            <div class="table-responsive">
-                <table class="table table-striped table-bordered">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Họ và tên</th>
-                        <th>Email</th>
-                        <th>Số điện thoại</th>
-                        <th>Địa chỉ</th>
-                        <th>Mật khẩu</th>
-                        <th class="hidden-role">Vai trò</th>
-                        <th></th> <!-- Cột cho các action -->
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach var="khachHang" items="${khachHangs}">
-                        <tr>
-                            <td>${khachHang.userID}</td>
-                            <td>${khachHang.tenKhachHang}</td>  <!-- Corrected -->
-                            <td>${khachHang.email}</td>
-                            <td>${khachHang.soDienThoai}</td>  <!-- Corrected -->
-                            <td>${khachHang.diaChi}</td>  <!-- Corrected -->
-                            <td>${khachHang.matKhau}</td>  <!-- Corrected -->
-                            <td class="hidden-role">${khachHang.vaiTro}</td>  <!-- Corrected -->
+    <!-- Form lọc -->
+    <form class="row g-3 mb-4" method="get" action="/donhang">
+        <div class="col-auto">
+            <label for="trangThai" class="col-form-label">Lọc theo trạng thái:</label>
+        </div>
+        <div class="col-auto">
+            <select class="form-select" name="trangThai" id="trangThai" onchange="this.form.submit()">
+                <option value="">-- Tất cả --</option>
+                <c:forEach items="${trangThais}" var="tt">
+                    <option value="${tt}" ${tt == trangThaiSelected ? 'selected' : ''}>${tt.moTa}</option>
+                </c:forEach>
+            </select>
+        </div>
+    </form>
+
+    <!-- Bảng đơn hàng -->
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped align-middle">
+            <thead class="table-primary">
+            <tr>
+            <th>Mã đơn hàng</th>
+        <th>Ngày đặt</th>
+        <th>Trạng thái</th>
+        <th>Phương thức thanh toán</th>
+        
+        <th>User ID</th>
+        <th>Địa chỉ giao hàng</th>
+        <th>Thao tác</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach items="${donHangs}" var="don">
+                <tr>
+                    <td>${don.orderID}</td>
+               
+                    <td>${don.ngayDatHang}</td>
+                 
                     <td>
-    <div class="dropdown">
-        <button class="btn btn-sm btn-light dropdown-toggle"
-                type="button" id="dropdownMenuButton${khachHang.userID}"
-                data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="fas fa-ellipsis-v"></i>
-        </button>
-        <ul class="dropdown-menu"
-            aria-labelledby="dropdownMenuButton${khachHang.userID}">
-            <li>
-                <form action="${pageContext.request.contextPath}/xoakhachhang" method="post">
-                    <input type="hidden" name="userID" value="${khachHang.userID}">
-                    <button type="submit" class="dropdown-item" onclick="return confirm('Bạn có chắc chắn muốn xóa khách hàng này?')">Xóa</button>
-                </form>
-            </li>
-        </ul>
-    </div>
-</td>
-            
-        </ul>
-    </div>
-</td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
-            </div>
+                        <form method="post" action="/donhang/update/${don.orderID}">
+                            <select class="form-select form-select-sm" name="trangThai" onchange="this.form.submit()">
+                                <c:forEach items="${trangThais}" var="tt">
+                                    <option value="${tt}" ${tt == don.trangThai ? 'selected' : ''}>${tt.moTa}</option>
+                                </c:forEach>
+                            </select>
 
-            <!-- Phân trang (nếu cần) -->
-            <nav aria-label="Page navigation">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item"><a class="page-link" href="#">Trang
-                        đầu</a></li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">4</a></li>
-                    <li class="page-item"><a class="page-link" href="#">Trang
-                        cuối</a></li>
-                </ul>
-            </nav>
+                            <!-- CSRF token nếu dùng Spring Security -->
+                            <sec:csrfInput/>
+                        </form>
+                        
+                    </td>
+                    <td>${don.phuongThucThanhToan}</td>
+                     <td>${don.user.id}</td>
+                   <td>${don.diaChiGiaoHang}</td>
+                    <td>
+                     <a href="${pageContext.request.contextPath}/donhang/chitiet/${don.orderID}" class="btn btn-sm btn-info ms-2">
+        <i class="fa fa-eye"></i> Xem chi tiết
+    </a>
+                    </td>
+                    
+                </tr>
+            </c:forEach>
+            </tbody>
+          
+        </table>
+    </div>
+</div>
+
+
         </main>
     </div>
 </div>
 
-<!-- Bootstrap JavaScript -->
-<script
-        src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-<script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

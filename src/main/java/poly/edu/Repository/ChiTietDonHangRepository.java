@@ -9,4 +9,6 @@ import poly.edu.Model.DonHang;
 
 public interface ChiTietDonHangRepository extends JpaRepository<ChiTietDonHang, Long> {
     List<ChiTietDonHang> findByDonHang(DonHang donHang);
+    
+    List<ChiTietDonHang> findByDonHangOrderByOrderItemIDAsc(DonHang donHang);
 }

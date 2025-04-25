@@ -58,7 +58,7 @@ public class UserService {
         newUser.setHovaten(hovaten);
         newUser.setSodienthoai(sodienthoai != null ? sodienthoai : null);
         newUser.setDiaChi(diaChi);
-        newUser.setRole("USER"); // Mặc định là USER
+        newUser.setRole("ADMIN"); // Mặc định là USER
 
         userRepository.save(newUser);
         return "Đăng ký thành công!";

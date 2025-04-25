@@ -241,7 +241,7 @@ public class HomeController {
     }
 
      // Trang chi tiết sản phẩm (có thể công khai)
-     @GetMapping("/products/{productId}") // URL chi tiết sản phẩm
+     @GetMapping("/details/{productId}") // URL chi tiết sản phẩm
      public String getDetailsByProductId(@PathVariable("productId") Long productId, Model model) {
          // Logic lấy chi tiết sản phẩm
          // ... (code hiện tại của bạn) ...

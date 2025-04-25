@@ -10,6 +10,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         body {
@@ -145,96 +146,81 @@
 
         </ul>
     </div>
+</nav>
 
 
-        </nav>
+        <!-- Main Content -->
+        <main class="col-md-3 ms-sm-auto col-lg-9 main-content">
+   
+<div class="container my-5">
+    <div class="row">
+        <!-- Biểu đồ tròn -->
+        <div class="col-md-6">
+            <h3>Biểu đồ tròn</h3>
+            <canvas id="pieChart"></canvas>
+        </div>
 
-        <!-- Main content -->
-        <main class="col-md-9 ms-sm-auto col-lg-9 ms-5 ">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h2>Danh sách Khách Hàng đã đặt hàng</h2>
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search"
-                           placeholder="Tìm Kiếm" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </form>
-            </div>
-
-            <div class="table-responsive">
-                <table class="table table-striped table-bordered">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Họ và tên</th>
-                        <th>Email</th>
-                        <th>Số điện thoại</th>
-                        <th>Địa chỉ</th>
-                        <th>Mật khẩu</th>
-                        <th class="hidden-role">Vai trò</th>
-                        <th></th> <!-- Cột cho các action -->
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach var="khachHang" items="${khachHangs}">
-                        <tr>
-                            <td>${khachHang.userID}</td>
-                            <td>${khachHang.tenKhachHang}</td>  <!-- Corrected -->
-                            <td>${khachHang.email}</td>
-                            <td>${khachHang.soDienThoai}</td>  <!-- Corrected -->
-                            <td>${khachHang.diaChi}</td>  <!-- Corrected -->
-                            <td>${khachHang.matKhau}</td>  <!-- Corrected -->
-                            <td class="hidden-role">${khachHang.vaiTro}</td>  <!-- Corrected -->
-                    <td>
-    <div class="dropdown">
-        <button class="btn btn-sm btn-light dropdown-toggle"
-                type="button" id="dropdownMenuButton${khachHang.userID}"
-                data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="fas fa-ellipsis-v"></i>
-        </button>
-        <ul class="dropdown-menu"
-            aria-labelledby="dropdownMenuButton${khachHang.userID}">
-            <li>
-                <form action="${pageContext.request.contextPath}/xoakhachhang" method="post">
-                    <input type="hidden" name="userID" value="${khachHang.userID}">
-                    <button type="submit" class="dropdown-item" onclick="return confirm('Bạn có chắc chắn muốn xóa khách hàng này?')">Xóa</button>
-                </form>
-            </li>
-        </ul>
+        <!-- Biểu đồ cột -->
+        <div class="col-md-6">
+            <h3>Biểu đồ cột</h3>
+            <canvas id="barChart"></canvas>
+        </div>
     </div>
-</td>
-            
-        </ul>
-    </div>
-</td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
-            </div>
+</div>
 
-            <!-- Phân trang (nếu cần) -->
-            <nav aria-label="Page navigation">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item"><a class="page-link" href="#">Trang
-                        đầu</a></li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">4</a></li>
-                    <li class="page-item"><a class="page-link" href="#">Trang
-                        cuối</a></li>
-                </ul>
-            </nav>
+<!-- Bootstrap JS và Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
+<script>
+    // Biểu đồ tròn (Pie Chart)
+    var ctxPie = document.getElementById('pieChart').getContext('2d');
+    var pieChart = new Chart(ctxPie, {
+        type: 'pie',
+        data: {
+            labels: ['Red', 'Blue', 'Yellow'],
+            datasets: [{
+                label: 'My First Dataset',
+                data: [300, 50, 100],
+                backgroundColor: ['red', 'blue', 'yellow'],
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            responsive: true
+        }
+    });
+
+    // Biểu đồ cột (Bar Chart)
+    var ctxBar = document.getElementById('barChart').getContext('2d');
+    var barChart = new Chart(ctxBar, {
+        type: 'bar',
+        data: {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+            datasets: [{
+                label: 'My First Dataset',
+                data: [65, 59, 80, 81, 56, 55],
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+
         </main>
     </div>
 </div>
 
-<!-- Bootstrap JavaScript -->
-<script
-        src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-<script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

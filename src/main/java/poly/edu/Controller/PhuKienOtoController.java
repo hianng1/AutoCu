@@ -5,6 +5,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -126,11 +127,17 @@ public class PhuKienOtoController {
     }
 
 
-    // Xử lý xóa phụ kiện
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id") Long id) {
-        pkRepo.deleteById(id);
-        return "redirect:/phukien/list";  // Quay lại danh sách sau khi xóa
+    public String deletePhuKien(@PathVariable("id") Long id, Model model) {
+        try {
+            // Thực hiện xóa PhuKienOto
+            pkRepo.deleteById(id);
+            return "redirect:/phukien/list"; 
+        } catch (DataIntegrityViolationException e) {
+            
+            model.addAttribute("errorMessage", "Phụ kiện này đang được liên kết với hóa đơn và không thể xóa.");
+            return "phukien/list";  
+        }
     }
 }
 
