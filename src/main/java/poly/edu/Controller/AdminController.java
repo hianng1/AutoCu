@@ -11,13 +11,12 @@ import poly.edu.DAO.UserDAO;
 import poly.edu.Model.User;
 
 @Controller
-@RequestMapping("/Admin")
+@RequestMapping("/quantri")
 public class AdminController {
 	@Autowired
     private UserDAO userDAO;
 	
     @GetMapping
-    
     public String danhSachNguoiDung(Model model) {
     	List<User> users = userDAO.findAll(); // Lấy *tất cả* user
         model.addAttribute("users", users);
