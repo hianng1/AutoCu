@@ -7,6 +7,19 @@ prefix="c"%> <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt"%>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AutoCu - Chuyên xe cũ & phụ tùng</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link
       href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
       rel="stylesheet"
@@ -15,7 +28,25 @@ prefix="c"%> <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt"%>
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
+    
     <style>
+    	.card-hover-effect {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover-effect:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        .price-text {
+            color: #dc3545;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .section-divider {
+            width: 15%;
+            height: 1px;
+            background-color: #e5e7eb;
+        }
       .support-banner {
         background-color: #f97316;
         background-image: url("https://pos.nvncdn.com/4e732c-26/art/artCT/20201015_LLLUpBDKbLdsrj0KfjLjj46G.jpg");
@@ -123,12 +154,30 @@ prefix="c"%> <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt"%>
       details[open] .group-open\:rotate-180 {
         transform: rotate(180deg);
       }
+      .card-hover-effect {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover-effect:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        .price-text {
+            color: #dc3545;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .section-divider {
+            width: 15%;
+            height: 1px;
+            background-color: #e5e7eb;
+        }
     </style>
   </head>
-  <body class="bg-gray-50">
+  <body>
     <jsp:include page="/common/header.jsp"></jsp:include>
 
-    <!-- Banner -->
+   	<div>
+   		<!-- Banner -->
     <div class="support-banner py-16 text-white">
       <div class="container mx-auto text-center px-4">
         <h1 class="text-4xl font-bold mb-4 drop-shadow-md">
@@ -563,6 +612,7 @@ prefix="c"%> <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt"%>
         </div>
       </div>
     </div>
+   	</div>
 
     <jsp:include page="/common/footer.jsp"></jsp:include>
 
