@@ -53,31 +53,6 @@
     </c:if>
 </div>
 
-<!-- Notification Section -->
-<c:if test="${not empty successMessage}">
-    <div class="toast-container position-fixed bottom-0 end-0 p-3">
-        <div class="toast show" role="alert">
-            <div class="toast-header bg-success text-white">
-                <strong class="me-auto">Thành công</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
-            </div>
-            <div class="toast-body">${successMessage}</div>
-        </div>
-    </div>
-</c:if>
-
-<c:if test="${not empty errorMessage}">
-    <div class="toast-container position-fixed bottom-0 end-0 p-3">
-        <div class="toast show" role="alert">
-            <div class="toast-header bg-danger text-white">
-                <strong class="me-auto">Lỗi</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
-            </div>
-            <div class="toast-body">${errorMessage}</div>
-        </div>
-    </div>
-</c:if>
-
 <!-- Hero Section -->
 <section class="relative h-[80vh] flex items-center justify-center">
     <div class="absolute inset-0">

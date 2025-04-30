@@ -362,8 +362,11 @@ public class CartController {
 
             // --- Chuyển hướng đến trang thông báo đặt hàng thành công ---
             // Sử dụng mã đơn hàng vừa lưu để thông báo
-            redirectAttributes.addFlashAttribute("success", "Đặt hàng thành công! Mã đơn hàng của bạn là: " + savedOrder.getOrderID());
-            return "redirect:/trangchu"; // <-- REDIRECT VỀ TRANG CHỦ HOẶC TRANG ĐƠN HÀNG CỦA TÔI
+         // ** Dòng mới: Dùng key "successMessage" để khớp với JSP **
+            redirectAttributes.addFlashAttribute("successMessage", "Đặt hàng thành công! Mã đơn hàng của bạn là: " + savedOrder.getOrderID());
+
+            // ** Giữ nguyên dòng redirect về trang giỏ hàng **
+            return "redirect:/cart/views"; // <-- REDIRECT VỀ TRANG GIỎ HÀNG
 
         } catch (Exception e) {
             // ** XỬ LÝ LỖI **
