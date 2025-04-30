@@ -3,7 +3,7 @@
 <%-- Cập nhật URI taglib JSTL sang chuẩn mới --%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> <%-- Đã sửa core_rt thành core --%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %> 
 <%-- Nếu bạn cần sử dụng các thẻ sec:... trong trang cart.jsp này, bỏ comment dòng dưới --%>
 <%-- <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %> --%>
 
@@ -13,7 +13,7 @@
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>AutoCu - Giỏ hàng</title>
+    <title>AutoCu - Chuyên xe cũ & phụ tùng</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -23,6 +23,10 @@
     <%-- Các meta tag này thường được đặt ở head của trang chính (layout hoặc index) --%>
     <%-- <meta name="_csrf" content="${_csrf.token}"/> --%>
     <%-- <meta name="_csrf_header" content="${_csrf.headerName}"/> --%>
+
+    <%-- Import Bootstrap CSS (Cần thiết cho Modal và các class form) --%>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
 
     <style>
         body {
@@ -118,6 +122,139 @@
             top: 1rem;
             right: 1rem;
          }
+
+         /* Custom style for Bootstrap form controls within Tailwind layout */
+         .form-label {
+            display: block; /* Make label block */
+            margin-bottom: 0.25rem; /* Add small margin below label */
+            font-size: 0.875rem; /* text-sm */
+            font-weight: 500; /* font-semibold */
+            color: #4b5563; /* text-gray-700 */
+         }
+         .form-control-sm {
+             padding: 0.25rem 0.5rem; /* Smaller padding */
+             font-size: 0.875rem; /* text-sm */
+             border-radius: 0.25rem; /* smaller border-radius */
+         }
+          .form-check-input {
+              margin-top: 0.25em; /* Adjust alignment */
+          }
+          .form-check-label {
+              margin-bottom: 0; /* Remove bottom margin */
+          }
+          
+           body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8fafc;
+        }
+        .cart-item {
+            transition: all 0.3s ease;
+        }
+        .cart-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .quantity-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e5e7eb;
+            background-color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .quantity-btn:hover {
+            background-color: #f3f4f6;
+        }
+        .quantity-input {
+            width: 50px;
+            text-align: center;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.375rem;
+            padding: 0.25rem;
+        }
+        .remove-btn {
+            color: #ef4444;
+            transition: all 0.2s ease;
+        }
+        .remove-btn:hover {
+            color: #dc2626;
+        }
+        .empty-cart {
+            text-align: center;
+            padding: 4rem 0;
+        }
+        .empty-cart i {
+            font-size: 4rem;
+            color: #9ca3af;
+            margin-bottom: 1rem;
+        }
+        .product-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+        }
+        .price {
+            color: #ef4444;
+            font-weight: 600;
+        }
+        .total-section {
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+        .customer-info {
+            background-color: #f3f4f6;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .customer-info p {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+        .customer-info i {
+            margin-right: 0.5rem;
+            color: #4b5563;
+            width: 20px;
+            text-align: center;
+        }
+         /* Custom style for Bootstrap form controls within Tailwind layout */
+         .form-label {
+            display: block; /* Make label block */
+            margin-bottom: 0.25rem; /* Add small margin below label */
+            font-size: 0.875rem; /* text-sm */
+            font-weight: 500; /* font-semibold */
+            color: #4b5563; /* text-gray-700 */
+         }
+         .form-control-sm {
+             padding: 0.25rem 0.5rem; /* Smaller padding */
+             font-size: 0.875rem; /* text-sm */
+             border-radius: 0.25rem; /* smaller border-radius */
+         }
+          .form-check-input {
+              margin-top: 0.25em; /* Adjust alignment */
+          }
+          .form-check-label {
+              margin-bottom: 0; /* Remove bottom margin */
+          }
+           /* Style for Toast messages positioning */
+          .toast-container.top-0.end-0 {
+              top: 1rem !important;
+              right: 1rem !important;
+          }
+
     </style>
 </head>
 <body>
@@ -126,6 +263,34 @@
 
     <div class="container mx-auto px-4 py-8">
         <h1 class="text-3xl font-bold text-gray-800 mb-8">Giỏ Hàng</h1>
+        
+        
+        <%-- START: DISPLAY TOAST MESSAGES (for general success/error) --%>
+        <%-- Toast Container cho Toast messages --%>
+        <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1100">
+            <%-- Toast cho thông báo thành công (từ RedirectAttributes) --%>
+            <c:if test="${not empty successMessage}">
+                <div id="successToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header bg-success text-white">
+                        <strong class="me-auto">Thành công</strong>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">${successMessage}</div>
+                </div>
+            </c:if>
+
+            <%-- Toast cho thông báo lỗi (từ RedirectAttributes) --%>
+            <c:if test="${not empty errorMessage}">
+                <div id="errorToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header bg-danger text-white">
+                        <strong class="me-auto">Lỗi</strong>
+                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">${errorMessage}</div>
+                </div>
+            </c:if>
+        </div>
+        <%-- END: DISPLAY TOAST MESSAGES --%>
 
         <%-- Display Flash Messages (success and error attributes from controller) --%>
         <c:if test="${not empty success}">
@@ -290,31 +455,14 @@
                         </div>
                     </div>
 
-					<%-- Link tiến hành thanh toán --%>
-                    <%-- THÊM contextPath vào link --%>
-					<%-- Form này sẽ gửi yêu cầu POST trực tiếp đến /checkout --%>
-					<form action="${pageContext.request.contextPath}/cart/checkout" method="post">
-					    <%-- Nếu bạn có cấu hình Spring Security CSRF, bỏ comment dòng dưới --%>
-					    <%-- <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> --%>
-					
-					    <%--
-					       Quan trọng: Nếu phương thức POST /checkout cần các tham số
-					       @RequestParam("paymentMethod"), @RequestParam("shippingAddress"), v.v.,
-					       bạn cần cung cấp chúng ở đây dưới dạng input ẩn hoặc thay đổi logic trong controller
-					       để lấy chúng từ nguồn khác (ví dụ: user profile defaults).
-					       Nếu không có input ẩn, các @RequestParam trong controller sẽ là null hoặc lỗi nếu required.
-					    --%>
-					    <%-- Ví dụ (nếu muốn gửi giá trị mặc định hoặc từ user profile): --%>
-					    <input type="hidden" name="paymentMethod" value="CashOnDelivery"/>
-					    <input type="hidden" name="shippingAddress" value="${userInfo.diaChi}"/>
-					    <input type="hidden" name="shippingMethod" value="standard"/>
-					    <input type="hidden" name="note" value=""/>
-					
-					
-					    <button type="submit" class="w-full text-center inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">
-					        Tiến hành thanh toán
-					    </button>
-					</form>
+					<%-- START: BUTTON KÍCH HOẠT MODAL --%>
+					<button type="button"
+					        class="w-full text-center inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
+					        data-bs-toggle="modal" data-bs-target="#checkoutModal"
+                            ${empty userInfo ? 'disabled' : ''}> <%-- Disable nút nếu chưa đăng nhập --%>
+					    Tiến hành thanh toán
+					</button>
+                    <%-- END: BUTTON KÍCH HOẠT MODAL --%>
 
 					<%-- Link tiếp tục mua sắm --%>
                     <%-- THÊM contextPath vào link --%>
@@ -335,9 +483,135 @@
             </div>
         </c:if>
     </div>
+    
+    <%-- START: BOOTSTRAP MODAL CHO CHECKOUT --%>
+    <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="checkoutModalLabel">Xác Nhận Đơn Hàng & Thanh Toán</h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	      </div>
+	      <div class="modal-body">
+	        <%-- Form sẽ được gửi khi nhấn nút xác nhận trong footer --%>
+	        <%-- THÊM contextPath vào action form trong modal --%>
+	        <form action="${pageContext.request.contextPath}/cart/checkout" method="post" id="checkoutForm">
+	            <%-- Nếu bạn có cấu hình Spring Security CSRF, bỏ comment dòng dưới --%>
+	            <%-- <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> --%>
+
+                <%-- Hiển thị thông tin tổng tiền --%>
+	            <div class="mb-3 text-center"> <%-- Thêm text-center để căn giữa --%>
+	                <p class="font-semibold text-xl text-gray-800">Tổng cộng: <span class="text-red-600"><fmt:formatNumber value="${TOTAL}" pattern="#,##0" /> đ</span></p>
+	            </div>
+
+	            <%-- Thông tin giao hàng (Điền sẵn từ userInfo) --%>
+	            <div class="mb-4 p-3 bg-gray-100 rounded">
+	                 <h6 class="font-semibold mb-2 text-gray-800">Thông tin giao hàng</h6>
+	                 <%-- Kiểm tra userInfo trước khi hiển thị để tránh lỗi (Nút kích hoạt đã disabled nếu empty, nhưng kiểm tra lại vẫn tốt) --%>
+	                 <c:if test="${not empty userInfo}">
+	                    <div class="mb-2">
+	                       <label for="shippingName" class="form-label text-sm">Người nhận:</label>
+	                       <%-- Readonly input for name --%>
+	                       <input type="text" class="form-control form-control-sm" id="shippingName" value="${userInfo.hovaten}" readonly>
+	                    </div>
+	                    <div class="mb-2">
+	                       <label for="shippingPhone" class="form-label text-sm">Số điện thoại:</label>
+                            <%-- Readonly input for phone --%>
+	                       <input type="text" class="form-control form-control-sm" id="shippingPhone" value="${userInfo.sodienthoai}" readonly>
+	                    </div>
+	                    <div class="mb-2">
+	                       <label for="shippingAddress" class="form-label text-sm">Địa chỉ nhận hàng:</label>
+	                       <%-- Tên input "shippingAddress" phải khớp với @RequestParam hoặc property trong @ModelAttribute object --%>
+	                       <input type="text" class="form-control form-control-sm" id="shippingAddress" name="shippingAddress" value="${userInfo.diaChi}" required> <%-- Cho phép sửa và bắt buộc --%>
+	                    </div>
+	                    <%-- Input ẩn cho user ID nếu controller cần (lấy lại từ session hoặc security context trong controller thường an toàn hơn) --%>
+	                    <%-- <input type="hidden" name="userId" value="${userInfo.maNguoiDung}"> --%>
+	                 </c:if>
+	                 <%-- Trường hợp userInfo empty sẽ không xảy ra nếu nút kích hoạt modal bị disabled --%>
+	            </div>
+
+	            <%-- Lựa chọn phương thức thanh toán --%>
+	            <div class="mb-4">
+	                 <h6 class="font-semibold mb-2 text-gray-800">Phương thức thanh toán</h6>
+	                 <%-- Tên input "paymentMethod" phải khớp với @RequestParam hoặc property trong @ModelAttribute object --%>
+	                 <div class="form-check">
+	                     <input class="form-check-input" type="radio" name="paymentMethod" id="paymentCash" value="CashOnDelivery" checked>
+	                     <label class="form-check-label" for="paymentCash">
+	                         Thanh toán khi nhận hàng (COD)
+	                     </label>
+	                 </div>
+	                 <%-- Thêm các lựa chọn thanh toán khác nếu có --%>
+	                 <%--
+	                 <div class="form-check">
+	                     <input class="form-check-input" type="radio" name="paymentMethod" id="paymentOnline" value="OnlinePayment">
+	                     <label class="form-check-label" for="paymentOnline">
+	                         Thanh toán Online (Ví điện tử, Ngân hàng...)
+	                     </label>
+	                 </div>
+	                 --%>
+	            </div>
+
+	            <%-- Ghi chú đơn hàng --%>
+	            <div class="mb-3">
+	                <label for="orderNote" class="form-label text-sm">Ghi chú (Tùy chọn):</label>
+	                <%-- Tên input "note" phải khớp với @RequestParam hoặc property trong @ModelAttribute object --%>
+	                <textarea class="form-control form-control-sm" id="orderNote" name="note" rows="2"></textarea>
+	            </div>
+
+	            <%-- Input ẩn cho các thông tin khác nếu controller cần --%>
+	            <%-- Ví dụ: tổng tiền, danh sách sản phẩm (nếu không lấy lại từ giỏ hàng session) --%>
+                 <%-- <input type="hidden" name="totalAmount" value="${TOTAL}"> --%>
+
+	             <%-- Lưu ý: Danh sách sản phẩm trong giỏ hàng thường được lấy lại từ session trong controller --%>
+	             <%-- hoặc từ database dựa trên user ID, không cần gửi lại qua form ẩn --%>
+
+	        </form>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+	        <%-- Nút này gửi form#checkoutForm --%>
+	        <%-- KHÔNG cần disabled ở đây vì nút kích hoạt modal đã bị disabled nếu user empty --%>
+	        <button type="submit" form="checkoutForm" class="btn btn-primary">Xác Nhận Thanh Toán</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+    <%-- END: BOOTSTRAP MODAL CHO CHECKOUT --%>
+    
+    <%-- START: MODAL THÔNG BÁO ĐẶT HÀNG THÀNH CÔNG (Popup theo yêu cầu) --%>
+    <div class="modal fade" id="checkoutSuccessModal" tabindex="-1" aria-labelledby="checkoutSuccessModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false"> <%-- Thêm data-bs-backdrop/keyboard để không đóng modal trừ khi bấm OK --%>
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header bg-success text-white">
+            <h5 class="modal-title" id="checkoutSuccessModalLabel">Đặt Hàng Thành Công!</h5>
+             <%-- Bỏ nút đóng mặc định để buộc người dùng bấm OK --%>
+            <%-- <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button> --%>
+          </div>
+          <div class="modal-body">
+            Đơn hàng của bạn đã được đặt thành công. Cảm ơn quý khách!
+            <%-- Hiển thị mã đơn hàng nếu bạn đã truyền orderId vào Model --%>
+             <c:if test="${not empty orderId}">
+                 <p class="mt-2">Mã đơn hàng của bạn: <strong>${orderId}</strong></p>
+             </c:if>
+          </div>
+          <div class="modal-footer">
+            <%-- Nút OK để đóng modal và chuyển hướng --%>
+            <button type="button" class="btn btn-primary" id="checkoutSuccessOkBtn">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <%-- END: MODAL THÔNG BÁO ĐẶT HÀNG THÀNH CÔNG --%>
+
 
     <%-- Include your footer --%>
     <jsp:include page="/common/footer.jsp" />
+
+     <%-- jQuery (Cần cho Bootstrap JS và các script tùy chỉnh dễ dàng hơn) --%>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <%-- Bootstrap JS (Cần thiết cho Modal, Toast và các thành phần JS khác của Bootstrap) --%>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 
     <script>
     // Function to update quantity input and potentially submit form
@@ -363,49 +637,63 @@
         }
     }
 
-    // Function to submit the update form for a specific cart item
-    function submitUpdateForm(cartID) { // Dùng cartID
-        const form = document.getElementById(`updateForm_${cartID}`); // Dùng cartID
+ // Function to submit the update form for a specific cart item
+    function submitUpdateForm(cartID) {
+        const form = document.getElementById(`updateForm_${cartID}`);
         if (form) {
-             // Optional: Add a small delay to prevent rapid submissions if the user clicks buttons fast
             setTimeout(() => {
                  form.submit();
-            }, 100); // Adjust delay as needed
+            }, 100);
         }
     }
 
-	// Function to show notification messages (if needed for AJAX or other client-side events)
-    // Your controller is currently using RedirectAttributes for flash messages,
-    // which are displayed by the JSTL 'success' and 'error' checks above.
-    // This showNotification function might be useful for future AJAX interactions.
-	/*
-    function showNotification(message, type) {
-	    const notification = document.getElementById('notification');
-	    notification.textContent = message;
+    // START: SCRIPT XỬ LÝ TOAST VÀ MODAL CHECKOUT SUCCESS
+    $(document).ready(function(){
+        // Display success toast if successMessage is present (from RedirectAttributes for non-checkout actions)
+        <c:if test="${not empty successMessage}">
+            var successToast = new bootstrap.Toast($('#successToast'));
+            successToast.show();
+        </c:if>
 
-	    // Remove all previous color classes
-	    notification.classList.remove('bg-green-500', 'bg-red-500');
+        // Display error toast if errorMessage is present (from RedirectAttributes for errors)
+        <c:if test="${not empty errorMessage}">
+            var errorToast = new bootstrap.Toast($('#errorToast'));
+            errorToast.show();
+        </c:if>
 
-	    // Add the appropriate color class based on type
-	    if (type === 'success') {
-	        notification.classList.add('bg-green-500');
-	    } else { // Assuming 'error' type
-	        notification.classList.add('bg-red-500');
-	    }
+        // CHECK FOR CHECKOUT SUCCESS FLAG AND SHOW MODAL
+        // Kiểm tra cờ checkoutSuccess được gửi từ controller thông qua Model
+        <c:if test="${checkoutSuccess eq true}">
+            // Lấy instance của modal thông báo thành công
+            var checkoutSuccessModal = new bootstrap.Modal($('#checkoutSuccessModal'));
 
-	    notification.classList.remove('hidden');
+            // Hiển thị modal
+            checkoutSuccessModal.show();
 
-	    // Hide the notification after 5 seconds
-	    setTimeout(() => {
-	        notification.classList.add('hidden');
-	    }, 5000);
-	}
-    */
+            // Bắt sự kiện click vào nút OK trong modal
+            $('#checkoutSuccessOkBtn').on('click', function() {
+                // Ẩn modal (không bắt buộc nếu chuyển hướng ngay)
+                // checkoutSuccessModal.hide();
+
+                // Chuyển hướng về trang chủ sau khi đóng modal
+                window.location.href = "${pageContext.request.contextPath}/trangchu";
+            });
+
+             // Tùy chọn: Xử lý sự kiện khi modal bị ẩn (ví dụ: do data-bs-backdrop="static" không cho đóng bằng click ngoài)
+             // Mặc dù nút OK đã xử lý, đây là fallback tốt.
+             $('#checkoutSuccessModal').on('hidden.bs.modal', function () {
+                 // Nếu modal bị ẩn vì lý do nào đó, vẫn chuyển hướng về trang chủ
+                  window.location.href = "${pageContext.request.contextPath}/trangchu";
+             });
+
+        </c:if>
+    });
+    // END: SCRIPT XỬ LÝ TOAST VÀ MODAL CHECKOUT SUCCESS
+    
 
     <%-- The AJAX checkout script was commented out as your controller uses a form submission. --%>
     <%-- If you decide to implement AJAX checkout later, you can use and adapt this. --%>
     </script>
-    <%-- Cần có script Bootstrap nếu bạn dùng các thành phần Bootstrap cần JS (ví dụ: alert dismissible) --%>
-    <%-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="..." crossorigin="anonymous"></script> --%>
+
 </body>
 </html>

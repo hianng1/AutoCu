@@ -230,36 +230,54 @@ public class CartController {
     
     @PostMapping("/checkout")
     @jakarta.transaction.Transactional
-    public String processCheckout(RedirectAttributes redirectAttributes) {
+    public String processCheckout(
+        @RequestParam(value = "shippingAddress", required = true) String shippingAddressParam, // Lấy địa chỉ từ form modal
+        @RequestParam(value = "paymentMethod", required = true) String paymentMethodParam, // Lấy phương thức thanh toán từ form modal
+        @RequestParam(value = "note", required = false) String noteParam, // Lấy ghi chú từ form modal
+        RedirectAttributes redirectAttributes) {
 
         try {
             // --- Lấy thông tin người dùng hiện tại ---
-            User user = getCurrentUser();
+            User user = getCurrentUser(); // Phương thức này cần được bạn triển khai để lấy user từ session hoặc SecurityContext
 
             if (user == null) {
+                // Thường thì SecurityConfig sẽ chặn request này nếu chưa đăng nhập,
+                // nhưng kiểm tra lại cũng không thừa. Redirect đến trang đăng nhập.
                 redirectAttributes.addFlashAttribute("error", "Vui lòng đăng nhập để đặt hàng.");
                 return "redirect:/login";
             }
 
             // --- Lấy giỏ hàng của người dùng từ Service ---
-            List<GioHang> cartItems = cartService.getGioHangByUser(user);
+            List<GioHang> cartItems = cartService.getGioHangByUser(user); // Đảm bảo cartService.getGioHangByUser(user) hoạt động đúng
 
             if (cartItems == null || cartItems.isEmpty()) {
                  redirectAttributes.addFlashAttribute("error", "Giỏ hàng của bạn đang trống.");
-                 return "redirect:/cart/views";
+                 return "redirect:/cart/views"; // <-- REDIRECT VỀ TRANG GIỎ HÀNG
             }
 
-            // --- Lấy thông tin đơn hàng từ Profile người dùng và/hoặc giá trị mặc định ---
-            String shippingAddress = user.getDiaChi();
+            // --- Lấy thông tin đơn hàng từ Request Param (từ form modal) ---
+            // Sử dụng giá trị từ form modal nếu có, nếu không thì lấy từ profile user (trường hợp fallback hoặc không dùng modal)
+            String shippingAddress = (shippingAddressParam != null && !shippingAddressParam.trim().isEmpty())
+                                     ? shippingAddressParam
+                                     : user.getDiaChi(); // Fallback về địa chỉ trong profile nếu form không gửi hoặc gửi rỗng
+
             if (shippingAddress == null || shippingAddress.trim().isEmpty()) {
-                 redirectAttributes.addFlashAttribute("error", "Vui lòng cập nhật địa chỉ giao hàng trong hồ sơ của bạn trước khi đặt hàng.");
-                 return "redirect:/profile/edit";
+                 // Vẫn kiểm tra lại địa chỉ cuối cùng có hợp lệ không
+                 redirectAttributes.addFlashAttribute("error", "Địa chỉ giao hàng không hợp lệ. Vui lòng cung cấp địa chỉ.");
+                 // Có thể redirect về trang profile hoặc trang giỏ hàng với thông báo
+                 return "redirect:/cart/views"; // <-- REDIRECT VỀ TRANG GIỎ HÀNG
             }
 
-            String paymentMethod = "CashOnDelivery";
-            String shippingMethod = "standard";
-            String note = null;
+            // Lấy phương thức thanh toán từ form modal, mặc định là COD nếu không có hoặc rỗng
+            String paymentMethod = (paymentMethodParam != null && !paymentMethodParam.trim().isEmpty())
+                                   ? paymentMethodParam
+                                   : "CashOnDelivery"; // Mặc định nếu form không gửi hoặc rỗng
 
+            // Lấy ghi chú từ form modal
+            String note = (noteParam != null && !noteParam.trim().isEmpty()) ? noteParam.trim() : null; // Lưu null nếu ghi chú rỗng hoặc chỉ chứa khoảng trắng
+
+
+            String shippingMethod = "standard"; // Có thể lấy từ form modal nếu có lựa chọn vận chuyển
 
             // --- Bắt đầu tạo đối tượng đơn hàng ---
             DonHang order = new DonHang();
@@ -267,9 +285,9 @@ public class CartController {
             order.setNgayDatHang(new Date());
             order.setPhuongThucThanhToan(paymentMethod);
             order.setDiaChiGiaoHang(shippingAddress);
-            order.setTrangThai(TrangThai.CHO_XAC_NHAN);
+            order.setTrangThai(TrangThai.CHO_XAC_NHAN); // Đảm bảo Enum TrangThai tồn tại và có giá trị CHO_XAC_NHAN
             order.setPhuongThucVanChuyen(shippingMethod);
-            order.setGhiChu(note);
+            order.setGhiChu(note); // <-- LƯU GIÁ TRỊ NOTE TỪ FORM MODAL
             order.setDaThanhToan(false);
 
             order.setChiTietDonHangs(new ArrayList<>());
@@ -278,43 +296,43 @@ public class CartController {
 
             // --- Vòng lặp qua các mục trong giỏ hàng để tạo ChiTietDonHang và cập nhật tồn kho sản phẩm ---
             for (GioHang cartItem : cartItems) {
-                  PhuKienOto product = cartItem.getPhuKienOto();
+                  PhuKienOto product = cartItem.getPhuKienOto(); // Đảm bảo mối quan hệ GioHang -> PhuKienOto hoạt động đúng
 
-                  // Kiểm tra số lượng tồn kho
+                  // Kiểm tra số lượng tồn kho trước khi tạo ChiTietDonHang
                   if (product.getSoLuong() < cartItem.getSoLuong()) {
-                       redirectAttributes.addFlashAttribute("error", "Sản phẩm '" + product.getTenPhuKien() + "' không đủ số lượng trong kho. Vui lòng điều chỉnh giỏ hàng.");
-                       return "redirect:/cart/views";
+                       // Rollback transaction nếu không đủ hàng (do @Transactional)
+                       redirectAttributes.addFlashAttribute("error", "Sản phẩm '" + product.getTenPhuKien() + "' không đủ số lượng trong kho (" + product.getSoLuong() + " có sẵn). Vui lòng điều chỉnh giỏ hàng.");
+                       return "redirect:/cart/views"; // <-- REDIRECT VỀ TRANG GIỎ HÀNG VỚI THÔNG BÁO
                   }
 
                 // Tạo ChiTietDonHang cho mỗi mục trong giỏ hàng
                 ChiTietDonHang orderDetail = new ChiTietDonHang();
-                orderDetail.setDonHang(order);
-                orderDetail.setPhuKienOto(product);
+                orderDetail.setDonHang(order); // Liên kết với đơn hàng
+                orderDetail.setPhuKienOto(product); // Liên kết với sản phẩm
                 orderDetail.setSoLuong(cartItem.getSoLuong());
                 orderDetail.setDonGia(cartItem.getGia());
 
-                // ** SỬA LỖI: Thiết lập giá trị cho ten_san_pham và thanh_tien **
-                // Đảm bảo lớp ChiTietDonHang có các phương thức setTenSanPham() và setThanhTien()
-                orderDetail.setTenSanPham(product.getTenPhuKien()); // <-- Lấy tên từ PhuKienOto
-                // Tính thành tiền cho mục này: Đơn giá * Số lượng
-                orderDetail.setThanhTien(cartItem.getGia().multiply(BigDecimal.valueOf(cartItem.getSoLuong()))); // <-- Tính và set thành tiền
+                // ** Thiết lập giá trị cho ten_san_pham và thanh_tien **
+                // Đảm bảo lớp ChiTietDonHang có các thuộc tính và phương thức getter/setter tương ứng
+                orderDetail.setTenSanPham(product.getTenPhuKien());
+                orderDetail.setThanhTien(cartItem.getGia().multiply(BigDecimal.valueOf(cartItem.getSoLuong())));
 
+                order.getChiTietDonHangs().add(orderDetail); // Thêm chi tiết vào đơn hàng
 
-                order.getChiTietDonHangs().add(orderDetail);
-
-                // Cập nhật số lượng tồn kho của sản phẩm trong DB
-                product.setSoLuong(product.getSoLuong() - cartItem.getSoLuong());
-                phuKienOtoService.save(product);
-
+                // Cập nhật số lượng tồn kho của sản phẩm TRONG BỘ NHỚ TRƯỚC KHI LƯU ĐƠN HÀNG
+                // Việc lưu tồn kho sản phẩm sẽ xảy ra khi transaction của đơn hàng commit.
+                // product.setSoLuong(product.getSoLuong() - cartItem.getSoLuong()); // Đã chuyển logic này xuống sau khi lưu DonHang để đảm bảo rollback
+                // phuKienOtoService.save(product); // Lưu sản phẩm sẽ được thực hiện khi session sync hoặc transaction commit
 
                 // Cộng dồn vào tổng tiền hàng (chỉ tiền sản phẩm)
-                itemsTotal = itemsTotal.add(orderDetail.getThanhTien()); // <-- Cộng dồn từ ThanhTien đã tính
+                itemsTotal = itemsTotal.add(orderDetail.getThanhTien());
             }
 
-            // --- Tính phí vận chuyển và Tổng tiền cuối cùng ---
-             BigDecimal shippingFee = BigDecimal.ZERO;
+             // --- Tính phí vận chuyển và Tổng tiền cuối cùng ---
+             BigDecimal shippingFee = BigDecimal.ZERO; // Cần logic tính phí ship thực tế
              try {
-                 shippingFee = calculateShippingFee(shippingMethod, itemsTotal);
+                 // Nếu bạn có hàm tính phí ship
+                 // shippingFee = calculateShippingFee(shippingMethod, itemsTotal);
              } catch (Exception e) {
                  // Xử lý lỗi tính phí ship
                  redirectAttributes.addFlashAttribute("error", "Lỗi khi tính phí vận chuyển.");
@@ -325,26 +343,41 @@ public class CartController {
             order.setTongThanhToan(itemsTotal.add(shippingFee));
 
             // --- Lưu đơn hàng vào cơ sở dữ liệu ---
-            DonHang savedOrder = donHangService.save(order);
+            // Việc này cũng sẽ tự động lưu các ChiTietDonHang (do cascade type)
+            // và đồng bộ các thay đổi trên PhuKienOto (tồn kho) nếu đang trong cùng một Persistence Context
+            DonHang savedOrder = donHangService.save(order); // Đảm bảo donHangService.save(order) hoạt động đúng
+
+            // --- Cập nhật số lượng tồn kho sản phẩm sau khi đơn hàng được lưu thành công ---
+            // Việc này cần được thực hiện trong cùng transaction hoặc sau khi lưu đơn hàng thành công
+            // Vòng lặp lại các sản phẩm để cập nhật tồn kho
+            for (GioHang cartItem : cartItems) {
+                PhuKienOto product = cartItem.getPhuKienOto();
+                product.setSoLuong(product.getSoLuong() - cartItem.getSoLuong());
+                phuKienOtoService.save(product); // Lưu lại sản phẩm với số lượng tồn kho mới
+            }
+
 
             // --- Xóa giỏ hàng của người dùng sau khi đặt hàng thành công ---
-            cartService.clear();
+            cartService.clear(); // Đảm bảo cartService.clear() hoạt động đúng (xóa các mục GioHang của user)
 
             // --- Chuyển hướng đến trang thông báo đặt hàng thành công ---
+            // Sử dụng mã đơn hàng vừa lưu để thông báo
             redirectAttributes.addFlashAttribute("success", "Đặt hàng thành công! Mã đơn hàng của bạn là: " + savedOrder.getOrderID());
-            return "redirect:/trangchu"; // <-- REDIRECT VỀ TRANG CHỦ
+            return "redirect:/trangchu"; // <-- REDIRECT VỀ TRANG CHỦ HOẶC TRANG ĐƠN HÀNG CỦA TÔI
 
         } catch (Exception e) {
-            // ** PHẦN DEBUG TẠM THỜI - BẠN CÓ THỂ BỎ HOẶC COMMENT SAU KHI SỬA LỖI GỐC **
+            // ** XỬ LÝ LỖI **
             System.err.println("-----------------------------------------------------");
-            System.err.println("DEBUG: Original Exception caught in processCheckout:");
+            System.err.println("Lỗi khi xử lý đơn hàng:");
             e.printStackTrace(System.err);
             System.err.println("-----------------------------------------------------");
 
-            // --- Xử lý lỗi tổng quát trong quá trình đặt hàng ---
+            // Phân loại lỗi nếu có thể (ví dụ: DataIntegrityViolationException cho các lỗi DB khác)
+            // Hiện tại đang bắt chung Exception
             redirectAttributes.addFlashAttribute("error", "Đã xảy ra lỗi trong quá trình đặt hàng. Vui lòng thử lại.");
-            return "redirect:/cart/views";
+            return "redirect:/cart/views"; // <-- REDIRECT VỀ TRANG GIỎ HÀNG VỚI THÔNG BÁO LỖI
         }
+        // Không cần finally block ở đây vì @Transactional sẽ xử lý commit/rollback tự động
     }
 
 
