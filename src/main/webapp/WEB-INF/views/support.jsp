@@ -48,11 +48,12 @@ prefix="c"%> <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt"%>
             background-color: #e5e7eb;
         }
       .support-banner {
-        background-color: #f97316;
-        background-image: url("https://pos.nvncdn.com/4e732c-26/art/artCT/20201015_LLLUpBDKbLdsrj0KfjLjj46G.jpg");
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://pos.nvncdn.com/4e732c-26/art/artCT/20201015_LLLUpBDKbLdsrj0KfjLjj46G.jpg"); /* Overlay gradient for better text readability */
         background-size: cover;
         background-position: center;
-        background-blend-mode: multiply;
+        color: white;
+        padding: 4rem 0; /* More vertical padding */
+        text-shadow: 0 2px 8px rgba(0,0,0,0.7); /* Stronger text shadow */
       }
       .support-card {
         border: 1px solid #e5e7eb;
@@ -187,17 +188,6 @@ prefix="c"%> <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt"%>
           Đội ngũ chuyên viên của AutoCu luôn sẵn sàng hỗ trợ bạn mọi lúc, mọi
           nơi
         </p>
-      </div>
-    </div>
-
-    <!-- Breadcrumb -->
-    <div class="bg-white shadow-sm">
-      <div class="container mx-auto py-2 px-4">
-        <div class="flex items-center text-sm text-gray-600">
-          <a href="/trangchu" class="hover:text-orange-500">Trang chủ</a>
-          <span class="mx-2">/</span>
-          <span class="text-orange-500">Hỗ trợ khách hàng</span>
-        </div>
       </div>
     </div>
 

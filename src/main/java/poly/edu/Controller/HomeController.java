@@ -269,5 +269,19 @@ public class HomeController {
          return "Detail";
      }
 
-     // Các phương thức khác trong HomeController...
+     @GetMapping("/contact")
+     public String showContactPage(Model model) {
+
+         // Optional: Lấy danh sách danh mục để hiển thị ở menu (nếu header/footer cần)
+         // try {
+         //     List<DanhMuc> danhMucList = danhMucDAO.findAll();
+         //     model.addAttribute("danhMucList", danhMucList);
+         // } catch (Exception e) {
+         //     // Log lỗi nếu không lấy được danh mục, nhưng không làm dừng trang contact
+         //     e.printStackTrace();
+         // }
+
+         // Trả về tên view (contact.jsp sẽ được render)
+         return "contact";
+     }
 }

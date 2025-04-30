@@ -2,6 +2,9 @@ package poly.edu.Controller;
 
 import java.util.List;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +19,7 @@ import poly.edu.DAO.SanPhamDAO;
 import poly.edu.Model.DanhMuc;
 import poly.edu.Model.User;
 import poly.edu.Service.EmailService;
+import poly.edu.Service.UserService;
 
 @Controller
 public class SupportController {
@@ -28,31 +32,53 @@ public class SupportController {
 
     @Autowired
     private EmailService emailService;
+    
+    @Autowired 
+    private UserService userService;
 
     /**
      * Hiển thị trang hỗ trợ khách hàng
      */
     @GetMapping("/support")
-    public String showSupportPage(Model model, HttpSession session) {
+    public String showSupportPage(Model model) { // Removed HttpSession session
         try {
-            // Lấy danh sách danh mục để hiển thị ở menu
-            List<DanhMuc> danhMucList = danhMucDAO.findAll();
-            model.addAttribute("danhMucList", danhMucList);
+            // Lấy danh sách danh mục để hiển thị ở menu (Giữ nguyên)
+            // Giả định danhMucDAO là một dependency đã được inject
+            // List<DanhMuc> danhMucList = danhMucDAO.findAll(); // Uncomment if you have DanhMucDAO
+            // model.addAttribute("danhMucList", danhMucList); // Uncomment if you have DanhMucDAO
 
-            // Lấy thông tin người dùng đã đăng nhập (nếu có)
-            User loggedInUser = (User) session.getAttribute("loggedInUser");
+            // *** SỬA: Lấy thông tin người dùng từ SecurityContextHolder ***
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            User loggedInUser = null;
+
+            // Kiểm tra nếu người dùng đã xác thực và không phải là người dùng ẩn danh mặc định của Spring Security
+            if (authentication != null && authentication.isAuthenticated() && !"anonymousUser".equals(authentication.getPrincipal())) {
+                 // Lấy username từ đối tượng xác thực
+                 String username = authentication.getName();
+                 // Sử dụng userService (giả định đã inject) để tìm thông tin người dùng đầy đủ
+                 // Giả định userService có phương thức findByUsername
+                 loggedInUser = userService.findByUsername(username); // Giả định userService đã được inject và có method findByUsername
+             }
+
+            // Nếu user tìm thấy (tức là người dùng đã đăng nhập thành công và tồn tại trong DB)
             if (loggedInUser != null) {
                 model.addAttribute("loggedInUser", loggedInUser);
                 // Điền sẵn thông tin cho form nếu người dùng đã đăng nhập
-                model.addAttribute("name", loggedInUser.getHovaten());
-                model.addAttribute("email", loggedInUser.getEmail());
-                model.addAttribute("phone", loggedInUser.getSodienthoai());
+                model.addAttribute("name", loggedInUser.getHovaten()); // Sử dụng getHovaten() từ đối tượng User
+                model.addAttribute("email", loggedInUser.getEmail());   // Sử dụng getEmail() từ đối tượng User
+                model.addAttribute("phone", loggedInUser.getSodienthoai()); // Sử dụng getSodienthoai() từ đối tượng User
             }
+            // Nếu loggedInUser là null, tức là chưa đăng nhập, các thuộc tính name, email, phone sẽ không được thêm vào model,
+            // và form sẽ hiển thị trống, điều này là hành vi mong muốn cho người dùng chưa đăng nhập.
 
+            // Trả về tên view (support.html hoặc support.jsp)
             return "support";
         } catch (Exception e) {
+            // Xử lý lỗi (Giữ nguyên)
             model.addAttribute("error", "Lỗi khi tải trang hỗ trợ: " + e.getMessage());
-            return "support";
+            // Có thể log lỗi ra console hoặc file log
+            e.printStackTrace();
+            return "support"; // Vẫn trả về view support để hiển thị thông báo lỗi
         }
     }
 
