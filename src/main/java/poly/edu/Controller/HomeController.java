@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional; // Có thể bỏ nếu không còn dùng Optional<User> trong controller này
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -203,7 +206,7 @@ public class HomeController {
     }
 
     @PostMapping("/change-password")
-    public String changePassword(@RequestParam Long userId,
+    public String changePassword(@RequestParam Integer userId,
                                     @RequestParam String currentPassword, // Có thể không cần nếu luồng là "quên MK"
                                     @RequestParam String newPassword,
                                     Model model, RedirectAttributes redirectAttributes) {
@@ -271,17 +274,83 @@ public class HomeController {
 
      @GetMapping("/contact")
      public String showContactPage(Model model) {
-
-         // Optional: Lấy danh sách danh mục để hiển thị ở menu (nếu header/footer cần)
-         // try {
-         //     List<DanhMuc> danhMucList = danhMucDAO.findAll();
-         //     model.addAttribute("danhMucList", danhMucList);
-         // } catch (Exception e) {
-         //     // Log lỗi nếu không lấy được danh mục, nhưng không làm dừng trang contact
-         //     e.printStackTrace();
-         // }
-
-         // Trả về tên view (contact.jsp sẽ được render)
          return "contact";
+     }
+     
+  // Your existing /profile GET mapping
+     @GetMapping("/profile")
+     public String showProfile(Model model, RedirectAttributes redirectAttributes) {
+         User user = getCurrentUser();
+
+         if (user == null) {
+             redirectAttributes.addFlashAttribute("error", "Vui lòng đăng nhập");
+             return "redirect:/login"; // Assuming you have a /login endpoint
+         }
+
+         model.addAttribute("userInfo", user);
+         // Check for flash attributes (success or error messages from update)
+         if (redirectAttributes.getFlashAttributes().containsKey("successMessage")) {
+              model.addAttribute("successMessage", redirectAttributes.getFlashAttributes().get("successMessage"));
+         }
+          if (redirectAttributes.getFlashAttributes().containsKey("errorMessage")) {
+              model.addAttribute("errorMessage", redirectAttributes.getFlashAttributes().get("errorMessage"));
+         }
+
+
+         return "profile"; // Return the name of your JSP file
+     }
+
+     // *** NEW POST MAPPING FOR PROFILE UPDATE ***
+     @PostMapping("/profile/update")
+     public String updateProfile(@RequestParam("fullname") String fullname,
+                                 @RequestParam("email") String email,
+                                 @RequestParam("address") String address,
+                                 @RequestParam("phone") String phone,
+                                 RedirectAttributes redirectAttributes,
+                                 Model model) { // Include Model to potentially add error/success if not redirecting
+
+         User currentUser = getCurrentUser(); // Get the currently logged-in user
+
+         if (currentUser == null) {
+             redirectAttributes.addFlashAttribute("error", "Phiên đăng nhập đã hết hạn hoặc người dùng không tồn tại.");
+             return "redirect:/login"; // Redirect to login if user is not found
+         }
+
+         // Call the new updateProfile method from your UserService
+         // Pass the user's ID and the received data
+         String updateResult = userService.updateProfile(
+             currentUser.getId(), // Assuming your User model has an getId() method
+             fullname,
+             email,
+             address,
+             phone
+         );
+
+         // Handle the result from the service
+         if (updateResult.equals("Cập nhật thông tin thành công!")) {
+             redirectAttributes.addFlashAttribute("successMessage", updateResult);
+         } else {
+             redirectAttributes.addFlashAttribute("errorMessage", updateResult);
+         }
+
+         // Redirect back to the profile page to show the updated info or message
+         return "redirect:/profile";
+     }
+
+     
+     private User getCurrentUser() {
+         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+         if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
+             return null;
+         }
+         Object principal = authentication.getPrincipal();
+         String username;
+         if (principal instanceof UserDetails) {
+             username = ((UserDetails) principal).getUsername();
+         } else {
+             username = principal.toString();
+         }
+         // Sử dụng userService để tìm đối tượng User đầy đủ từ username
+         return userService.findByUsername(username);
      }
 }

@@ -4,8 +4,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder; // Import PasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional; // Import Transactional
 
 import poly.edu.Model.User;
 import poly.edu.Repository.UserRepository;
@@ -17,11 +18,10 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder; // Inject PasswordEncoder Bean
+    private PasswordEncoder passwordEncoder;
 
-    // Không cần inject EmailService ở đây nếu nó chỉ được dùng trong handleForgotPassword
-     @Autowired
-     private EmailService emailService;
+    @Autowired
+    private EmailService emailService;
 
 
     public User findByUsername(String username) {
@@ -33,7 +33,8 @@ public class UserService {
     }
 
     // Đăng ký tài khoản - SỬA để MÃ HÓA mật khẩu
-    public String registerUser(String username, String rawPassword, String email, // Đổi tên password thành rawPassword cho rõ
+    @Transactional // Add Transactional annotation for database operations
+    public String registerUser(String username, String rawPassword, String email,
                                String hovaten, String sodienthoai, String diaChi) {
         if (userRepository.existsByUsername(username)) {
             return "Tên người dùng đã tồn tại!";
@@ -44,71 +45,98 @@ public class UserService {
         if (hovaten == null || hovaten.trim().isEmpty()) {
             return "Họ tên không được để trống!";
         }
-        // Kiểm tra độ dài mật khẩu tối thiểu (tùy chọn)
-        if (rawPassword == null || rawPassword.length() < 6) { // Ví dụ độ dài tối thiểu 6
+        if (rawPassword == null || rawPassword.length() < 6) {
              return "Mật khẩu phải có ít nhất 6 ký tự!";
         }
 
-
         User newUser = new User();
         newUser.setUsername(username);
-        // *** MÃ HÓA MẬT KHẨU TRƯỚC KHI LƯU ***
-        newUser.setPassword(passwordEncoder.encode(rawPassword)); // Sử dụng PasswordEncoder
+        newUser.setPassword(passwordEncoder.encode(rawPassword));
         newUser.setEmail(email);
         newUser.setHovaten(hovaten);
         newUser.setSodienthoai(sodienthoai != null ? sodienthoai : null);
         newUser.setDiaChi(diaChi);
-        newUser.setRole("USER"); // Mặc định là USER
+        newUser.setRole("USER");
 
         userRepository.save(newUser);
         return "Đăng ký thành công!";
     }
 
-    // *** XÓA PHƯƠNG THỨC authenticate() ***
-    // Spring Security sẽ đảm nhiệm việc xác thực bằng UserDetailsService và PasswordEncoder
-
     // Xử lý quên mật khẩu - SỬA để MÃ HÓA mật khẩu mới
+    @Transactional
     public String handleForgotPassword(String email) {
         User user = userRepository.findByEmail(email);
         if (user != null) {
-            String newRawPassword = generateRandomPassword(); // Tạo mật khẩu thô mới
-            // *** MÃ HÓA MẬT KHẨU MỚI TRƯỚC KHI LƯU ***
-            user.setPassword(passwordEncoder.encode(newRawPassword)); // Mã hóa và lưu
+            String newRawPassword = generateRandomPassword();
+            user.setPassword(passwordEncoder.encode(newRawPassword));
             userRepository.save(user);
-            // Lưu ý: Gửi mật khẩu thô qua email là không an toàn trong môi trường thực tế.
+            // Lưu ý: Gửi mật khẩu thô qua email là không an toàn.
             // Nên gửi link đặt lại mật khẩu có token hết hạn.
-            emailService.sendResetPasswordEmail(user, newRawPassword); // Gửi mật khẩu thô mới qua email (Cần cải thiện logic này)
+            emailService.sendResetPasswordEmail(user, newRawPassword); // Cần cải thiện logic này
             return "Mật khẩu mới đã được gửi vào email của bạn!";
         }
         return "Email không tồn tại trong hệ thống.";
     }
 
     // Đổi mật khẩu - SỬA để so sánh mật khẩu an toàn và mã hóa mật khẩu mới
-    public String changePassword(Long userId, String currentRawPassword, String newRawPassword) { // Đổi tên param
+    @Transactional
+    public String changePassword(Integer userId, String currentRawPassword, String newRawPassword) {
         User user = userRepository.findById(userId).orElse(null);
         if (user == null) {
             return "Người dùng không tồn tại!";
         }
 
-        // *** SO SÁNH MẬT KHẨU HIỆN TẠI BẰNG PasswordEncoder ***
-        // Sử dụng matches() để so sánh mật khẩu thô với mật khẩu đã mã hóa trong DB
         if (!passwordEncoder.matches(currentRawPassword, user.getPassword())) {
             return "Mật khẩu hiện tại không đúng!";
         }
 
-        // Kiểm tra độ dài mật khẩu mới (tùy chọn)
-         if (newRawPassword == null || newRawPassword.length() < 6) { // Ví dụ độ dài tối thiểu 6
+         if (newRawPassword == null || newRawPassword.length() < 6) {
               return "Mật khẩu mới phải có ít nhất 6 ký tự!";
          }
 
-        // *** MÃ HÓA MẬT KHẨU MỚI TRƯỚC KHI LƯU ***
-        user.setPassword(passwordEncoder.encode(newRawPassword)); // Mã hóa và lưu
+        user.setPassword(passwordEncoder.encode(newRawPassword));
         userRepository.save(user);
         return "Mật khẩu đã được cập nhật thành công!";
     }
 
+    // *** PHƯƠNG THỨC MỚI ĐỂ CẬP NHẬT THÔNG TIN PROFILE ***
+    @Transactional // Add Transactional annotation
+    public String updateProfile(Integer userId, String fullname, String email, String address, String phone) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (!userOptional.isPresent()) {
+            return "Người dùng không tồn tại."; // User not found
+        }
+
+        User user = userOptional.get();
+
+        // Optional: Add validation for input fields here
+        if (fullname == null || fullname.trim().isEmpty()) {
+             return "Họ tên không được để trống!";
+        }
+        // Add more validation as needed (e.g., email format, phone format)
+
+        // Update fields
+        user.setHovaten(fullname);
+        user.setEmail(email);
+        user.setDiaChi(address);
+        user.setSodienthoai(phone);
+
+        // Note: Password and Role are NOT updated here.
+        // Password should be updated via the changePassword method.
+        // Role should typically not be user-editable.
+
+        try {
+            userRepository.save(user);
+            return "Cập nhật thông tin thành công!";
+        } catch (Exception e) {
+            // Log the exception
+            e.printStackTrace(); // Replace with proper logging
+            return "Đã xảy ra lỗi khi cập nhật thông tin.";
+        }
+    }
+
+
     private String generateRandomPassword() {
-        // Tạo mật khẩu ngẫu nhiên
         return UUID.randomUUID().toString().substring(0, 8);
     }
 }
