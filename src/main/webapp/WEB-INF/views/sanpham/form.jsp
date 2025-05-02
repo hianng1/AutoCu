@@ -254,7 +254,10 @@
         </c:if>
     </div>
 
-  
+   <div class="mb-3">
+        <label for="mota">Mô tả sản phẩm</label>
+        <textarea name="mota" class="form-control" rows="4">${sanPham.mota}</textarea>
+    </div>
     
     <div class="mb-3">
         <label>Danh mục</label>
