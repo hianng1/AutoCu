@@ -48,10 +48,11 @@
                                 <div class="invalid-feedback">Vui lòng nhập tên đăng nhập</div>
                             </div>
                             <div class="mb-3">
-                                <label for="password" class="form-label">Mật khẩu</label>
-                                <input type="password" class="form-control" name="password" required>
-                                <div class="invalid-feedback">Vui lòng nhập mật khẩu</div>
-                            </div>
+							    <label for="password" class="form-label">Mật khẩu</label>
+							    <input type="password" class="form-control" name="password" required>
+							    <div class="form-text" style="color: red;">Mật khẩu ít nhất 6 ký tự.</div>
+							    <div class="invalid-feedback">Vui lòng nhập mật khẩu hợp lệ (ít nhất 6 ký tự).</div>
+							</div>
                             <div class="mb-3">
                                 <label class="form-label">Họ và tên</label>
                                 <input type="text" class="form-control" name="hovaten" required>

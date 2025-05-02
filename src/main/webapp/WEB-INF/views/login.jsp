@@ -98,10 +98,6 @@
                             </div>
                         </form>
 
-                        <div class="text-center mb-4">
-                            <span class="text-muted">Hoặc đăng nhập bằng</span>
-                        </div>
-
                         <!-- <div class="social-login d-flex gap-3 mb-4">
                             <a href="#" class="btn btn-outline-primary flex-fill">
                                 <i class="fab fa-facebook"></i> Facebook
