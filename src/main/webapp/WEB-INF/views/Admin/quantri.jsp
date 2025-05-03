@@ -135,14 +135,11 @@
     </a>
     <div class="collapse" id="thongKe">
         <ul class="nav flex-column ps-3">
-            <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/thongke/banhang">Thống kê bán hàng</a></li>
+            <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/thongke">Thống kê bán hàng</a></li>
             <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/donhang">Thống kê đơn hàng</a></li>
-           
         </ul>
     </div>
 </li>
-
-
         </ul>
     </div>
 </nav>
@@ -171,6 +168,7 @@
                         <th>Email</th>
                         <th>Role</th>
                         <th>Số điện thoại</th>
+                        <th>Địa chỉ</th>
                         <th>Họ và tên</th>
                         <th></th>
                     </tr>
@@ -184,6 +182,7 @@
                             <td>${user.email}</td>
                             <td>${user.role}</td>
                             <td>${user.sodienthoai}</td>
+                            <td>${user.diaChi}</td>
                             <td>${user.hovaten}</td>
                             <td>
                                 <div class="dropdown">
@@ -196,12 +195,12 @@
                                         aria-labelledby="dropdownMenuButton1">
 
                                         <li><a class="dropdown-item" href="${pageContext.request.contextPath}/suanhanvien?id=${user.id}">Sửa</a></li>
-     <li>
-    <form action="${pageContext.request.contextPath}/xoanhanvien" method="post">
-        <input type="hidden" name="id" value="${user.id}">
-        <button type="submit" class="dropdown-item" onclick="return confirm('Bạn có chắc chắn muốn xóa người dùng này?')">Xóa</button>
-    </form>
-</li>
+									     <li>
+									    <form action="${pageContext.request.contextPath}/xoanhanvien" method="post">
+									        <input type="hidden" name="id" value="${user.id}">
+									        <button type="submit" class="dropdown-item" onclick="return confirm('Bạn có chắc chắn muốn xóa người dùng này?')">Xóa</button>
+									    </form>
+									</li>
                                     </ul>
                                 </div>
                             </td>

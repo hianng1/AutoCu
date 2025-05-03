@@ -179,25 +179,24 @@
                     <tbody>
                     <c:forEach var="khachHang" items="${khachHangs}">
                         <tr>
-                            <td>${khachHang.userID}</td>
-                            <td>${khachHang.tenKhachHang}</td>  <!-- Corrected -->
+                            <td>${khachHang.id}</td>
+                            <td>${khachHang.hovaten}</td>  <!-- Corrected -->
                             <td>${khachHang.email}</td>
-                            <td>${khachHang.soDienThoai}</td>  <!-- Corrected -->
+                            <td>${khachHang.sodienthoai}</td>  <!-- Corrected -->
                             <td>${khachHang.diaChi}</td>  <!-- Corrected -->
-                            <td>${khachHang.matKhau}</td>  <!-- Corrected -->
-                            <td class="hidden-role">${khachHang.vaiTro}</td>  <!-- Corrected -->
+                            <td class="hidden-role">${khachHang.role}</td>  <!-- Corrected -->
                     <td>
     <div class="dropdown">
         <button class="btn btn-sm btn-light dropdown-toggle"
-                type="button" id="dropdownMenuButton${khachHang.userID}"
+                type="button" id="dropdownMenuButton${khachHang.id}"
                 data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fas fa-ellipsis-v"></i>
         </button>
         <ul class="dropdown-menu"
-            aria-labelledby="dropdownMenuButton${khachHang.userID}">
+            aria-labelledby="dropdownMenuButton${khachHang.id}">
             <li>
                 <form action="${pageContext.request.contextPath}/xoakhachhang" method="post">
-                    <input type="hidden" name="userID" value="${khachHang.userID}">
+                    <input type="hidden" name="userID" value="${khachHang.id}">
                     <button type="submit" class="dropdown-item" onclick="return confirm('Bạn có chắc chắn muốn xóa khách hàng này?')">Xóa</button>
                 </form>
             </li>
@@ -213,20 +212,6 @@
                     </tbody>
                 </table>
             </div>
-
-            <!-- Phân trang (nếu cần) -->
-            <nav aria-label="Page navigation">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item"><a class="page-link" href="#">Trang
-                        đầu</a></li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">4</a></li>
-                    <li class="page-item"><a class="page-link" href="#">Trang
-                        cuối</a></li>
-                </ul>
-            </nav>
         </main>
     </div>
 </div>

@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,9 @@ public class ThemNhanVienController {
 
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private static final Logger logger = LoggerFactory.getLogger(ThemNhanVienController.class);
 
@@ -33,6 +37,7 @@ public class ThemNhanVienController {
                               @RequestParam("matKhau") String matKhau,
                               @RequestParam("diaChiEmail") String diaChiEmail,
                               @RequestParam("xacNhanMatKhau") String xacNhanMatKhau,
+                              @RequestParam("diachi") String diaChi,
                               @RequestParam("chucVu") String chucVu,
                               @RequestParam(value = "soDienThoai", required = false) String soDienThoai,
                               Model model) {
@@ -42,10 +47,11 @@ public class ThemNhanVienController {
         String hovaten = ho + " " + ten;
         User newUser = new User();
         newUser.setUsername(username);
-        newUser.setPassword(matKhau);
+        newUser.setPassword(passwordEncoder.encode(matKhau));
         newUser.setEmail(diaChiEmail);
         newUser.setRole(chucVu);
         newUser.setHovaten(hovaten);
+        newUser.setDiaChi(diaChi);
         newUser.setSodienthoai(soDienThoai);
 
         try {
