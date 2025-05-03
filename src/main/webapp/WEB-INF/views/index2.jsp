@@ -175,7 +175,7 @@
     </div>
 
     <div class="row g-4">
-        <c:forEach var="phukien" items="${phuKienOtoList}" begin="0" end="7">
+        <c:forEach var="phukien" items="${phuKienOtoList}" >
             <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                 <div class="card h-100 card-hover-effect border-0 shadow-sm">
                     <div class="position-relative">

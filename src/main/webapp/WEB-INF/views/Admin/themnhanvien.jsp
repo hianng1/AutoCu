@@ -211,7 +211,7 @@
                                    placeholder="Nhập địa chỉ ">
                             <span id="diaChiEmailError" class="text-danger"></span>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-6 mb-2">
                             <label for="xacNhanMatKhau" class="form-label">Xác nhận mật
                                 khẩu</label>
                             <div class="password-container">
@@ -224,6 +224,15 @@
                             <span id="xacNhanMatKhauError" class="text-danger"></span>
                         </div>
 
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-12 mb-1">
+                            <label for="diaChiEmail" class="form-label">Địa chỉ:</label>
+                            <input type="text" class="form-control" id="diachi" name="diachi"
+                                   placeholder="Nhập địa chỉ">
+                            <span id="diaChiEmailError" class="text-danger"></span>
+                        </div>
                     </div>
 
 
