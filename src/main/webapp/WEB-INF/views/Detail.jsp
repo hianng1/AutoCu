@@ -240,15 +240,15 @@
     <!-- Tiêu đề và giá -->
     <div class="row mb-4 align-items-center">
         <div class="col-md-9">
-            <h4 class="fw-bold text-primary mb-0">
-                Xe ${details[0].tenSanPham} - 
+            <h4 class="fw-bold fs-3 text-primary mb-0">
+                 ${details[0].tenSanPham} - 
                 <span class="text-danger">
-                    <fmt:formatNumber value="${details[0].gia}" type="number"/> Triệu
+                    <fmt:formatNumber value="${details[0].gia}" type="number"/> VND
                 </span>
             </h4>
         </div>
         <div class="col-md-3 text-end text-muted">
-            <small><i class="far fa-calendar-alt me-1"></i>Đăng ngày ${now}</small>
+            <small><i class="far fa-calendar-alt me-1"></i></small>
         </div>
     </div>
 
@@ -260,12 +260,14 @@
             <h5 class="fw-semibold mb-3">Thông số kỹ thuật</h5>
             <table class="table table-bordered table-striped">
                 <tbody>
-                    <tr><td><strong>Động cơ</strong></td><td>${details[0].nhienLieu} ${details[0].truyenDong}</td></tr>
-                    <tr><td><strong>Số ghế</strong></td><td>${details[0].soGhe}</td></tr>
-                    <tr><td><strong>Số cửa</strong></td><td>5 cửa</td></tr>
+                    <tr><td><strong>Động cơ</strong></td><td>${details[0].nhienLieu} </td></tr>
+                    <tr><td><strong>Số ghế</strong></td><td>${details[0].soGhe} Ghế </td> </tr>
+                    <tr><td><strong>Truyền động</strong></td><td>${details[0].truyenDong}  </td> </tr>
+                    <tr><td><strong>Số cửa</strong></td><td>5 Cửa</td></tr>
                     <tr><td><strong>Kiểu dáng</strong></td><td>${details[0].danhMuc.tenDanhMuc}</td></tr>
                     <tr><td><strong>Hãng xe</strong></td><td>${details[0].hangXe}</td></tr>
-                    <tr><td><strong>Kho</strong></td><td>${details[0].soLuongTrongKho} chiếc</td></tr>
+                    <tr><td><strong>Bảo hành</strong></td><td>${details[0].baoHanh}</td></tr>
+                    
                     <tr><td><strong>Địa điểm lấy xe</strong></td><td>${details[0].diaDiemLayXe}</td></tr>
                 </tbody>
             </table>
@@ -290,47 +292,13 @@
 </div>
 
                 <!-- Form button -->
-             <div>
-  <button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#formModal">
-    <i class="fas fa-file-alt me-1"></i> Tư vấn xe
-  </button>
-</div>
-<div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content p-4 shadow-sm rounded-4">
-      <!-- Nút đóng -->
-      <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+            
+<button class="btn btn-outline-warning" >
+    <i class="fas fa-file-alt me-1"></i>  
+    <a class="nav-link" href="${pageContext.request.contextPath}/support">Tư vấn xe</a>
+</button>
 
-      <!-- Tiêu đề -->
-      <h5 class="modal-title fw-bold mb-3" id="formModalLabel">Nhận thông tin xe</h5>
 
-      <!-- Form -->
-      <form>
-        <div class="mb-3">
-          <label class="form-label fw-bold">Họ Tên*</label>
-          <input type="text" class="form-control" required>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label fw-bold">Email*</label>
-          <input type="email" class="form-control">
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label fw-bold">Số điện thoại</label>
-          <input type="text" class="form-control">
-        </div>
-
-        <!-- Nút gửi -->
-        <div class="text-center">
-          <button type="submit" class="btn btn-warning text-white fw-bold px-4 py-2 rounded-pill" style="background-color: #ffa64d; border: none;">
-            GỬI THÔNG TIN
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
             </div>
         </div>
 
@@ -357,14 +325,7 @@
         <div class="col-12">
             <h5>Thông tin mô tả</h5>
             <div class="desc-box border rounded p-3 bg-light">
-                <p>Toyota Avanza Premio 2022 – MPV 7 chỗ thực dụng, vận hành linh hoạt, tiết kiệm nhiên liệu
-
-Toyota Avanza Premio 2022 là mẫu MPV 7 chỗ lý tưởng cho gia đình và dịch vụ, nổi bật với thiết kế hiện đại, không gian rộng rãi và khả năng vận hành ổn định. Ngoại thất xe được thiết kế mới mẻ với lưới tản nhiệt lớn, cụm đèn LED sắc nét và mâm hợp kim 16 inch mạnh mẽ.
-
-Khoang nội thất rộng rãi với 3 hàng ghế linh hoạt, hàng ghế thứ 2 và 3 có thể gập phẳng để tối ưu không gian chứa đồ. Ghế nỉ bền đẹp, điều hòa 2 dàn lạnh làm mát nhanh và sâu, màn hình cảm ứng hỗ trợ kết nối USB/Bluetooth/AUX đáp ứng nhu cầu giải trí cơ bản.
-
-Xe sử dụng động cơ xăng 1.5L 2NR-VE, công suất 105 mã lực tại 6.000 vòng/phút, mô-men xoắn 138 Nm tại 4.200 vòng/phút, kết hợp hộp số tự động vô cấp CVT, mang lại khả năng vận hành mượt mà và tiết kiệm nhiên liệu, với mức tiêu thụ trung bình khoảng 6,3L/100km .
-Với ưu điểm về không gian, vận hành và chi phí sử dụng hợp lý, Toyota Avanza Premio 2022 là lựa chọn đáng cân nhắc cho những ai tìm kiếm một chiếc MPV 7 chỗ phục vụ gia đình hoặc kinh doanh dịch vụ.</p>
+                <p><td>${details[0].mota}</td></p>
             </div>
         </div>
     </div>

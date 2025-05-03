@@ -12,7 +12,9 @@ import poly.edu.Model.DonHang;
 import poly.edu.Repository.ChiTietDonHangRepository;
 import poly.edu.Repository.DonHangRepository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/donhang")
@@ -20,7 +22,8 @@ import java.util.List;
 public class DonHangController {
 
     private final DonHangRepository donHangRepo;
-    
+
+
     @Autowired
     private DonHangRepository donHangRepository; 
     
@@ -66,6 +69,29 @@ public class DonHangController {
         model.addAttribute("chiTietDonHangs", chiTietDonHangs);
 
         return "Admin/chitietdonhang"; // Trang JSP
+    }
+
+    @GetMapping("/api/donhang/thongke")
+    public Map<String, Object> thongKeDonHang() {
+        List<Object[]> thongKeList = donHangRepository.thongKeDonHangTheoTrangThai();
+
+        // Chuẩn bị labels và data cho biểu đồ
+        List<String> labels = new java.util.ArrayList<>();
+        List<Long> data = new java.util.ArrayList<>();
+
+        for (Object[] row : thongKeList) {
+            DonHang.TrangThai trangThai = (DonHang.TrangThai) row[0];
+            Long soLuong = (Long) row[1];
+
+            labels.add(trangThai.getMoTa()); // Lấy mô tả tiếng Việt
+            data.add(soLuong);
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("labels", labels);
+        response.put("data", data);
+
+        return response; // JSON: { labels: [...], data: [...] }
     }
 
 }

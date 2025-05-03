@@ -69,6 +69,9 @@ public class SanPham implements Serializable {
 
     @Column(name = "AnhDaiDien")
     private String anhDaiDien;
+    
+    @Column(name = "Mota", columnDefinition = "nvarchar(2250)")
+    private String mota;
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "CategoryID", nullable = false, referencedColumnName = "CategoryID")
@@ -183,4 +186,5 @@ public class SanPham implements Serializable {
     public void setDanhMuc(DanhMuc danhMuc) {
         this.danhMuc = danhMuc;
     }
+    
 }
