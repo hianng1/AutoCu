@@ -1,6 +1,7 @@
 package poly.edu.Controller;
 
 import java.util.List;
+import java.util.Date;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,6 +21,10 @@ import poly.edu.Model.DanhMuc;
 import poly.edu.Model.User;
 import poly.edu.Service.EmailService;
 import poly.edu.Service.UserService;
+import poly.edu.Service.TicketHoTroService;
+import poly.edu.Model.TicketHoTro;
+import poly.edu.Repository.KhachHangRepository;
+import poly.edu.Model.KhachHang;
 
 @Controller
 public class SupportController {
@@ -35,6 +40,12 @@ public class SupportController {
     
     @Autowired 
     private UserService userService;
+
+    @Autowired
+    private TicketHoTroService ticketHoTroService;
+
+    @Autowired
+    private KhachHangRepository khachHangRepository;
 
     /**
      * Hiển thị trang hỗ trợ khách hàng
@@ -96,6 +107,35 @@ public class SupportController {
             RedirectAttributes redirectAttributes) {
 
         try {
+            // Lấy user hiện tại nếu đã đăng nhập
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            User loggedInUser = null;
+            if (authentication != null && authentication.isAuthenticated() && !"anonymousUser".equals(authentication.getPrincipal())) {
+                String username = authentication.getName();
+                loggedInUser = userService.findByUsername(username);
+            }
+
+            // Lưu ticket vào database
+            TicketHoTro ticket = new TicketHoTro();
+            ticket.setMoTaVanDe(message);
+            ticket.setTrangThai("Pending");
+            ticket.setNgayTao(new Date());
+            ticket.setNgayCapNhat(new Date());
+            if (loggedInUser != null) {
+                // Lấy KhachHang từ email của User
+                java.util.Optional<KhachHang> khachHangOpt = khachHangRepository.findByEmail(loggedInUser.getEmail());
+                if (khachHangOpt.isPresent()) {
+                    ticket.setKhachHang(khachHangOpt.get());
+                } else {
+                    model.addAttribute("error", "Không tìm thấy thông tin khách hàng.");
+                    return "support";
+                }
+            } else {
+                model.addAttribute("error", "Bạn cần đăng nhập để gửi yêu cầu hỗ trợ.");
+                return "support";
+            }
+            ticketHoTroService.save(ticket);
+
             // Gửi email thông báo
             emailService.sendSupportRequestEmail(name, email, phone, subject, message);
 

@@ -28,6 +28,8 @@ prefix="c"%> <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt"%>
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     
     <style>
     	.card-hover-effect {
@@ -172,10 +174,154 @@ prefix="c"%> <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt"%>
             height: 1px;
             background-color: #e5e7eb;
         }
+      .chat-container {
+        position: fixed;
+        bottom: 60px;
+        right: 20px;
+        width: 350px;
+        height: 500px;
+        background: white;
+        border-radius: 18px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+        display: flex;
+        flex-direction: column;
+        z-index: 1000;
+        transition: all 0.3s ease;
+        overflow: hidden;
+      }
+      .chat-header {
+        background: #f97316;
+        color: white;
+        padding: 18px 20px;
+        border-radius: 18px 18px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 1.1rem;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(249,115,22,0.08);
+      }
+      .chat-messages {
+        flex: 1;
+        padding: 18px 12px 20px 12px;
+        overflow-y: auto;
+        background: #f8fafc;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        scroll-behavior: smooth;
+      }
+      .message {
+        margin-bottom: 0;
+        padding: 10px 16px;
+        border-radius: 18px;
+        max-width: 80%;
+        font-size: 1rem;
+        line-height: 1.5;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        word-break: break-word;
+      }
+      .message.sent {
+        background: linear-gradient(90deg, #f97316 80%, #fb923c 100%);
+        color: white;
+        margin-left: auto;
+        border-bottom-right-radius: 4px;
+        border-bottom-left-radius: 18px;
+        border-top-left-radius: 18px;
+        border-top-right-radius: 18px;
+      }
+      .message.received {
+        background: #fff;
+        color: #222;
+        margin-right: auto;
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 18px;
+        border-top-left-radius: 18px;
+        border-top-right-radius: 18px;
+        border: 1px solid #f3f4f6;
+      }
+      .chat-input {
+        padding: 14px 12px 14px 12px;
+        border-top: 1px solid #e5e7eb;
+        background: #fff;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        position: static;
+        width: 100%;
+        z-index: 2;
+      }
+      .chat-input input {
+        flex: 1;
+        padding: 10px 16px;
+        border: 1px solid #e5e7eb;
+        border-radius: 20px;
+        outline: none;
+        font-size: 1rem;
+        background: #f8fafc;
+        transition: border 0.2s;
+      }
+      .chat-input input:focus {
+        border: 1.5px solid #f97316;
+        background: #fff;
+      }
+      .chat-input button {
+        background: #f97316;
+        color: white;
+        border: none;
+        padding: 10px 18px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 500;
+        transition: background 0.2s;
+      }
+      .chat-input button:hover {
+        background: #ea580c;
+      }
+      .chat-toggle {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #f97316;
+        color: white;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        z-index: 1001;
+        box-shadow: 0 4px 16px rgba(249,115,22,0.18);
+      }
+      .chat-toggle:hover {
+        background: #ea580c;
+      }
     </style>
   </head>
   <body>
     <jsp:include page="/common/header.jsp"></jsp:include>
+
+    <!-- Chat Toggle Button -->
+    <div class="chat-toggle" onclick="toggleChat()">
+      <i class="fas fa-comments"></i>
+    </div>
+
+    <!-- Chat Container -->
+    <div id="chatContainer" class="chat-container" style="display: none;">
+      <div class="chat-header">
+        <span>Chat với chúng tôi</span>
+        <button onclick="toggleChat()" style="background: none; border: none; color: white; cursor: pointer;">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div id="chatMessages" class="chat-messages"></div>
+      <div class="chat-input">
+        <input type="text" id="messageInput" placeholder="Nhập tin nhắn...">
+        <button onclick="sendMessage()">Gửi</button>
+      </div>
+    </div>
 
    	<div>
    		<!-- Banner -->
@@ -607,14 +753,93 @@ prefix="c"%> <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt"%>
     <jsp:include page="/common/footer.jsp"></jsp:include>
 
     <script>
-      document.querySelectorAll("details").forEach((el) => {
-        el.addEventListener("click", (e) => {
-          const others = document.querySelectorAll("details");
-          others.forEach((other) => {
-            if (other !== el) other.removeAttribute("open");
-          });
+      let stompClient = null;
+      let username = null;
+      var loggedInUsername = "${sessionScope.userInfo.username}";
+
+      function connect() {
+        const socket = new SockJS('/ws');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, onConnected, onError);
+      }
+
+      function onConnected() {
+        if (loggedInUsername && loggedInUsername !== 'null' && loggedInUsername !== 'undefined' && loggedInUsername !== '') {
+          username = loggedInUsername;
+        } else {
+          username = prompt('Nhập tên của bạn:');
+        }
+        if (username) {
+          stompClient.subscribe('/topic/public', onMessageReceived);
+          stompClient.send("/app/chat.addUser", {}, JSON.stringify({
+            sender: username,
+            type: 'JOIN'
+          }));
+        }
+      }
+
+      function onError(error) {
+        console.error('Lỗi kết nối:', error);
+      }
+
+      function sendMessage() {
+        const messageInput = document.getElementById('messageInput');
+        const messageContent = messageInput.value.trim();
+        if (messageContent && stompClient) {
+          const chatMessage = {
+            sender: username,
+            content: messageContent,
+            type: 'CHAT'
+          };
+          stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
+          messageInput.value = '';
+        }
+      }
+
+      // Gửi tin nhắn bằng Enter, Shift+Enter để xuống dòng
+      document.addEventListener('DOMContentLoaded', function() {
+        const messageInput = document.getElementById('messageInput');
+        messageInput.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+          }
         });
       });
+
+      function onMessageReceived(payload) {
+        const message = JSON.parse(payload.body);
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message');
+        if (message.type === 'JOIN') {
+          messageElement.classList.add('received');
+          messageElement.textContent = message.sender + ' (' + message.role + ') đã tham gia chat';
+        } else if (message.type === 'LEAVE') {
+          messageElement.classList.add('received');
+          messageElement.textContent = message.sender + ' (' + message.role + ') đã rời khỏi chat';
+        } else {
+          messageElement.classList.add(message.sender === username ? 'sent' : 'received');
+          messageElement.textContent = message.sender + ' (' + message.role + '): ' + message.content;
+        }
+        document.getElementById('chatMessages').appendChild(messageElement);
+        document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+      }
+
+      function toggleChat() {
+        const chatContainer = document.getElementById('chatContainer');
+        if (chatContainer.style.display === 'none') {
+          chatContainer.style.display = 'flex';
+          if (!stompClient) {
+            connect();
+          }
+        } else {
+          chatContainer.style.display = 'none';
+        }
+      }
+
+      window.onload = function() {
+        connect();
+      };
     </script>
   </body>
 </html>

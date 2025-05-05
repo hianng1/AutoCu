@@ -65,7 +65,7 @@ public class EmailService {
     // Gửi email thông báo cho admin
     private void sendNotificationEmailToAdmin(String name, String email, String phone, String subject, String messageContent) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo("autocu@gmail.com"); // Email của admin
+        message.setTo("thiembinh16@gmail.com"); // Email của admin
         message.setSubject("Yêu cầu hỗ trợ mới: " + subject);
         message.setText("Thông tin yêu cầu hỗ trợ mới:\n\n" +
                 "Người gửi: " + name + "\n" +
