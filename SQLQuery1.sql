@@ -24,27 +24,6 @@ VALUES
 (N'Tấm che nắng', N'Giảm nhiệt độ trong xe, bảo vệ nội thất khỏi ánh nắng mặt trời', N'phu_kien'),
 (N'Bạt phủ xe', N'Bảo vệ xe khỏi bụi bẩn, nắng mưa khi đỗ xe ngoài trời', N'phu_kien');
 
-INSERT INTO san_pham (ten_san_pham, so_ghe, truyen_dong, nhien_lieu, dia_diem_lay_xe, hang_xe, gia, so_luong_trong_kho, CategoryID, ngay_san_xuat, bao_hanh, anh_dai_dien)
-(N'Sedan', N'Dòng xe sedan phổ biến, phù hợp cho gia đình và cá nhân'),
-(N'SUV', N'Dòng xe SUV đa dụng, phù hợp cho mọi địa hình'),
-(N'Bán tải', N'Dòng xe bán tải mạnh mẽ, phù hợp cho công việc và giải trí'),
-(N'Xe điện', N'Dòng xe thân thiện với môi trường, sử dụng động cơ điện'),
-(N'Hatchback', N'Dòng xe nhỏ gọn, phù hợp cho đô thị'),
-(N'Coupe', N'Dòng xe thể thao, thiết kế 2 cửa'),
-(N'MPV', N'Dòng xe đa dụng, nhiều chỗ ngồi, phù hợp cho gia đình lớn'),
-(N'Xe sang', N'Dòng xe cao cấp, sang trọng, dành cho giới thượng lưu'),
-(N'Xe thể thao', N'Dòng xe hiệu suất cao, thiết kế thể thao'),
-(N'Xe cổ điển', N'Dòng xe cổ điển, phục vụ sưu tầm và giải trí'),
-(N'Camera hành trình', N'Ghi lại hành trình di chuyển, hỗ trợ lái xe an toàn'),
-(N'Cảm biến áp suất lốp', N'Giúp kiểm soát áp suất lốp, đảm bảo an toàn khi lái xe'),
-(N'Bọc ghế da', N'Tăng tính thẩm mỹ và bảo vệ ghế xe khỏi mài mòn'),
-( N'Thanh giá nóc', N'Hỗ trợ chở hàng trên nóc xe, tiện lợi cho các chuyến đi xa'),
-(N'Bơm lốp ô tô', N'Dụng cụ bơm lốp khẩn cấp, tiện lợi khi đi đường dài'),
-(N'Gạt mưa', N'Gạt nước kính chắn gió, đảm bảo tầm nhìn khi trời mưa'),
-(N'Nước hoa ô tô', N'Tạo không gian thơm mát, dễ chịu khi lái xe'),
-(N'Màn hình giải trí', N'Giải trí đa phương tiện, hỗ trợ kết nối điện thoại và GPS'),
-(N'Tấm che nắng', N'Giảm nhiệt độ trong xe, bảo vệ nội thất khỏi ánh nắng mặt trời'),
-(N'Bạt phủ xe', N'Bảo vệ xe khỏi bụi bẩn, nắng mưa khi đỗ xe ngoài trời');
 INSERT INTO san_pham 
 (ten_san_pham, so_ghe, truyen_dong, nhien_lieu, dia_diem_lay_xe, hang_xe, gia, so_luong_trong_kho, CategoryID, ngay_san_xuat, bao_hanh, anh_dai_dien, mota)
 VALUES

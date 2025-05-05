@@ -2,6 +2,7 @@ package poly.edu.Service;
 
 import java.util.List;
 
+import poly.edu.Model.DanhMuc;
 import poly.edu.Model.PhuKienOto;
 
 public interface PhuKienOtoService {
@@ -11,7 +12,7 @@ public interface PhuKienOtoService {
     PhuKienOto findById(Long id);
     List<PhuKienOto> findAll();
     PhuKienOto update(PhuKienOto p);
-
+    List<PhuKienOto> getAccessoriesByCategory(DanhMuc danhMuc);
     // Thêm phương thức cập nhật số lượng tồn kho
     void updateStock(Long accessoryId, int soLuong);
 }

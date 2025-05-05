@@ -33,6 +33,7 @@ import poly.edu.Model.PhuKienOto;
 import poly.edu.Model.SanPham;
 import poly.edu.Model.User;
 import poly.edu.Repository.UserRepository;
+import poly.edu.Service.DanhMucService;
 import poly.edu.Service.PhuKienOtoService;
 import poly.edu.Service.SanPhamService;
 import poly.edu.Service.UserService; // Giữ lại nếu UserService có các phương thức khác được dùng
@@ -336,6 +337,118 @@ public class HomeController {
          // Redirect back to the profile page to show the updated info or message
          return "redirect:/profile";
      }
+     
+     @Autowired
+     private DanhMucService categoryService;
+     
+     @GetMapping("/cars")
+     public String showUsedCarsPage(
+             @RequestParam(value = "category", required = false) String categoryName,
+             Model model) {
+
+         List<SanPham> carsList; // Danh sách xe sẽ được hiển thị
+         
+         // Lấy danh sách danh mục loại 'xe' để hiển thị bộ lọc trên trang JSP
+         // Sử dụng phương thức từ CategoryService nếu có
+         List<DanhMuc> carCategories = categoryService.getCategoriesByLoai("xe");
+         // Hoặc nếu CategoryService chỉ có getAllCategories():
+         // List<DanhMuc> allCategories = categoryService.getAllCategories();
+         // List<DanhMuc> carCategories = allCategories.stream()
+         //                                 .filter(cat -> "xe".equals(cat.getLoai()))
+         //                                 .collect(java.util.stream.Collectors.toList());
+
+
+         if (categoryName != null && !categoryName.isEmpty()) {
+             // Bước 1: Tìm đối tượng DanhMuc dựa trên tên danh mục từ request
+             Optional<DanhMuc> selectedCategoryOpt = categoryService.getCategoryByName(categoryName);
+
+             if (selectedCategoryOpt.isPresent()) {
+                 // Bước 2: Nếu tìm thấy danh mục, lấy đối tượng DanhMuc
+                 DanhMuc selectedCategory = selectedCategoryOpt.get();
+                 // Bước 3: Gọi SanPhamService để lấy xe thuộc danh mục này và có loại là 'xe'
+                 // Truyền ĐỐI TƯỢNG DanhMuc và loại ('xe')
+                 carsList = sanPhamService.getProductsByCategoryAndType(selectedCategory, "xe");
+             } else {
+                 // Nếu tên danh mục không hợp lệ hoặc không tìm thấy, hiển thị tất cả xe
+                 System.err.println("Danh mục xe '" + categoryName + "' không tìm thấy. Hiển thị tất cả xe.");
+                 carsList = sanPhamService.getAllCars(); // Hiển thị tất cả xe
+                 // Hoặc bạn có thể trả về danh sách rỗng và thêm thông báo lỗi vào model
+                 // carsList = java.util.Collections.emptyList();
+                 // model.addAttribute("errorMessage", "Danh mục '" + categoryName + "' không tồn tại.");
+             }
+
+         } else {
+             // Nếu không có tham số 'category' trong URL, lấy tất cả xe
+             carsList = sanPhamService.getAllCars();
+         }
+
+         // Add dữ liệu vào model để truyền sang JSP
+         model.addAttribute("allCarsList", carsList); // Đảm bảo tên attribute khớp với tên dùng trong JSP
+         model.addAttribute("categoriesList", carCategories); // Truyền danh mục xe cho JSP (để tạo link lọc)
+
+         // Trả về tên view (tên file JSP không có .jsp)
+         return "used_cars"; // Đảm bảo bạn có file used_cars.jsp trong thư mục views
+     }
+
+     // Handler cho trang Phụ Kiện Ô Tô
+     @GetMapping("/accessories")
+     public String showAccessoriesPage(
+              @RequestParam(value = "category", required = false) String categoryName,
+             Model model) {
+
+         // >>> Danh sách chứa các đối tượng PhuKienOto <<<
+         List<PhuKienOto> accessoriesList;
+
+          // Lấy danh sách danh mục loại 'phu_kien' để hiển thị bộ lọc trên trang JSP
+          // Sử dụng phương thức từ CategoryService
+         List<DanhMuc> accessoryCategories = categoryService.getCategoriesByLoai("phu_kien");
+          // Hoặc nếu CategoryService chỉ có getAllCategories():
+          // List<DanhMuc> allCategories = categoryService.getAllCategories();
+          // List<DanhMuc> accessoryCategories = allCategories.stream()
+          //                                 .filter(cat -> "phu_kien".equals(cat.getLoai()))
+          //                                 .collect(java.util.stream.Collectors.toList());
+
+
+         if (categoryName != null && !categoryName.isEmpty()) {
+              // Bước 1: Tìm đối tượng DanhMuc dựa trên tên danh mục từ request
+             Optional<DanhMuc> selectedCategoryOpt = categoryService.getCategoryByName(categoryName);
+
+             if (selectedCategoryOpt.isPresent()) {
+                 // Bước 2: Nếu tìm thấy danh mục, lấy đối tượng DanhMuc
+                 DanhMuc selectedCategory = selectedCategoryOpt.get();
+                 // Bước 3: Gọi >>> PhuKienOtoService <<< để lấy phụ kiện thuộc danh mục này
+                 // Giả định PhuKienOtoService có phương thức getAccessoriesByCategory(DanhMuc danhMuc)
+                  accessoriesList = phuKienOtoService.getAccessoriesByCategory(selectedCategory);
+             } else {
+                  // Nếu tên danh mục không hợp lệ hoặc không tìm thấy, hiển thị tất cả phụ kiện
+                  System.err.println("Danh mục phụ kiện '" + categoryName + "' không tìm thấy. Hiển thị tất cả phụ kiện.");
+                  // >>> Gọi findAll() từ PhuKienOtoService <<<
+                  accessoriesList = phuKienOtoService.findAll(); // Hiển thị tất cả phụ kiện
+                  // Hoặc bạn có thể trả về danh sách rỗng và thêm thông báo lỗi vào model
+                  // accessoriesList = java.util.Collections.emptyList();
+                  // model.addAttribute("errorMessage", "Danh mục '" + categoryName + "' không tồn tại.");
+             }
+
+         } else {
+              // Nếu không có tham số 'category' trong URL, lấy tất cả phụ kiện
+              // >>> Gọi findAll() từ PhuKienOtoService <<<
+              accessoriesList = phuKienOtoService.findAll();
+          }
+
+          // Add dữ liệu vào model để truyền sang JSP
+          // >>> Tên attribute khớp với tên dùng trong JSP: "allAccessoriesList" <<<
+          model.addAttribute("allAccessoriesList", accessoriesList);
+          // Truyền danh mục phụ kiện cho JSP (để tạo link lọc)
+          model.addAttribute("categoriesList", accessoryCategories);
+
+          // Trả về tên view (tên file JSP không có .jsp)
+          return "accessories"; // Đảm bảo bạn có file accessories.jsp trong thư mục views
+      }
+
+     // Bạn có thể thêm các handler khác tại đây, ví dụ:
+     // @GetMapping("/details/{id}") để hiển thị chi tiết sản phẩm
+     // @PostMapping("/cart/add/{id}") để thêm vào giỏ hàng (như trong trang chủ)
+
 
      
      private User getCurrentUser() {

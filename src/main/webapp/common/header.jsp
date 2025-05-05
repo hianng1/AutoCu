@@ -101,10 +101,8 @@
     <div class="flex items-center flex-nowrap">
       <%-- THÊM contextPath vào các link menu chính --%>
       <a href="${pageContext.request.contextPath}/trangchu" class="px-4 py-3 hover:bg-orange-600 inline-block"><i class="fas fa-home"></i> Trang Chủ</a>
-      <a href="/usedcars" class="px-4 py-3 hover:bg-orange-600 inline-block">Xe oto cũ</a> <%-- Link placeholder --%>
+      <a href="/cars" class="px-4 py-3 hover:bg-orange-600 inline-block">Xe oto cũ</a> <%-- Link placeholder --%>
       <a href="/accessories" class="px-4 py-3 hover:bg-orange-600 inline-block">Phụ kiện xe</a> <%-- Link placeholder --%>
-      <a href="/rente-cars" class="px-4 py-3 hover:bg-orange-600 inline-block">Thuê xe</a> <%-- Link placeholder --%>
-      <a href="cars-news" class="px-4 py-3 hover:bg-orange-600 inline-block">Tin xe hơi</a> <%-- Link placeholder --%>
       <a href="/support" class="px-4 py-3 hover:bg-orange-600 inline-block">Hỗ trợ</a> <%-- Link placeholder --%>
       <a href="/contact" class="px-4 py-3 hover:bg-orange-600 inline-block">Liên hệ</a> <%-- Link placeholder --%>
     </div>
