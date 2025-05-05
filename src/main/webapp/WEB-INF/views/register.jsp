@@ -49,9 +49,9 @@
                             </div>
                             <div class="mb-3">
 							    <label for="password" class="form-label">Mật khẩu</label>
-							    <input type="password" class="form-control" name="password" required>
-							    <div class="form-text" style="color: red;">Mật khẩu ít nhất 6 ký tự.</div>
-							    <div class="invalid-feedback">Vui lòng nhập mật khẩu hợp lệ (ít nhất 6 ký tự).</div>
+							    <input type="password" class="form-control" name="password" id="password" required pattern="(?=.*[a-z])(?=.*[A-Z]).{6,}">
+							    <div class="form-text" style="color: red;">Mật khẩu ít nhất 6 ký tự và chứa ít nhất một chữ hoa và một chữ thường.</div>
+							    <div class="invalid-feedback">Vui lòng nhập mật khẩu hợp lệ (ít nhất 6 ký tự và chứa ít nhất một chữ hoa và một chữ thường).</div>
 							</div>
                             <div class="mb-3">
                                 <label class="form-label">Họ và tên</label>
@@ -60,13 +60,13 @@
                             </div>
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" name="email" required>
-                                <div class="invalid-feedback">Vui lòng nhập email hợp lệ</div>
+                                <input type="email" class="form-control" id="email" name="email" required pattern=".+@.+">
+                                <div class="invalid-feedback">Vui lòng nhập email hợp lệ (có chứa ký tự @)</div>
                             </div>
                             <div class="mb-3">
                                 <label for="phone" class="form-label">Số điện thoại</label>
-                                <input type="tel" class="form-control" id="phone" name="sodienthoai" pattern="[0-9]{10,11}" required>
-                                <div class="invalid-feedback">Vui lòng nhập số điện thoại hợp lệ (10-11 số)</div>
+                                <input type="tel" class="form-control" id="phone" name="sodienthoai" pattern="[0-9]{9}" required>
+                                <div class="invalid-feedback">Vui lòng nhập số điện thoại hợp lệ (9 số)</div>
                             </div>
                             <div class="mb-3">
                                 <label for="soNha" class="form-label">Số nhà/Đường</label>
@@ -78,13 +78,13 @@
 								    <input type="text" class="form-control" id="tinhThanh" name="tinhThanh" required>
 								    <div class="invalid-feedback">Vui lòng nhập tỉnh/thành phố</div>
 								</div>
-									
+
 								<div class="mb-3">
 								    <label for="quanHuyen" class="form-label">Quận/Huyện</label>
 								    <input type="text" class="form-control" id="quanHuyen" name="quanHuyen" required>
 								    <div class="invalid-feedback">Vui lòng nhập quận/huyện</div>
 								</div>
-								
+
 								<div class="mb-3">
 								    <label for="phuongXa" class="form-label">Phường/Xã</label>
 								    <input type="text" class="form-control" id="phuongXa" name="phuongXa" required>
@@ -105,5 +105,42 @@
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        (() => {
+            'use strict'
+
+            // Lấy tất cả các form cần xác thực
+            const forms = document.querySelectorAll('.needs-validation')
+
+            // Lặp qua chúng và ngăn chặn việc gửi
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    // Kiểm tra thêm điều kiện cho mật khẩu
+                    const passwordInput = form.querySelector('#password');
+                    if (passwordInput) {
+                        const passwordValue = passwordInput.value;
+                        const hasUpperCase = /[A-Z]/.test(passwordValue);
+                        const hasLowerCase = /[a-z]/.test(passwordValue);
+                        const isLongEnough = passwordValue.length >= 6;
+
+                        if (!isLongEnough || !hasUpperCase || !hasLowerCase) {
+                            passwordInput.classList.add('is-invalid');
+                            event.preventDefault();
+                            event.stopPropagation();
+                        } else {
+                            passwordInput.classList.remove('is-invalid');
+                        }
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>
 </body>
 </html>

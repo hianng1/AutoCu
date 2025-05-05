@@ -15,7 +15,9 @@ import poly.edu.Model.User;
 
 @Repository
 public interface DonHangRepository extends JpaRepository<DonHang, Long> {
-	
+
+    @Query("SELECT d.trangThai, COUNT(d) FROM DonHang d GROUP BY d.trangThai")
+    List<Object[]> thongKeDonHangTheoTrangThai();
     // Tìm đơn hàng theo ID và người dùng
 	Optional<DonHang> findByOrderIDAndUser(Long orderID, User user);
 
@@ -54,6 +56,6 @@ public interface DonHangRepository extends JpaRepository<DonHang, Long> {
     @Query("SELECT DISTINCT d FROM DonHang d JOIN d.chiTietDonHangs c WHERE c.phuKienOto.accessoryID = ?1")
     List<DonHang> findByProductId(Long accessoryID);
 
-    @Query("SELECT d.trangThai, COUNT(d) FROM DonHang d GROUP BY d.trangThai")
-    List<Object[]> thongKeDonHangTheoTrangThai();
+    // *** Đã loại bỏ phương thức sau vì trùng lặp chức năng với findByUser(User user) ***
+    // List<DonHang> findAllByUser(User user);
 }

@@ -1,4 +1,4 @@
-﻿create database QuanLyXe2;
+﻿﻿create database QuanLyXe2;
 use QuanLyXe2;
 
 INSERT INTO danh_muc(ten_danh_muc, mo_ta, loai)

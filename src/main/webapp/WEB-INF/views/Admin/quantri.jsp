@@ -12,6 +12,9 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
+    .table {
+    font-size: 0.8rem; /* Hoặc một giá trị nhỏ hơn tùy bạn */
+}
         body {
             background-color: #f8f9fa;
         }
@@ -92,16 +95,7 @@
             <span>Quản lý user</span>
         </h6>
         <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link" href="${pageContext.request.contextPath}/quantri">
-                    <i class="fas fa-tachometer-alt"></i> Quản trị
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <i class="fas fa-user-circle"></i> Tài khoản
-                </a>
-            </li>
+           
             <li class="nav-item">
                 <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#thongTinTaiKhoan">
                     <i class="fas fa-cogs"></i> Thông tin tài khoản <i class="fas fa-caret-down"></i>
