@@ -86,22 +86,13 @@
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar -->
-       <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block sidebar">
+     <nav id="sidebar" class="col-md-3 col-lg-3 d-md-block sidebar">
     <div class="position-sticky">
         <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
             <span>Quản lý user</span>
         </h6>
         <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link" href="${pageContext.request.contextPath}/quantri">
-                    <i class="fas fa-tachometer-alt"></i> Quản trị
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <i class="fas fa-user-circle"></i> Tài khoản
-                </a>
-            </li>
+           
             <li class="nav-item">
                 <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#thongTinTaiKhoan">
                     <i class="fas fa-cogs"></i> Thông tin tài khoản <i class="fas fa-caret-down"></i>
@@ -135,18 +126,14 @@
     </a>
     <div class="collapse" id="thongKe">
         <ul class="nav flex-column ps-3">
-            <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/thongke/banhang">Thống kê bán hàng</a></li>
+            <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/thongke">Thống kê bán hàng</a></li>
             <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/donhang">Thống kê đơn hàng</a></li>
-           
         </ul>
     </div>
 </li>
-
-
         </ul>
     </div>
 </nav>
-
         <!-- Main Content -->
         <main class="col-md-9 ms-sm-auto col-lg-9 main-content">
             <div class="d-flex justify-content-between align-items-center">
@@ -241,7 +228,7 @@
                             <label for="chucVu" class="form-label">Chức vụ</label>
                             <select class="form-select" id="chucVu" name="chucVu"
                                     onchange="togglePhoneNumberField(this)">
-                                <option value="Admin">Admin</option>
+                                <option value="ADMIN">ADMIN</option>
                                 <option value="USER">USER</option>
                             </select>
                         </div>

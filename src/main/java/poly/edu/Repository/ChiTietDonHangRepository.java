@@ -1,14 +1,14 @@
 package poly.edu.Repository;
 
 import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
-
+import org.springframework.stereotype.Repository;
 import poly.edu.Model.ChiTietDonHang;
 import poly.edu.Model.DonHang;
 
+@Repository
 public interface ChiTietDonHangRepository extends JpaRepository<ChiTietDonHang, Long> {
-    List<ChiTietDonHang> findByDonHang(DonHang donHang);
-    
+    // ... các phương thức khác ...
+
     List<ChiTietDonHang> findByDonHangOrderByOrderItemIDAsc(DonHang donHang);
 }

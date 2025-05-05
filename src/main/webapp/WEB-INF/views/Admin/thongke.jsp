@@ -1,4 +1,3 @@
-
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -19,10 +18,6 @@
 
         /* Sidebar */
         /* Sidebar */
-        #barChart {
-    width: 600px !important; /* Sử dụng !important để đảm bảo ghi đè các style khác */
-    height: 400px !important;
-}
 #sidebar {
     background-color: #343a40;
     color: white;
@@ -90,24 +85,15 @@
 
 <div class="container-fluid">
     <div class="row">
-        <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block sidebar">
+       <nav id="sidebar" class="col-md-3 col-lg-3 d-md-block sidebar">
     <div class="position-sticky">
         <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
             <span>Quản lý user</span>
         </h6>
         <ul class="nav flex-column">
+           
             <li class="nav-item">
-                <a class="nav-link" href="${pageContext.request.contextPath}/quantri">
-                    <i class="fas fa-tachometer-alt"></i> Quản trị
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <i class="fas fa-user-circle"></i> Tài khoản
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-bs-target="#thongTinTaiKhoan">
+                <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#thongTinTaiKhoan">
                     <i class="fas fa-cogs"></i> Thông tin tài khoản <i class="fas fa-caret-down"></i>
                 </a>
                 <div class="collapse show" id="thongTinTaiKhoan">
@@ -123,7 +109,7 @@
                 </a>
             </li>
           <li class="nav-item">
-    <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-bs-target="#quanLySanPham">
+    <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#quanLySanPham">
         <i class="fas fa-box"></i> Quản lý Sản Phẩm <i class="fas fa-caret-down"></i>
     </a>
     <div class="collapse" id="quanLySanPham">
@@ -134,19 +120,16 @@
     </div>
 </li>
 <li class="nav-item">
-    <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-bs-target="#thongKe">
+    <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#thongKe">
         <i class="fas fa-chart-bar"></i> Thống kê <i class="fas fa-caret-down"></i>
     </a>
-    <div class="collapse show" id="thongKe">
+    <div class="collapse" id="thongKe">
         <ul class="nav flex-column ps-3">
             <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/thongke">Thống kê bán hàng</a></li>
             <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/donhang">Thống kê đơn hàng</a></li>
-
         </ul>
     </div>
 </li>
-
-
         </ul>
     </div>
 </nav>
@@ -186,8 +169,8 @@
 
     <div class="row">
         <div class="col-md-6">
-            <h3>Biểu đồ doanh thu</h3>
-         <canvas id="barChart" width="600" height="400"></canvas>
+   
+            <canvas id="barChart"></canvas>
         </div>
     </div>
 </div>
@@ -198,46 +181,26 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
     $(document).ready(function() {
-    	flatpickr(".flatpickr", {
-    	    mode: "range",
-    	    dateFormat: "Y-m-d", // Sử dụng m và d viết thường
-    	    onClose: function(selectedDates, dateStr, instance) {
-    	        console.log("Giá trị dateStr khi đóng flatpickr:", dateStr);
-    	        $("#reportRange").val(dateStr);
-    	    }
-    	});
+        flatpickr(".flatpickr", {
+            mode: "range",
+            dateFormat: "Y-m-d",
+            onClose: function(selectedDates, dateStr, instance) {
+                // Sử dụng jQuery để gán giá trị và kích hoạt sự kiện change
+                $("#reportRange").val(dateStr).trigger('change');
+            }
+        });
 
-    	$("#reportForm").submit(function() {
-    	    if ($("#reportRange").val() === "") {
-    	        alert("Vui lòng chọn khoảng thời gian thống kê.");
-    	        return false; // Ngăn chặn submit nếu chưa chọn
-    	    }
-    	    var encodedReportRange = encodeURIComponent($("#reportRange").val());
-    	    console.log("Giá trị reportRange khi submit:", encodedReportRange);
-    	    $("#reportRange").val(encodedReportRange); // Gán giá trị đã mã hóa trở lại input
-    	    return true; // Cho phép submit
-    	});
-
-    	  // Lấy dữ liệu từ model
-      // Lấy dữ liệu từ model
-    <c:if test="${not empty doanhThuTheoNgay}">
-    var doanhThuTheoNgay = ${doanhThuTheoNgay};
-    console.log("TOÀN BỘ doanhThuTheoNgay:", JSON.stringify(doanhThuTheoNgay)); // In ra toàn bộ object
-
-    var labels = Object.keys(doanhThuTheoNgay);
-    console.log("Labels:", labels); // In ra mảng labels
-
-    var data = Object.values(doanhThuTheoNgay).map(Number); // Chuyển giá trị sang số
-    console.log("Data (sau map Number):", data); // In ra mảng data sau khi chuyển đổi
-
-    // Kiểm tra kiểu dữ liệu của từng phần tử trong data
-    data.forEach(function(item, index) {
-        console.log("Data [" + index + "] (" + typeof item + "):", item);
+        // Optional: Log giá trị của input field khi form được submit
+        $("#reportForm").submit(function() {
+            console.log("Giá trị reportRange khi submit:", $("#reportRange").val());
+        });
     });
 
-    // Biểu đồ cột (Bar Chart)
-    var ctxBar = document.getElementById('barChart').getContext('2d');
-    console.log("ctxBar:", ctxBar); // Kiểm tra context của canvas
+    // Lấy dữ liệu từ model
+    <c:if test="${not empty doanhThuTheoNgay}">
+    var doanhThuTheoNgay = ${doanhThuTheoNgay};
+    var labels = Object.keys(doanhThuTheoNgay);
+    var data = Object.values(doanhThuTheoNgay);
 
     // Biểu đồ cột (Bar Chart)
     var ctxBar = document.getElementById('barChart').getContext('2d');
