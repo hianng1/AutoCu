@@ -1,4 +1,4 @@
-	package poly.edu.Repository;
+package poly.edu.Repository;
 
 import java.util.Date;
 import java.util.List;
@@ -32,6 +32,9 @@ public interface DonHangRepository extends JpaRepository<DonHang, Long> {
 
     // Tìm đơn hàng trong khoảng thời gian - Giữ nguyên
     List<DonHang> findByNgayDatHangBetween(Date startDate, Date endDate);
+    
+    // Tìm đơn hàng theo khoảng thời gian và trạng thái - Mới thêm
+    List<DonHang> findByNgayDatHangBetweenAndTrangThai(Date startDate, Date endDate, DonHang.TrangThai trangThai);
 
     // Tìm đơn hàng theo người dùng và trạng thái - Sử dụng kiểu Enum DonHang.TrangThai
     List<DonHang> findByUserAndTrangThai(User user, DonHang.TrangThai trangThai); // <-- Sửa từ String
