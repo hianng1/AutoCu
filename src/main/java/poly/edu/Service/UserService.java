@@ -17,8 +17,9 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+	/*
+	 * @Autowired private PasswordEncoder passwordEncoder;
+	 */
 
     @Autowired
     private EmailService emailService;
@@ -42,16 +43,21 @@ public class UserService {
         if (userRepository.existsByEmail(email)) {
             return "Email đã được sử dụng!";
         }
+        if (userRepository.existsBySodienthoai(sodienthoai)) {
+            return "Số điện thoại đã được sử dụng!";
+        }
         if (hovaten == null || hovaten.trim().isEmpty()) {
             return "Họ tên không được để trống!";
         }
         if (rawPassword == null || rawPassword.length() < 6) {
              return "Mật khẩu phải có ít nhất 6 ký tự!";
         }
+        
 
         User newUser = new User();
         newUser.setUsername(username);
-        newUser.setPassword(passwordEncoder.encode(rawPassword));
+		/* newUser.setPassword(passwordEncoder.encode(rawPassword)); */ //bỏ encode\
+        newUser.setPassword(rawPassword);
         newUser.setEmail(email);
         newUser.setHovaten(hovaten);
         newUser.setSodienthoai(sodienthoai != null ? sodienthoai : null);
@@ -68,7 +74,8 @@ public class UserService {
         User user = userRepository.findByEmail(email);
         if (user != null) {
             String newRawPassword = generateRandomPassword();
-            user.setPassword(passwordEncoder.encode(newRawPassword));
+			/* user.setPassword(passwordEncoder.encode(newRawPassword)); */// bỏ passwworrencoe.enco
+           user.setPassword(newRawPassword); //bỏ mã hóa
             userRepository.save(user);
             // Lưu ý: Gửi mật khẩu thô qua email là không an toàn.
             // Nên gửi link đặt lại mật khẩu có token hết hạn.
@@ -86,15 +93,21 @@ public class UserService {
             return "Người dùng không tồn tại!";
         }
 
-        if (!passwordEncoder.matches(currentRawPassword, user.getPassword())) {
+		/*
+		 * if (!passwordEncoder.matches(currentRawPassword, user.getPassword())) { //
+		 * if(crrentrawpsss return "Mật khẩu hiện tại không đúng!"; }
+		 */
+        if (!currentRawPassword.equals(user.getPassword())) {
             return "Mật khẩu hiện tại không đúng!";
-        }
+        } // bỏ mã hóa 
 
          if (newRawPassword == null || newRawPassword.length() < 6) {
               return "Mật khẩu mới phải có ít nhất 6 ký tự!";
          }
 
-        user.setPassword(passwordEncoder.encode(newRawPassword));
+			/* user.setPassword(passwordEncoder.encode(newRawPassword)); */// bỏ encode
+         user.setPassword(newRawPassword); // không mã hóa 
+         
         userRepository.save(user);
         return "Mật khẩu đã được cập nhật thành công!";
     }

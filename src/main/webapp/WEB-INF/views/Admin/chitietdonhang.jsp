@@ -115,7 +115,7 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/quantri">
-                    <i class="fas fa-users"></i> Quản lý user
+                    <i class="fas fa-users"></i> Quản lý user	
                 </a>
             </li>
           <li class="nav-item">
@@ -179,6 +179,12 @@
     </table>
 
     <a href="${pageContext.request.contextPath}/donhang" class="btn btn-secondary">Quay lại</a>
+    <!-- Nút xuất hóa đơn -->
+<form action="${pageContext.request.contextPath}/donhang/xuatpdf/${donHang.orderID}" method="post">
+    <button type="submit" class="btn btn-success">Xuất hóa đơn PDF</button>
+</form>
+    
+    
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

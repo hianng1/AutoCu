@@ -3,6 +3,10 @@ package poly.edu.Controller;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +16,31 @@ import poly.edu.Model.DonHang;
 import poly.edu.Repository.ChiTietDonHangRepository;
 import poly.edu.Repository.DonHangRepository;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.itextpdf.text.Document;
+
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
+
+
+import java.util.stream.Stream;
+
+
+
 
 @Controller
 @RequestMapping("/donhang")
@@ -93,5 +119,75 @@ public class DonHangController {
 
         return response; // JSON: { labels: [...], data: [...] }
     }
+    // xuất hóa đơn 
+    @RequestMapping(value = "/xuatpdf/{id}", method = {RequestMethod.POST, RequestMethod.GET})
+    public ResponseEntity<byte[]> xuatHoaDonPdf(@PathVariable("id") Long id) {
+        try {
+            DonHang donHang = donHangRepository.findById(id).orElse(null);
+            if (donHang == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+
+            List<ChiTietDonHang> chiTietDonHangs = chiTietDonHangRepository.findByDonHangOrderByOrderItemIDAsc(donHang);
+
+            // Tạo PDF vào ByteArrayOutputStream thay vì file
+            byte[] pdfBytes = exportToPdfBytes(donHang, chiTietDonHangs);
+            
+            // Tạo header cho phản hồi để yêu cầu browser tải xuống file
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData("attachment", "hoadon_" + id + ".pdf");
+            headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+            
+            // Trả về file PDF để browser tự động tải xuống
+            return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    
+    // Phương thức tạo PDF và trả về mảng byte
+    public byte[] exportToPdfBytes(DonHang donHang, List<ChiTietDonHang> chiTietDonHangs) throws Exception {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Document document = new Document();
+        PdfWriter.getInstance(document, baos);
+        document.open();
+
+        Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14);
+        Paragraph title = new Paragraph("Chi tiết đơn hàng #" + donHang.getOrderID(), font);
+        title.setAlignment(Element.ALIGN_CENTER);
+        document.add(title);
+
+        document.add(new Paragraph("Ngày đặt: " + donHang.getNgayDatHang()));
+        document.add(new Paragraph("Trạng thái: " + donHang.getTrangThai().getMoTa()));
+        document.add(new Paragraph(" "));
+
+        PdfPTable table = new PdfPTable(5);
+        table.setWidthPercentage(100);
+        table.setSpacingBefore(10f);
+
+        Stream.of("ID", "Tên sản phẩm", "Số lượng", "Đơn giá", "Thành tiền").forEach(headerTitle -> {
+            PdfPCell header = new PdfPCell();
+            header.setPhrase(new Phrase(headerTitle));
+            table.addCell(header);
+        });
+
+        for (ChiTietDonHang ct : chiTietDonHangs) {
+            table.addCell(String.valueOf(ct.getOrderItemID()));
+            table.addCell(ct.getTenSanPham());
+            table.addCell(String.valueOf(ct.getSoLuong()));
+            table.addCell(String.valueOf(ct.getDonGia()));
+            table.addCell(String.valueOf(ct.getThanhTien()));
+        }
+
+        document.add(table);
+        document.close();
+        
+        return baos.toByteArray();
+    }
+
+
 
 }
