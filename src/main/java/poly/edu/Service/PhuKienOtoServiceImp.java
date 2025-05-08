@@ -1,5 +1,6 @@
 package poly.edu.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import poly.edu.DAO.PhuKienOtoDAO;
+import poly.edu.Model.DanhMuc;
 import poly.edu.Model.PhuKienOto;
 import poly.edu.Repository.PhuKienOtoRepository;
 
@@ -71,6 +73,26 @@ public class PhuKienOtoServiceImp implements PhuKienOtoService {
 	public PhuKienOto save(PhuKienOto p) {
 		// TODO Auto-generated method stub
 		return PKrepo.save(p);
+	}
+	
+	@Autowired
+	private PhuKienOtoRepository phuKienOtoRepository;
+
+	@Override
+	public List<PhuKienOto> getAccessoriesByCategory(DanhMuc danhMuc) {
+		// TODO Auto-generated method stub // Xóa dòng comment này
+
+        // Kiểm tra xem đối tượng DanhMuc có null không
+        if (danhMuc == null) {
+            // Xử lý trường hợp danh mục là null.
+            // Tốt nhất là trả về một danh sách rỗng vì không có danh mục để lọc.
+            System.err.println("Gọi getAccessoriesByCategory với DanhMuc null. Trả về danh sách rỗng.");
+            return Collections.emptyList(); // Trả về danh sách rỗng không thể thay đổi
+        }
+
+        // Sử dụng PhuKienOtoRepository để tìm các phụ kiện liên kết với DanhMuc này.
+        // >>> Yêu cầu PhuKienOtoRepository có phương thức findByDanhMuc(DanhMuc danhMuc); <<<
+		return phuKienOtoRepository.findByDanhMuc(danhMuc);
 	}
 
 

@@ -29,39 +29,52 @@ public class ThongkeController {
         Model model) {
 
         if (reportRange != null && !reportRange.isEmpty()) {
-        	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d"); // Sử dụng M và d viết thường
-            Date startDate;
-            Date endDate;
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d");
+            Date startDate = null;
+            Date endDate = null;
 
             try {
                 String[] dates = reportRange.split(" to ");
-                startDate = dateFormat.parse(dates[0]);
-                endDate = dateFormat.parse(dates[1]);
+                if (dates.length == 2) {
+                    String startDateStr = dates[0].trim();
+                    String endDateStr = dates[1].trim();
+                    startDate = dateFormat.parse(startDateStr);
+                    endDate = dateFormat.parse(endDateStr);
 
-                List<DonHang> donHangs = donHangRepository.findByNgayDatHangBetween(startDate, endDate);
-                List<DonHang> donHangDaGiao = donHangs.stream()
-                        .filter(dh -> DonHang.TrangThai.DA_GIAO.equals(dh.getTrangThai()))
-                        .collect(Collectors.toList());
+                    System.out.println("Ngày bắt đầu: " + startDate); // Log
+                    System.out.println("Ngày kết thúc: " + endDate);   // Log
 
-                Map<String, BigDecimal> doanhThuTheoNgay = new HashMap<>();
-                SimpleDateFormat dayFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    List<DonHang> donHangs = donHangRepository.findByNgayDatHangBetween(startDate, endDate);
+                    System.out.println("Số lượng đơn hàng tìm thấy: " + donHangs.size()); // Log
 
+                    List<DonHang> donHangDaGiao = donHangs.stream()
+                            .filter(dh -> DonHang.TrangThai.DA_GIAO.equals(dh.getTrangThai()))
+                            .collect(Collectors.toList());
+                    System.out.println("Số lượng đơn hàng đã giao: " + donHangDaGiao.size()); // Log
 
-for (DonHang donHang : donHangDaGiao) {
-    String ngay = dayFormat.format(donHang.getNgayDatHang());
-    BigDecimal tongThanhToan = donHang.getTongThanhToan();
-    // Thêm dấu nháy kép vào key khi put vào map
-    doanhThuTheoNgay.put("\"" + ngay + "\"", doanhThuTheoNgay.getOrDefault("\"" + ngay + "\"", BigDecimal.ZERO).add(tongThanhToan));
-}
+                    Map<String, BigDecimal> doanhThuTheoNgay = new HashMap<>();
+                    SimpleDateFormat dayFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-                model.addAttribute("doanhThuTheoNgay", doanhThuTheoNgay);
-                model.addAttribute("startDate", dateFormat.format(startDate));
-                model.addAttribute("endDate", dateFormat.format(endDate));
+                    for (DonHang donHang : donHangDaGiao) {
+                        String ngay = dayFormat.format(donHang.getNgayDatHang());
+                        BigDecimal tongThanhToan = donHang.getTongThanhToan();
+                        doanhThuTheoNgay.put("\"" + ngay + "\"", doanhThuTheoNgay.getOrDefault("\"" + ngay + "\"", BigDecimal.ZERO).add(tongThanhToan));
+                    }
+
+                    System.out.println("Dữ liệu doanh thu theo ngày: " + doanhThuTheoNgay); // Log
+                    model.addAttribute("doanhThuTheoNgay", doanhThuTheoNgay);
+                    model.addAttribute("startDate", dateFormat.format(startDate));
+                    model.addAttribute("endDate", dateFormat.format(endDate));
+
+                } else {
+                    model.addAttribute("error", "Khoảng thời gian không hợp lệ. Vui lòng chọn đúng định dạng.");
+                }
 
             } catch (ParseException e) {
-                model.addAttribute("error", "Invalid date format");
+                model.addAttribute("error", "Định dạng ngày không hợp lệ. Vui lòng chọn đúng định dạngプター-MM-DD.");
             }
         }
 
         return "Admin/thongke";
-    }}
+    }
+}
