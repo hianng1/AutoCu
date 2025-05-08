@@ -60,13 +60,13 @@
                             </div>
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" name="email" required pattern=".+@.+">
-                                <div class="invalid-feedback">Vui lòng nhập email hợp lệ (có chứa ký tự @)</div>
+                                <input type="email" class="form-control" id="email" name="email" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
+                                <div class="invalid-feedback">Vui lòng nhập email hợp lệ (vd: example@domain.com)</div>
                             </div>
                             <div class="mb-3">
                                 <label for="phone" class="form-label">Số điện thoại</label>
-                                <input type="tel" class="form-control" id="phone" name="sodienthoai" pattern="[0-9]{9}" required>
-                                <div class="invalid-feedback">Vui lòng nhập số điện thoại hợp lệ (9 số)</div>
+                                <input type="tel" class="form-control" id="phone" name="sodienthoai" pattern="[0-9]{10}" required>
+                                <div class="invalid-feedback">Vui lòng nhập số điện thoại hợp lệ (10 số)</div>
                             </div>
                             <div class="mb-3">
                                 <label for="soNha" class="form-label">Số nhà/Đường</label>
