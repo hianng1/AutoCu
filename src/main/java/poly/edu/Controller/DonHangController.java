@@ -25,17 +25,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.itextpdf.text.Document;
-
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Chunk;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-
-
 
 import java.util.stream.Stream;
 
@@ -152,37 +150,288 @@ public class DonHangController {
     public byte[] exportToPdfBytes(DonHang donHang, List<ChiTietDonHang> chiTietDonHangs) throws Exception {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Document document = new Document();
-        PdfWriter.getInstance(document, baos);
+        PdfWriter writer = PdfWriter.getInstance(document, baos);
         document.open();
+        
+        // Thiết lập fonts
+        Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 20, new com.itextpdf.text.BaseColor(44, 62, 80));
+        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, new com.itextpdf.text.BaseColor(44, 62, 80));
+        Font normalFont = FontFactory.getFont(FontFactory.HELVETICA, 10);
+        Font boldFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10);
+        Font smallFont = FontFactory.getFont(FontFactory.HELVETICA, 8);
+        Font smallBoldFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 8);
+        Font largeBoldFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14, new com.itextpdf.text.BaseColor(231, 76, 60));
 
-        Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14);
-        Paragraph title = new Paragraph("Chi tiết đơn hàng #" + donHang.getOrderID(), font);
+        // Thêm tiêu đề và logo
+        Paragraph companyName = new Paragraph("AUTO CU - XE MÁY & Ô TÔ", titleFont);
+        companyName.setAlignment(Element.ALIGN_CENTER);
+        document.add(companyName);
+        
+        Paragraph companyDetails = new Paragraph("Địa chỉ: 123 Nguyễn Văn Linh, Quận 7, TP.HCM\nĐiện thoại: (028) 1234 5678 - Email: info@autocu.com.vn\nWebsite: www.autocu.com.vn", smallFont);
+        companyDetails.setAlignment(Element.ALIGN_CENTER);
+        document.add(companyDetails);
+        
+        // Thêm đường kẻ ngang
+        com.itextpdf.text.pdf.draw.LineSeparator ls = new com.itextpdf.text.pdf.draw.LineSeparator();
+        ls.setLineColor(new com.itextpdf.text.BaseColor(189, 195, 199));
+        document.add(new Chunk(ls));
+
+        // Tiêu đề hóa đơn
+        Paragraph title = new Paragraph("HÓA ĐƠN BÁN HÀNG", headerFont);
         title.setAlignment(Element.ALIGN_CENTER);
+        title.setSpacingBefore(10);
+        title.setSpacingAfter(10);
         document.add(title);
+        
+        // Mã đơn hàng và ngày đặt
+        PdfPTable infoTable = new PdfPTable(2);
+        infoTable.setWidthPercentage(100);
+        infoTable.setSpacingBefore(10);
+        infoTable.setSpacingAfter(10);
+        
+        PdfPCell cell;
+        
+        // Mã đơn hàng
+        cell = new PdfPCell(new Phrase("MÃ ĐƠN HÀNG: #" + donHang.getOrderID(), headerFont));
+        cell.setBorder(0);
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        infoTable.addCell(cell);
+        
+        // Ngày đặt hàng
+        java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        cell = new PdfPCell(new Phrase("NGÀY ĐẶT: " + dateFormat.format(donHang.getNgayDatHang()), headerFont));
+        cell.setBorder(0);
+        cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+        infoTable.addCell(cell);
+        
+        document.add(infoTable);
 
-        document.add(new Paragraph("Ngày đặt: " + donHang.getNgayDatHang()));
-        document.add(new Paragraph("Trạng thái: " + donHang.getTrangThai().getMoTa()));
-        document.add(new Paragraph(" "));
-
+        // Thông tin khách hàng và đơn hàng
+        PdfPTable customerOrderTable = new PdfPTable(2);
+        customerOrderTable.setWidthPercentage(100);
+        customerOrderTable.setSpacingBefore(10);
+        float[] columnWidths = {1f, 1f};
+        customerOrderTable.setWidths(columnWidths);
+        
+        // Thông tin khách hàng
+        PdfPTable customerTable = new PdfPTable(1);
+        customerTable.setWidthPercentage(100);
+        
+        cell = new PdfPCell(new Phrase("THÔNG TIN KHÁCH HÀNG", boldFont));
+        cell.setBackgroundColor(new com.itextpdf.text.BaseColor(236, 240, 241));
+        cell.setPadding(5);
+        customerTable.addCell(cell);
+        
+        cell = new PdfPCell();
+        cell.setPadding(5);
+        
+        Paragraph customerInfo = new Paragraph();
+        customerInfo.add(new Chunk("Tên khách hàng: ", boldFont));
+        customerInfo.add(new Chunk(donHang.getUser().getHovaten(), normalFont));
+        customerInfo.add(Chunk.NEWLINE);
+        
+        customerInfo.add(new Chunk("Số điện thoại: ", boldFont));
+        customerInfo.add(new Chunk(donHang.getUser().getSodienthoai(), normalFont));
+        customerInfo.add(Chunk.NEWLINE);
+        
+        customerInfo.add(new Chunk("Email: ", boldFont));
+        customerInfo.add(new Chunk(donHang.getUser().getEmail(), normalFont));
+        customerInfo.add(Chunk.NEWLINE);
+        
+        customerInfo.add(new Chunk("Địa chỉ giao hàng: ", boldFont));
+        customerInfo.add(new Chunk(donHang.getDiaChiGiaoHang(), normalFont));
+        
+        cell.addElement(customerInfo);
+        customerTable.addCell(cell);
+        
+        PdfPCell customerCell = new PdfPCell(customerTable);
+        customerCell.setBorder(0);
+        customerOrderTable.addCell(customerCell);
+        
+        // Thông tin đơn hàng
+        PdfPTable orderTable = new PdfPTable(1);
+        orderTable.setWidthPercentage(100);
+        
+        cell = new PdfPCell(new Phrase("THÔNG TIN ĐƠN HÀNG", boldFont));
+        cell.setBackgroundColor(new com.itextpdf.text.BaseColor(236, 240, 241));
+        cell.setPadding(5);
+        orderTable.addCell(cell);
+        
+        cell = new PdfPCell();
+        cell.setPadding(5);
+        
+        Paragraph orderInfo = new Paragraph();
+        orderInfo.add(new Chunk("Trạng thái: ", boldFont));
+        orderInfo.add(new Chunk(donHang.getTrangThai().getMoTa(), normalFont));
+        orderInfo.add(Chunk.NEWLINE);
+        
+        orderInfo.add(new Chunk("Phương thức vận chuyển: ", boldFont));
+        orderInfo.add(new Chunk(donHang.getPhuongThucVanChuyen(), normalFont));
+        orderInfo.add(Chunk.NEWLINE);
+        
+        orderInfo.add(new Chunk("Phương thức thanh toán: ", boldFont));
+        orderInfo.add(new Chunk(donHang.getPhuongThucThanhToan(), normalFont));
+        orderInfo.add(Chunk.NEWLINE);
+        
+        orderInfo.add(new Chunk("Đã thanh toán: ", boldFont));
+        orderInfo.add(new Chunk(donHang.isDaThanhToan() ? "Có" : "Không", normalFont));
+        
+        if (donHang.getGhiChu() != null && !donHang.getGhiChu().isEmpty()) {
+            orderInfo.add(Chunk.NEWLINE);
+            orderInfo.add(new Chunk("Ghi chú: ", boldFont));
+            orderInfo.add(new Chunk(donHang.getGhiChu(), normalFont));
+        }
+        
+        cell.addElement(orderInfo);
+        orderTable.addCell(cell);
+        
+        PdfPCell orderCell = new PdfPCell(orderTable);
+        orderCell.setBorder(0);
+        customerOrderTable.addCell(orderCell);
+        
+        document.add(customerOrderTable);
+        
+        // Tiêu đề chi tiết đơn hàng
+        Paragraph detailsTitle = new Paragraph("CHI TIẾT SẢN PHẨM", headerFont);
+        detailsTitle.setAlignment(Element.ALIGN_LEFT);
+        detailsTitle.setSpacingBefore(15);
+        detailsTitle.setSpacingAfter(10);
+        document.add(detailsTitle);
+        
+        // Bảng chi tiết đơn hàng
         PdfPTable table = new PdfPTable(5);
         table.setWidthPercentage(100);
-        table.setSpacingBefore(10f);
-
-        Stream.of("ID", "Tên sản phẩm", "Số lượng", "Đơn giá", "Thành tiền").forEach(headerTitle -> {
-            PdfPCell header = new PdfPCell();
-            header.setPhrase(new Phrase(headerTitle));
-            table.addCell(header);
-        });
-
-        for (ChiTietDonHang ct : chiTietDonHangs) {
-            table.addCell(String.valueOf(ct.getOrderItemID()));
-            table.addCell(ct.getTenSanPham());
-            table.addCell(String.valueOf(ct.getSoLuong()));
-            table.addCell(String.valueOf(ct.getDonGia()));
-            table.addCell(String.valueOf(ct.getThanhTien()));
+        
+        // Thiết lập độ rộng các cột
+        float[] columnProductWidths = {0.5f, 2f, 0.5f, 1f, 1f};
+        table.setWidths(columnProductWidths);
+        
+        // Headers
+        String[] headers = {"ID", "Tên sản phẩm", "Số lượng", "Đơn giá", "Thành tiền"};
+        for (String header : headers) {
+            cell = new PdfPCell(new Phrase(header, boldFont));
+            cell.setBackgroundColor(new com.itextpdf.text.BaseColor(52, 152, 219));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setPadding(5);
+            cell.setBorderColor(new com.itextpdf.text.BaseColor(189, 195, 199));
+            table.addCell(cell);
         }
-
+        
+        // Dữ liệu sản phẩm
+        java.text.NumberFormat currencyFormat = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("vi", "VN"));
+        
+        for (ChiTietDonHang ct : chiTietDonHangs) {
+            // ID
+            cell = new PdfPCell(new Phrase(String.valueOf(ct.getOrderItemID()), normalFont));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setPadding(5);
+            cell.setBorderColor(new com.itextpdf.text.BaseColor(189, 195, 199));
+            table.addCell(cell);
+            
+            // Tên sản phẩm
+            cell = new PdfPCell(new Phrase(ct.getTenSanPham(), normalFont));
+            cell.setPadding(5);
+            cell.setBorderColor(new com.itextpdf.text.BaseColor(189, 195, 199));
+            table.addCell(cell);
+            
+            // Số lượng
+            cell = new PdfPCell(new Phrase(String.valueOf(ct.getSoLuong()), normalFont));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setPadding(5);
+            cell.setBorderColor(new com.itextpdf.text.BaseColor(189, 195, 199));
+            table.addCell(cell);
+            
+            // Đơn giá
+            cell = new PdfPCell(new Phrase(currencyFormat.format(ct.getDonGia()), normalFont));
+            cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            cell.setPadding(5);
+            cell.setBorderColor(new com.itextpdf.text.BaseColor(189, 195, 199));
+            table.addCell(cell);
+            
+            // Thành tiền
+            cell = new PdfPCell(new Phrase(currencyFormat.format(ct.getThanhTien()), normalFont));
+            cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            cell.setPadding(5);
+            cell.setBorderColor(new com.itextpdf.text.BaseColor(189, 195, 199));
+            table.addCell(cell);
+        }
+        
         document.add(table);
+        
+        // Tổng hợp thanh toán
+        PdfPTable summaryTable = new PdfPTable(2);
+        summaryTable.setWidthPercentage(50);
+        summaryTable.setHorizontalAlignment(Element.ALIGN_RIGHT);
+        summaryTable.setSpacingBefore(15);
+        
+        // Tiền hàng
+        cell = new PdfPCell(new Phrase("Tổng tiền hàng:", boldFont));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(0);
+        cell.setPadding(5);
+        summaryTable.addCell(cell);
+        
+        cell = new PdfPCell(new Phrase(currencyFormat.format(donHang.getTongTienHang()), normalFont));
+        cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+        cell.setBorder(0);
+        cell.setPadding(5);
+        summaryTable.addCell(cell);
+        
+        // Phí vận chuyển
+        cell = new PdfPCell(new Phrase("Phí vận chuyển:", boldFont));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(0);
+        cell.setPadding(5);
+        summaryTable.addCell(cell);
+        
+        cell = new PdfPCell(new Phrase(currencyFormat.format(donHang.getPhiVanChuyen()), normalFont));
+        cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+        cell.setBorder(0);
+        cell.setPadding(5);
+        summaryTable.addCell(cell);
+        
+        // Vẽ đường kẻ
+        cell = new PdfPCell(new Phrase(""));
+        cell.setBorder(PdfPCell.BOTTOM);
+        cell.setBorderColor(new com.itextpdf.text.BaseColor(189, 195, 199));
+        cell.setPadding(2);
+        summaryTable.addCell(cell);
+        
+        cell = new PdfPCell(new Phrase(""));
+        cell.setBorder(PdfPCell.BOTTOM);
+        cell.setBorderColor(new com.itextpdf.text.BaseColor(189, 195, 199));
+        cell.setPadding(2);
+        summaryTable.addCell(cell);
+        
+        // Tổng thanh toán
+        cell = new PdfPCell(new Phrase("TỔNG THANH TOÁN:", largeBoldFont));
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(0);
+        cell.setPadding(5);
+        summaryTable.addCell(cell);
+        
+        cell = new PdfPCell(new Phrase(currencyFormat.format(donHang.getTongThanhToan()), largeBoldFont));
+        cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+        cell.setBorder(0);
+        cell.setPadding(5);
+        summaryTable.addCell(cell);
+        
+        document.add(summaryTable);
+        
+        // Thêm chân trang
+        Paragraph footer = new Paragraph();
+        footer.add(Chunk.NEWLINE);
+        footer.add(Chunk.NEWLINE);
+        footer.add(new Chunk("Cảm ơn quý khách đã mua hàng tại AUTO CU!", boldFont));
+        footer.add(Chunk.NEWLINE);
+        footer.add(new Chunk("Mọi thắc mắc và yêu cầu hỗ trợ vui lòng liên hệ:", normalFont));
+        footer.add(Chunk.NEWLINE);
+        footer.add(new Chunk("Hotline: 1900 1234 - Email: hotro@autocu.com.vn", normalFont));
+        footer.setAlignment(Element.ALIGN_CENTER);
+        footer.setSpacingBefore(30);
+        document.add(footer);
+        
         document.close();
         
         return baos.toByteArray();
