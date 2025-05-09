@@ -39,9 +39,9 @@ public class SanPhamController {
     @Autowired
     private HinhAnhSanPhamRepository hinhAnhSanPhamRepository;
 
-
-    @Value("${upload.path}") // Đường dẫn lưu ảnh (cấu hình trong application.properties)
+    @Value("${upload.path}")
     private String uploadDir;
+  
 
     // Hiển thị danh sách sản phẩm
     @GetMapping
@@ -57,41 +57,48 @@ public class SanPhamController {
         model.addAttribute("danhMucs", sanPhamService.getAllDanhMuc());
         return "sanpham/form"; // Trả về trang form.jsp
     }
-
-    // Xử lý lưu sản phẩm
- // Xử lý lưu hoặc cập nhật sản phẩm
+ 
     @PostMapping("/saveSanPham")
     public String saveSanPham(@ModelAttribute SanPham sanPham,
                               @RequestParam("categoryID") Long categoryID,
                               @RequestParam("file") MultipartFile file) {
         try {
-            // Kiểm tra nếu có thay đổi ảnh
+            // Kiểm tra nếu có upload file
             if (!file.isEmpty()) {
                 String fileName = file.getOriginalFilename();
-                Path filePath = Paths.get(uploadDir, fileName);
+
+                // Tạo đường dẫn tuyệt đối tới thư mục lưu ảnh
+                Path uploadPath = Paths.get(uploadDir);
+
+                // Tạo thư mục nếu chưa tồn tại
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
+
+                // Đường dẫn file đầy đủ
+                Path filePath = uploadPath.resolve(fileName);
+
+                // Ghi file vào ổ đĩa
                 Files.write(filePath, file.getBytes());
-                sanPham.setAnhDaiDien(fileName);  // Cập nhật tên ảnh
+
+                // Lưu tên file vào DB
+                sanPham.setAnhDaiDien(fileName);
             }
 
-            // Gán danh mục cho sản phẩm
+            // Gán danh mục
             DanhMuc danhMuc = danhMucRepository.findById(categoryID).orElse(null);
             sanPham.setDanhMuc(danhMuc);
 
-            // Kiểm tra xem có phải là cập nhật hay tạo mới
-            if (sanPham.getProductID() != null) {
-                // Nếu productID đã có, cập nhật sản phẩm
-                System.out.println("Cập nhật sản phẩm với ID: " + sanPham.getProductID());
-                sanPhamRepository.save(sanPham);
-            } else {
-                // Nếu productID không có, tạo mới sản phẩm
-                System.out.println("Tạo mới sản phẩm");
-                sanPhamRepository.save(sanPham);
-            }
+            // Lưu hoặc cập nhật
+            sanPhamRepository.save(sanPham);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return "redirect:/sanpham";
     }
+
 
 
 

@@ -5,6 +5,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +27,9 @@ import poly.edu.Repository.PhuKienOtoRepository;
 @RequestMapping("/phukien")
 public class PhuKienOtoController {
 
+	 @Value("${upload.path}")
+	    private String uploadDir; 
+	
     @Autowired
     private PhuKienOtoRepository pkRepo;
 
@@ -49,7 +53,8 @@ public class PhuKienOtoController {
         return "phukien/form";  // Tên file JSP cho form tạo mới
     }
 
-    // Xử lý form tạo mới phụ kiện
+    // lấy từ application.properties
+
     @PostMapping("/save")
     public String savePhuKien(@ModelAttribute PhuKienOto phuKienOto,
                               @RequestParam("file") MultipartFile file,
@@ -57,26 +62,28 @@ public class PhuKienOtoController {
         try {
             if (!file.isEmpty()) {
                 String fileName = file.getOriginalFilename();
-                String uploadDir = "D:/uploads/images/";
+
+                // Lưu vào đường dẫn trong project: src/main/webapp/imgs/
                 Path filePath = Paths.get(uploadDir, fileName);
-                Files.createDirectories(filePath.getParent());
+                Files.createDirectories(filePath.getParent()); // tạo thư mục nếu chưa có
                 Files.write(filePath, file.getBytes());
-                phuKienOto.setAnhDaiDien(fileName);
+
+                phuKienOto.setAnhDaiDien(fileName); // lưu tên ảnh vào DB
             }
 
-            // Gán DanhMuc theo ID nhập tay
+            // Gán danh mục
             DanhMuc danhMuc = danhMucRepo.findById(categoryId).orElse(null);
             if (danhMuc != null) {
                 phuKienOto.setDanhMuc(danhMuc);
             }
 
             pkRepo.save(phuKienOto);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
         return "redirect:/phukien/list";
     }
-
 
     // Hiển thị form chỉnh sửa phụ kiện
     @GetMapping("/edit/{id}")
