@@ -1,0 +1,90 @@
+body {
+    background-color: #f8f9fa;
+}
+
+/* Sidebar */
+#sidebar {
+    background-color: #343a40;
+    color: white;
+    padding: 20px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 300px; /* Độ rộng sidebar */
+    z-index: 1000;
+    box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+}
+
+/* Tăng kích thước font chữ cho header sidebar */
+.sidebar-heading span {
+    font-size: 1.5rem;
+    color: #007bff;
+    font-weight: bold;
+}
+
+/* Hiệu ứng cho link sidebar */
+.sidebar .nav-link {
+    padding: 0.75rem 1rem;
+    color: #adb5bd;
+    transition: background-color 0.3s, padding-left 0.3s;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #007bff;
+    color: white !important;
+    padding-left: 1.5rem; /* Tăng khoảng cách khi hover */
+}
+
+.sidebar .nav-link i {
+    margin-right: 10px;
+}
+
+/* Hiệu ứng collapse item */
+.sidebar .nav-item .collapse {
+    background-color: #495057;
+}
+
+.sidebar .nav-item .collapse .nav-link {
+    color: #ccc;
+    padding-left: 2rem;
+}
+
+.sidebar .nav-item .collapse .nav-link:hover {
+    background-color: #6c757d;
+}
+
+.sidebar .nav-link.active {
+    background-color: #28a745;
+    color: white !important;
+}
+
+/* Thêm hiệu ứng cho các item có icon */
+.sidebar .nav-link i {
+    font-size: 1.2rem;
+}
+
+/* Main content positioning */
+.main-content {
+    margin-left: 300px;
+    padding: 20px;
+}
+
+/* Table styling */
+.table {
+    font-size: 0.9rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #sidebar {
+        width: 100%;
+        position: relative;
+        height: auto;
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+}
