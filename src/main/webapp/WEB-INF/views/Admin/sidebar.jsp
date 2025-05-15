@@ -137,6 +137,14 @@ prefix="c" %>
                     </ul>
                 </div>
             </li>
+            <li class="nav-item mt-3">
+                <a
+                    class="nav-link text-danger"
+                    href="${pageContext.request.contextPath}/logout"
+                >
+                    <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                </a>
+            </li>
         </ul>
     </div>
 </nav>
