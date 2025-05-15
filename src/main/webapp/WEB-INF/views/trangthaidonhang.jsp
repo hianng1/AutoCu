@@ -301,16 +301,6 @@ prefix="c"%> <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
                             </c:choose>
                         </p>
                         <div class="pt-4 mt-4 border-t">
-                            <div class="flex justify-between">
-                                <span>Tổng tiền hàng:</span>
-                                <span
-                                    ><fmt:formatNumber
-                                        value="${donHang.tongTienHang}"
-                                        type="currency"
-                                        currencySymbol="₫"
-                                        maxFractionDigits="0"
-                                /></span>
-                            </div>
                             <div class="flex justify-between mt-2">
                                 <span>Phí vận chuyển:</span>
                                 <span
@@ -405,7 +395,7 @@ prefix="c"%> <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
                         </div>
                         <div>
                             <p class="text-sm text-gray-600">Gọi hotline</p>
-                            <p class="font-semibold">1900 1234</p>
+                            <p class="font-semibold">+84 382 948 198</p>
                         </div>
                     </div>
                     <div class="flex items-center">
@@ -419,7 +409,7 @@ prefix="c"%> <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
                             <p class="font-semibold">hotro@autocu.com.vn</p>
                         </div>
                     </div>
-                    <div class="flex items-center">
+<!--                     <div class="flex items-center">
                         <div
                             class="w-10 h-10 bg-orange-100 text-orange-500 rounded-full flex items-center justify-center mr-3"
                         >
@@ -433,7 +423,7 @@ prefix="c"%> <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
                                 Bắt đầu chat
                             </button>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>

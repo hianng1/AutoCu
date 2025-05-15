@@ -436,7 +436,7 @@
                          <div class="flex justify-between text-gray-600">
                             <span>Phí vận chuyển</span>
                              <%-- Phí vận chuyển thường tính ở trang thanh toán. Có thể hiển thị placeholder hoặc 0 --%>
-                            <span>--</span> <%-- Hoặc <span>0 đ</span> hoặc tương tự --%>
+                            <span>0 đ</span> <%-- Hoặc <span>0 đ</span> hoặc tương tự --%>
                         </div>
                         <%-- Tính thuế VAT (thường tính ở tổng cuối cùng) --%>
                         <%-- <div class="flex justify-between text-gray-600">

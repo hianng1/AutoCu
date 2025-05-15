@@ -41,7 +41,7 @@ import poly.edu.Service.UserService; // Giữ lại nếu UserService có các p
 @Controller
 public class HomeController {
 
-	@Autowired
+    @Autowired
     private DanhMucDAO danhMucDAO;
     @Autowired
     private SanPhamDAO sanPhamDAO;
@@ -61,13 +61,12 @@ public class HomeController {
     // Sử dụng UserService cho các tác vụ khác (đăng ký, quên/đổi mật khẩu)
     @Autowired
     private UserService userService;
-     @Autowired
+    @Autowired
     private UserRepository userRepository; // Giữ lại nếu cần cho forgot password
-
 
     // Trang chủ công khai (có thể hiển thị thông tin chung)
     // SecurityConfig sẽ quyết định ai có quyền truy cập
-    @GetMapping(value = {"/", "/trangchu"}, produces = "text/html; charset=UTF-8") // Map cả "/" và "/trangchu"
+    @GetMapping(value = { "/", "/trangchu" }, produces = "text/html; charset=UTF-8") // Map cả "/" và "/trangchu"
     public String home(Model model) {
         try {
             List<SanPham> sanPhamList = sanPhamDAO.findAll();
@@ -83,13 +82,17 @@ public class HomeController {
             List<PhuKienOto> phuKienOtoList = phuKienOtoService.findAll();
             model.addAttribute("phuKienOtoList", phuKienOtoList);
 
-            // Bạn có thể lấy thông tin người dùng đã đăng nhập ở đây nếu cần hiển thị trên trang chủ
+            // Bạn có thể lấy thông tin người dùng đã đăng nhập ở đây nếu cần hiển thị trên
+            // trang chủ
             // Bằng cách sử dụng SecurityContextHolder, giống như trong CartController
-            // Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            // if (authentication != null && authentication.isAuthenticated() && !"anonymousUser".equals(authentication.getPrincipal())) {
-            //      String username = authentication.getName();
-            //      User loggedInUser = userService.findByUsername(username); // Cần UserService hoặc UserRepository
-            //      model.addAttribute("userInfo", loggedInUser);
+            // Authentication authentication =
+            // SecurityContextHolder.getContext().getAuthentication();
+            // if (authentication != null && authentication.isAuthenticated() &&
+            // !"anonymousUser".equals(authentication.getPrincipal())) {
+            // String username = authentication.getName();
+            // User loggedInUser = userService.findByUsername(username); // Cần UserService
+            // hoặc UserRepository
+            // model.addAttribute("userInfo", loggedInUser);
             // }
 
         } catch (Exception e) {
@@ -97,7 +100,6 @@ public class HomeController {
         }
         return "index2"; // Trả về view index2.jsp (theo cấu hình properties)
     }
-
 
     // --- Đăng ký ---
     // Hiển thị form đăng ký
@@ -109,16 +111,16 @@ public class HomeController {
     // Xử lý đăng ký (Vẫn giữ lại vì Spring Security không xử lý đăng ký mặc định)
     @PostMapping("/register")
     public String register(@RequestParam String username,
-                            @RequestParam String password,
-                            @RequestParam String email,
-                            @RequestParam String hovaten,
-                            @RequestParam(required = true) String sodienthoai,
-                            @RequestParam String soNha,
-                            @RequestParam String phuongXa,
-                            @RequestParam String quanHuyen,
-                            @RequestParam String tinhThanh,
-                            Model model,
-                            RedirectAttributes redirectAttributes) {
+            @RequestParam String password,
+            @RequestParam String email,
+            @RequestParam String hovaten,
+            @RequestParam(required = true) String sodienthoai,
+            @RequestParam String soNha,
+            @RequestParam String phuongXa,
+            @RequestParam String quanHuyen,
+            @RequestParam String tinhThanh,
+            Model model,
+            RedirectAttributes redirectAttributes) {
         // Kết hợp các phần thông tin địa chỉ để tạo thành địa chỉ đầy đủ
         String diaChiFull = String.join(", ", soNha, phuongXa, quanHuyen, tinhThanh);
 
@@ -133,7 +135,8 @@ public class HomeController {
 
         // Nếu đăng ký thất bại, gửi thông báo lỗi tới model và trả về trang đăng ký
         model.addAttribute("message", result);
-        // Giữ lại các giá trị đã nhập để người dùng không phải nhập lại (tùy chọn, cần thêm logic)
+        // Giữ lại các giá trị đã nhập để người dùng không phải nhập lại (tùy chọn, cần
+        // thêm logic)
         // model.addAttribute("username", username);
         // ... các field khác ...
         return "register"; // Nếu đăng ký thất bại, vẫn ở trang đăng ký
@@ -141,28 +144,30 @@ public class HomeController {
 
     // --- Đăng nhập ---
     // Hiển thị form đăng nhập
-    // Spring Security sẽ chuyển hướng đến đây nếu cần xác thực hoặc đăng nhập thất bại
+    // Spring Security sẽ chuyển hướng đến đây nếu cần xác thực hoặc đăng nhập thất
+    // bại
     @GetMapping("/login")
     public String showLoginForm(@RequestParam(value = "message", required = false) String message,
-                                @RequestParam(value = "error", required = false) String error, // Thêm param error từ Spring Security
-                                @RequestParam(value = "logout", required = false) String logout, // Thêm param logout từ Spring Security
-                                Model model) {
+            @RequestParam(value = "error", required = false) String error, // Thêm param error từ Spring Security
+            @RequestParam(value = "logout", required = false) String logout, // Thêm param logout từ Spring Security
+            Model model) {
         if (message != null && !message.isEmpty()) {
             model.addAttribute("message", message);
         }
-         // Xử lý thông báo lỗi từ Spring Security khi đăng nhập thất bại
-         if (error != null) {
-             model.addAttribute("error", "Sai tên đăng nhập hoặc mật khẩu!"); // Hoặc thông báo tùy chỉnh
-         }
-         // Xử lý thông báo đăng xuất thành công từ Spring Security
-         if (logout != null) {
-             model.addAttribute("message", "Bạn đã đăng xuất thành công.");
-         }
+        // Xử lý thông báo lỗi từ Spring Security khi đăng nhập thất bại
+        if (error != null) {
+            model.addAttribute("error", "Sai tên đăng nhập hoặc mật khẩu!"); // Hoặc thông báo tùy chỉnh
+        }
+        // Xử lý thông báo đăng xuất thành công từ Spring Security
+        if (logout != null) {
+            model.addAttribute("message", "Bạn đã đăng xuất thành công.");
+        }
         return "login"; // Trả về view login.jsp
     }
 
     // *** XÓA PHƯƠNG THỨC @PostMapping("/login") xử lý login thủ công ***
-    // Spring Security Filter Chain sẽ xử lý request POST đến /login (hoặc /j_spring_security_check)
+    // Spring Security Filter Chain sẽ xử lý request POST đến /login (hoặc
+    // /j_spring_security_check)
 
     // *** XÓA PHƯƠNG THỨC @GetMapping("/logout") xử lý logout thủ công ***
     // Spring Security Filter Chain sẽ xử lý request GET/POST đến /logout
@@ -172,7 +177,8 @@ public class HomeController {
 
     // --- Quên và đổi mật khẩu (Giữ lại) ---
     // Giữ nguyên các phương thức forgot-password và change-password
-    // (Vì đây là logic riêng của ứng dụng, không phải luồng xác thực chính của Spring Security)
+    // (Vì đây là logic riêng của ứng dụng, không phải luồng xác thực chính của
+    // Spring Security)
 
     @GetMapping("/forgot-password")
     public String showForgotPasswordPage() {
@@ -181,18 +187,19 @@ public class HomeController {
 
     @PostMapping("/forgot-password")
     public String forgotPassword(@RequestParam String email, Model model, RedirectAttributes redirectAttributes) {
-        // Lưu ý: handleForgotPassword cần gửi email và có thể tạo token đặt lại mật khẩu
+        // Lưu ý: handleForgotPassword cần gửi email và có thể tạo token đặt lại mật
+        // khẩu
         String result = userService.handleForgotPassword(email);
         if (result.contains("đã được gửi")) {
             User user = userRepository.findByEmail(email); // Cần tìm user để lấy ID
-             if (user != null) {
-                 redirectAttributes.addFlashAttribute("message", result);
-                 // Chuyển hướng đến trang đổi mật khẩu, truyền userId hoặc token bảo mật hơn
-                 return "redirect:/change-password?userId=" + user.getId(); // Giả định getId() là getUserID()
-             } else {
-                 model.addAttribute("message", "Không tìm thấy người dùng với email này.");
-                 return "forgot-password";
-             }
+            if (user != null) {
+                redirectAttributes.addFlashAttribute("message", result);
+                // Chuyển hướng đến trang đổi mật khẩu, truyền userId hoặc token bảo mật hơn
+                return "redirect:/change-password?userId=" + user.getId(); // Giả định getId() là getUserID()
+            } else {
+                model.addAttribute("message", "Không tìm thấy người dùng với email này.");
+                return "forgot-password";
+            }
 
         } else {
             model.addAttribute("message", result);
@@ -208,12 +215,14 @@ public class HomeController {
 
     @PostMapping("/change-password")
     public String changePassword(@RequestParam Integer userId,
-                                    @RequestParam String currentPassword, // Có thể không cần nếu luồng là "quên MK"
-                                    @RequestParam String newPassword,
-                                    Model model, RedirectAttributes redirectAttributes) {
-        // Lưu ý: changePassword cần kiểm tra mật khẩu hiện tại (nếu không phải luồng quên MK)
+            @RequestParam String currentPassword, // Có thể không cần nếu luồng là "quên MK"
+            @RequestParam String newPassword,
+            Model model, RedirectAttributes redirectAttributes) {
+        // Lưu ý: changePassword cần kiểm tra mật khẩu hiện tại (nếu không phải luồng
+        // quên MK)
         // và mã hóa mật khẩu mới trước khi lưu
-        String result = userService.changePassword(userId, currentPassword, newPassword); // Cần điều chỉnh service method
+        String result = userService.changePassword(userId, currentPassword, newPassword); // Cần điều chỉnh service
+                                                                                          // method
 
         if (result.contains("thành công")) {
             redirectAttributes.addFlashAttribute("message", result);
@@ -226,16 +235,17 @@ public class HomeController {
         }
     }
 
-
     // --- Các phương thức khác ---
     @Autowired
     private UserDAO userDAO; // Giữ lại nếu cần
 
     @GetMapping("/quantri") // URL cho trang admin/quản trị
-     // SecurityConfig cần cấu hình để chỉ cho phép user có ROLE_ADMIN truy cập
+    // SecurityConfig cần cấu hình để chỉ cho phép user có ROLE_ADMIN truy cập
     public String danhSachNguoiDung(Model model) {
-        // Lấy thông tin user hiện tại từ SecurityContextHolder nếu cần hiển thị trên trang admin
-        // Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        // Lấy thông tin user hiện tại từ SecurityContextHolder nếu cần hiển thị trên
+        // trang admin
+        // Authentication authentication =
+        // SecurityContextHolder.getContext().getAuthentication();
         // ... lấy user từ username ...
         // model.addAttribute("userInfo", loggedInUser);
 
@@ -244,226 +254,311 @@ public class HomeController {
         return "Admin/quantri"; // Trả về view trang quản trị
     }
 
-     // Trang chi tiết sản phẩm (có thể công khai)
-     @GetMapping("/details/{productId}") // URL chi tiết sản phẩm
-     public String getDetailsByProductId(@PathVariable("productId") Long productId, Model model) {
-         // Logic lấy chi tiết sản phẩm
-         // ... (code hiện tại của bạn) ...
+    // Trang chi tiết sản phẩm (có thể công khai)
+    @GetMapping("/details/{productId}") // URL chi tiết sản phẩm
+    public String getDetailsByProductId(@PathVariable("productId") Long productId, Model model) {
+        // Logic lấy chi tiết sản phẩm
+        // ... (code hiện tại của bạn) ...
 
-         List<SanPham> details = sanPhamDAO.findByProductId(productId);
+        List<SanPham> details = sanPhamDAO.findByProductId(productId);
 
-         if (!details.isEmpty()) {
-             SanPham sanPham = details.get(0);
-             Long categoryID = sanPham.getDanhMuc().getCategoryID();
+        if (!details.isEmpty()) {
+            SanPham sanPham = details.get(0);
+            Long categoryID = sanPham.getDanhMuc().getCategoryID();
 
-             List<HinhAnhSanPham> hinhAnhList = sanPham.getHinhAnhSanPhams();
+            List<HinhAnhSanPham> hinhAnhList = sanPham.getHinhAnhSanPhams();
 
-              // logger debug (nếu bạn muốn thêm logger lại)
-              // System.out.println("CategoryID: " + categoryID);
-              // System.out.println("ProductID: " + productId);
-              // System.out.println("Số ảnh: " + hinhAnhList.size());
+            // logger debug (nếu bạn muốn thêm logger lại)
+            // System.out.println("CategoryID: " + categoryID);
+            // System.out.println("ProductID: " + productId);
+            // System.out.println("Số ảnh: " + hinhAnhList.size());
 
-             List<SanPham> sanPhamTuongTu = sanPhamService.getSanPhamTuongTu(categoryID, productId);
+            List<SanPham> sanPhamTuongTu = sanPhamService.getSanPhamTuongTu(categoryID, productId);
 
-             model.addAttribute("sanPhamTuongTu", sanPhamTuongTu);
-             model.addAttribute("hinhAnhList", hinhAnhList);
-         }
+            model.addAttribute("sanPhamTuongTu", sanPhamTuongTu);
+            model.addAttribute("hinhAnhList", hinhAnhList);
+        }
 
-         model.addAttribute("details", details);
-         return "Detail";
-     }
+        model.addAttribute("details", details);
+        return "Detail";
+    }
 
-     @GetMapping("/contact")
-     public String showContactPage(Model model) {
-         return "contact";
-     }
-     
-  // Your existing /profile GET mapping
-     @GetMapping("/profile")
-     public String showProfile(Model model, RedirectAttributes redirectAttributes) {
-         User user = getCurrentUser();
+    @GetMapping("/contact")
+    public String showContactPage(Model model) {
+        return "contact";
+    }
 
-         if (user == null) {
-             redirectAttributes.addFlashAttribute("error", "Vui lòng đăng nhập");
-             return "redirect:/login"; // Assuming you have a /login endpoint
-         }
+    // Your existing /profile GET mapping
+    @GetMapping("/profile")
+    public String showProfile(Model model, RedirectAttributes redirectAttributes) {
+        User user = getCurrentUser();
 
-         model.addAttribute("userInfo", user);
-         // Check for flash attributes (success or error messages from update)
-         if (redirectAttributes.getFlashAttributes().containsKey("successMessage")) {
-              model.addAttribute("successMessage", redirectAttributes.getFlashAttributes().get("successMessage"));
-         }
-          if (redirectAttributes.getFlashAttributes().containsKey("errorMessage")) {
-              model.addAttribute("errorMessage", redirectAttributes.getFlashAttributes().get("errorMessage"));
-         }
+        if (user == null) {
+            redirectAttributes.addFlashAttribute("error", "Vui lòng đăng nhập");
+            return "redirect:/login"; // Assuming you have a /login endpoint
+        }
 
+        model.addAttribute("userInfo", user);
+        // Check for flash attributes (success or error messages from update)
+        if (redirectAttributes.getFlashAttributes().containsKey("successMessage")) {
+            model.addAttribute("successMessage", redirectAttributes.getFlashAttributes().get("successMessage"));
+        }
+        if (redirectAttributes.getFlashAttributes().containsKey("errorMessage")) {
+            model.addAttribute("errorMessage", redirectAttributes.getFlashAttributes().get("errorMessage"));
+        }
 
-         return "profile"; // Return the name of your JSP file
-     }
+        return "profile"; // Return the name of your JSP file
+    }
 
-     // *** NEW POST MAPPING FOR PROFILE UPDATE ***
-     @PostMapping("/profile/update")
-     public String updateProfile(@RequestParam("fullname") String fullname,
-                                 @RequestParam("email") String email,
-                                 @RequestParam("address") String address,
-                                 @RequestParam("phone") String phone,
-                                 RedirectAttributes redirectAttributes,
-                                 Model model) { // Include Model to potentially add error/success if not redirecting
+    // *** NEW POST MAPPING FOR PROFILE UPDATE ***
+    @PostMapping("/profile/update")
+    public String updateProfile(@RequestParam("fullname") String fullname,
+            @RequestParam("email") String email,
+            @RequestParam("address") String address,
+            @RequestParam("phone") String phone,
+            RedirectAttributes redirectAttributes,
+            Model model) { // Include Model to potentially add error/success if not redirecting
 
-         User currentUser = getCurrentUser(); // Get the currently logged-in user
+        User currentUser = getCurrentUser(); // Get the currently logged-in user
 
-         if (currentUser == null) {
-             redirectAttributes.addFlashAttribute("error", "Phiên đăng nhập đã hết hạn hoặc người dùng không tồn tại.");
-             return "redirect:/login"; // Redirect to login if user is not found
-         }
+        if (currentUser == null) {
+            redirectAttributes.addFlashAttribute("error", "Phiên đăng nhập đã hết hạn hoặc người dùng không tồn tại.");
+            return "redirect:/login"; // Redirect to login if user is not found
+        }
 
-         // Call the new updateProfile method from your UserService
-         // Pass the user's ID and the received data
-         String updateResult = userService.updateProfile(
-             currentUser.getId(), // Assuming your User model has an getId() method
-             fullname,
-             email,
-             address,
-             phone
-         );
+        // Call the new updateProfile method from your UserService
+        // Pass the user's ID and the received data
+        String updateResult = userService.updateProfile(
+                currentUser.getId(), // Assuming your User model has an getId() method
+                fullname,
+                email,
+                address,
+                phone);
 
-         // Handle the result from the service
-         if (updateResult.equals("Cập nhật thông tin thành công!")) {
-             redirectAttributes.addFlashAttribute("successMessage", updateResult);
-         } else {
-             redirectAttributes.addFlashAttribute("errorMessage", updateResult);
-         }
+        // Handle the result from the service
+        if (updateResult.equals("Cập nhật thông tin thành công!")) {
+            redirectAttributes.addFlashAttribute("successMessage", updateResult);
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", updateResult);
+        }
 
-         // Redirect back to the profile page to show the updated info or message
-         return "redirect:/profile";
-     }
-     
-     @Autowired
-     private DanhMucService categoryService;
-     
-     @GetMapping("/cars")
-     public String showUsedCarsPage(
-             @RequestParam(value = "category", required = false) String categoryName,
-             Model model) {
+        // Redirect back to the profile page to show the updated info or message
+        return "redirect:/profile";
+    }
 
-         List<SanPham> carsList; // Danh sách xe sẽ được hiển thị
-         
-         // Lấy danh sách danh mục loại 'xe' để hiển thị bộ lọc trên trang JSP
-         // Sử dụng phương thức từ CategoryService nếu có
-         List<DanhMuc> carCategories = categoryService.getCategoriesByLoai("xe");
-         // Hoặc nếu CategoryService chỉ có getAllCategories():
-         // List<DanhMuc> allCategories = categoryService.getAllCategories();
-         // List<DanhMuc> carCategories = allCategories.stream()
-         //                                 .filter(cat -> "xe".equals(cat.getLoai()))
-         //                                 .collect(java.util.stream.Collectors.toList());
+    @Autowired
+    private DanhMucService categoryService;
 
+    @GetMapping("/cars")
+    public String showUsedCarsPage(
+            @RequestParam(value = "category", required = false) String categoryName,
+            @RequestParam(value = "priceMax", required = false) Integer priceMax,
+            @RequestParam(value = "yearFrom", required = false) Integer yearFrom,
+            @RequestParam(value = "yearTo", required = false) Integer yearTo,
+            @RequestParam(value = "fuelType", required = false) String fuelType,
+            @RequestParam(value = "sort", required = false) String sort,
+            Model model) {
 
-         if (categoryName != null && !categoryName.isEmpty()) {
-             // Bước 1: Tìm đối tượng DanhMuc dựa trên tên danh mục từ request
-             Optional<DanhMuc> selectedCategoryOpt = categoryService.getCategoryByName(categoryName);
+        List<SanPham> carsList; // Danh sách xe sẽ được hiển thị
 
-             if (selectedCategoryOpt.isPresent()) {
-                 // Bước 2: Nếu tìm thấy danh mục, lấy đối tượng DanhMuc
-                 DanhMuc selectedCategory = selectedCategoryOpt.get();
-                 // Bước 3: Gọi SanPhamService để lấy xe thuộc danh mục này và có loại là 'xe'
-                 // Truyền ĐỐI TƯỢNG DanhMuc và loại ('xe')
-                 carsList = sanPhamService.getProductsByCategoryAndType(selectedCategory, "xe");
-             } else {
-                 // Nếu tên danh mục không hợp lệ hoặc không tìm thấy, hiển thị tất cả xe
-                 System.err.println("Danh mục xe '" + categoryName + "' không tìm thấy. Hiển thị tất cả xe.");
-                 carsList = sanPhamService.getAllCars(); // Hiển thị tất cả xe
-                 // Hoặc bạn có thể trả về danh sách rỗng và thêm thông báo lỗi vào model
-                 // carsList = java.util.Collections.emptyList();
-                 // model.addAttribute("errorMessage", "Danh mục '" + categoryName + "' không tồn tại.");
-             }
+        // Lấy danh sách danh mục loại 'xe' để hiển thị bộ lọc
+        List<DanhMuc> carCategories = categoryService.getCategoriesByLoai("xe");
 
-         } else {
-             // Nếu không có tham số 'category' trong URL, lấy tất cả xe
-             carsList = sanPhamService.getAllCars();
-         }
+        // Base query - sẽ được điều chỉnh dựa trên các tham số
+        carsList = sanPhamService.getAllCars();
 
-         // Add dữ liệu vào model để truyền sang JSP
-         model.addAttribute("allCarsList", carsList); // Đảm bảo tên attribute khớp với tên dùng trong JSP
-         model.addAttribute("categoriesList", carCategories); // Truyền danh mục xe cho JSP (để tạo link lọc)
+        // Apply Category Filter
+        if (categoryName != null && !categoryName.isEmpty()) {
+            Optional<DanhMuc> selectedCategoryOpt = categoryService.getCategoryByName(categoryName);
+            if (selectedCategoryOpt.isPresent()) {
+                DanhMuc selectedCategory = selectedCategoryOpt.get();
+                carsList = sanPhamService.getProductsByCategoryAndType(selectedCategory, "xe");
+            }
+        }
 
-         // Trả về tên view (tên file JSP không có .jsp)
-         return "used_cars"; // Đảm bảo bạn có file used_cars.jsp trong thư mục views
-     }
+        // Apply Price Filter
+        if (priceMax != null) {
+            double maxPrice = priceMax * 1000000.0; // Convert to VND (if slider uses millions)
+            carsList = carsList.stream()
+                    .filter(car -> car.getGia() <= maxPrice)
+                    .collect(java.util.stream.Collectors.toList());
+        }
 
-     // Handler cho trang Phụ Kiện Ô Tô
-     @GetMapping("/accessories")
-     public String showAccessoriesPage(
-              @RequestParam(value = "category", required = false) String categoryName,
-             Model model) {
+        // Apply Year Filter
+        if (yearFrom != null) {
+            final int yearFromValue = yearFrom;
+            carsList = carsList.stream()
+                    .filter(car -> {
+                        if (car.getNgaySanXuat() != null) {
+                            java.util.Calendar cal = java.util.Calendar.getInstance();
+                            cal.setTime(car.getNgaySanXuat());
+                            return cal.get(java.util.Calendar.YEAR) >= yearFromValue;
+                        }
+                        return false;
+                    })
+                    .collect(java.util.stream.Collectors.toList());
+        }
 
-         // >>> Danh sách chứa các đối tượng PhuKienOto <<<
-         List<PhuKienOto> accessoriesList;
+        if (yearTo != null) {
+            final int yearToValue = yearTo;
+            carsList = carsList.stream()
+                    .filter(car -> {
+                        if (car.getNgaySanXuat() != null) {
+                            java.util.Calendar cal = java.util.Calendar.getInstance();
+                            cal.setTime(car.getNgaySanXuat());
+                            return cal.get(java.util.Calendar.YEAR) <= yearToValue;
+                        }
+                        return false;
+                    })
+                    .collect(java.util.stream.Collectors.toList());
+        }
 
-          // Lấy danh sách danh mục loại 'phu_kien' để hiển thị bộ lọc trên trang JSP
-          // Sử dụng phương thức từ CategoryService
-         List<DanhMuc> accessoryCategories = categoryService.getCategoriesByLoai("phu_kien");
-          // Hoặc nếu CategoryService chỉ có getAllCategories():
-          // List<DanhMuc> allCategories = categoryService.getAllCategories();
-          // List<DanhMuc> accessoryCategories = allCategories.stream()
-          //                                 .filter(cat -> "phu_kien".equals(cat.getLoai()))
-          //                                 .collect(java.util.stream.Collectors.toList());
+        // Apply Fuel Type Filter
+        if (fuelType != null && !fuelType.isEmpty()) {
+            carsList = carsList.stream()
+                    .filter(car -> fuelType.equals(car.getNhienLieu()))
+                    .collect(java.util.stream.Collectors.toList());
+        }
 
+        // Apply Sorting
+        if (sort != null && !sort.isEmpty()) {
+            switch (sort) {
+                case "price-desc":
+                    carsList.sort((car1, car2) -> Double.compare(car2.getGia(), car1.getGia()));
+                    break;
+                case "price-asc":
+                    carsList.sort((car1, car2) -> Double.compare(car1.getGia(), car2.getGia()));
+                    break;
+                case "year-desc":
+                    carsList.sort((car1, car2) -> {
+                        if (car1.getNgaySanXuat() == null)
+                            return 1;
+                        if (car2.getNgaySanXuat() == null)
+                            return -1;
+                        return car2.getNgaySanXuat().compareTo(car1.getNgaySanXuat());
+                    });
+                    break;
+                default:
+                    // No sorting or default sorting
+                    break;
+            }
+        }
 
-         if (categoryName != null && !categoryName.isEmpty()) {
-              // Bước 1: Tìm đối tượng DanhMuc dựa trên tên danh mục từ request
-             Optional<DanhMuc> selectedCategoryOpt = categoryService.getCategoryByName(categoryName);
+        // Add dữ liệu vào model
+        model.addAttribute("allCarsList", carsList);
+        model.addAttribute("categoriesList", carCategories);
 
-             if (selectedCategoryOpt.isPresent()) {
-                 // Bước 2: Nếu tìm thấy danh mục, lấy đối tượng DanhMuc
-                 DanhMuc selectedCategory = selectedCategoryOpt.get();
-                 // Bước 3: Gọi >>> PhuKienOtoService <<< để lấy phụ kiện thuộc danh mục này
-                 // Giả định PhuKienOtoService có phương thức getAccessoriesByCategory(DanhMuc danhMuc)
-                  accessoriesList = phuKienOtoService.getAccessoriesByCategory(selectedCategory);
-             } else {
-                  // Nếu tên danh mục không hợp lệ hoặc không tìm thấy, hiển thị tất cả phụ kiện
-                  System.err.println("Danh mục phụ kiện '" + categoryName + "' không tìm thấy. Hiển thị tất cả phụ kiện.");
-                  // >>> Gọi findAll() từ PhuKienOtoService <<<
-                  accessoriesList = phuKienOtoService.findAll(); // Hiển thị tất cả phụ kiện
-                  // Hoặc bạn có thể trả về danh sách rỗng và thêm thông báo lỗi vào model
-                  // accessoriesList = java.util.Collections.emptyList();
-                  // model.addAttribute("errorMessage", "Danh mục '" + categoryName + "' không tồn tại.");
-             }
+        return "used_cars";
+    }
 
-         } else {
-              // Nếu không có tham số 'category' trong URL, lấy tất cả phụ kiện
-              // >>> Gọi findAll() từ PhuKienOtoService <<<
-              accessoriesList = phuKienOtoService.findAll();
-          }
+    // Handler cho trang Phụ Kiện Ô Tô
+    @GetMapping("/accessories")
+    public String showAccessoriesPage(
+            @RequestParam(value = "category", required = false) String categoryName,
+            @RequestParam(value = "priceMax", required = false) Integer priceMax,
+            @RequestParam(value = "brand", required = false) String brand,
+            @RequestParam(value = "rating", required = false) Integer rating,
+            @RequestParam(value = "sort", required = false) String sort,
+            Model model) {
 
-          // Add dữ liệu vào model để truyền sang JSP
-          // >>> Tên attribute khớp với tên dùng trong JSP: "allAccessoriesList" <<<
-          model.addAttribute("allAccessoriesList", accessoriesList);
-          // Truyền danh mục phụ kiện cho JSP (để tạo link lọc)
-          model.addAttribute("categoriesList", accessoryCategories);
+        List<PhuKienOto> accessoriesList;
 
-          // Trả về tên view (tên file JSP không có .jsp)
-          return "accessories"; // Đảm bảo bạn có file accessories.jsp trong thư mục views
-      }
+        // Lấy danh sách danh mục loại 'phu_kien'
+        List<DanhMuc> accessoryCategories = categoryService.getCategoriesByLoai("phu_kien");
 
-     // Bạn có thể thêm các handler khác tại đây, ví dụ:
-     // @GetMapping("/details/{id}") để hiển thị chi tiết sản phẩm
-     // @PostMapping("/cart/add/{id}") để thêm vào giỏ hàng (như trong trang chủ)
+        // Base query
+        accessoriesList = phuKienOtoService.findAll();
 
+        // Apply Category Filter
+        if (categoryName != null && !categoryName.isEmpty()) {
+            Optional<DanhMuc> selectedCategoryOpt = categoryService.getCategoryByName(categoryName);
+            if (selectedCategoryOpt.isPresent()) {
+                DanhMuc selectedCategory = selectedCategoryOpt.get();
+                accessoriesList = phuKienOtoService.getAccessoriesByCategory(selectedCategory);
+            }
+        }
 
-     
-     private User getCurrentUser() {
-         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-         if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
-             return null;
-         }
-         Object principal = authentication.getPrincipal();
-         String username;
-         if (principal instanceof UserDetails) {
-             username = ((UserDetails) principal).getUsername();
-         } else {
-             username = principal.toString();
-         }
-         // Sử dụng userService để tìm đối tượng User đầy đủ từ username
-         return userService.findByUsername(username);
-     }
+        // Apply Price Filter
+        if (priceMax != null) {
+            final double maxPrice = priceMax.doubleValue();
+            accessoriesList = accessoriesList.stream()
+                    .filter(accessory -> accessory.getGia() <= maxPrice)
+                    .collect(java.util.stream.Collectors.toList());
+        }
+
+        // Apply Brand Filter
+        if (brand != null && !brand.isEmpty()) {
+            accessoriesList = accessoriesList.stream()
+                    .filter(accessory -> brand.equals(accessory.getHangSanXuat()))
+                    .collect(java.util.stream.Collectors.toList());
+        }
+
+        // Apply Rating Filter - Note: This assumes you have rating data in your model
+        // If you don't have actual ratings, you might want to comment this out or
+        // implement mock ratings
+        if (rating != null) {
+            // For demonstration purposes, we'll filter randomly based on rating
+            // In a real app, you would filter based on actual ratings from reviews
+            final int ratingValue = rating;
+            accessoriesList = accessoriesList.stream()
+                    .filter(accessory -> {
+                        // Mock implementation - in real app, replace with actual rating logic
+                        return accessory.getAccessoryID() % 5 + 1 >= ratingValue;
+                    })
+                    .collect(java.util.stream.Collectors.toList());
+        }
+
+        // Apply Sorting
+        if (sort != null && !sort.isEmpty()) {
+            switch (sort) {
+                case "price-desc":
+                    accessoriesList.sort((a1, a2) -> Double.compare(a2.getGia(), a1.getGia()));
+                    break;
+                case "price-asc":
+                    accessoriesList.sort((a1, a2) -> Double.compare(a1.getGia(), a2.getGia()));
+                    break;
+                case "rating-desc":
+                    // Mock rating sort - replace with actual rating logic in real app
+                    accessoriesList.sort((a1, a2) -> {
+                        long mockRating1 = a1.getAccessoryID() % 5 + 1;
+                        long mockRating2 = a2.getAccessoryID() % 5 + 1;
+                        return Long.compare(mockRating2, mockRating1);
+                    });
+                    break;
+                case "popular":
+                    // Mock popularity sort - replace with actual popularity data in real app
+                    java.util.Collections.shuffle(accessoriesList); // Simple random sort for demo purposes
+                    break;
+                default:
+                    // No sorting or default sorting
+                    break;
+            }
+        }
+
+        model.addAttribute("allAccessoriesList", accessoriesList);
+        model.addAttribute("categoriesList", accessoryCategories);
+
+        return "accessories";
+    }
+
+    // Bạn có thể thêm các handler khác tại đây, ví dụ:
+    // @GetMapping("/details/{id}") để hiển thị chi tiết sản phẩm
+    // @PostMapping("/cart/add/{id}") để thêm vào giỏ hàng (như trong trang chủ)
+
+    private User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()
+                || authentication.getPrincipal().equals("anonymousUser")) {
+            return null;
+        }
+        Object principal = authentication.getPrincipal();
+        String username;
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+        // Sử dụng userService để tìm đối tượng User đầy đủ từ username
+        return userService.findByUsername(username);
+    }
 }

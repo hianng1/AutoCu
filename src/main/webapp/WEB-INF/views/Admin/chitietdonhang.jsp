@@ -100,10 +100,6 @@
                 </tbody>
                 <tfoot class="table-secondary">
                     <tr>
-                        <td colspan="4" class="text-end fw-bold">Tổng tiền hàng:</td>
-                        <td class="text-end fw-bold"><fmt:formatNumber value="${donHang.tongTienHang}" type="currency" currencySymbol="₫" maxFractionDigits="0"/></td>
-                    </tr>
-                    <tr>
                         <td colspan="4" class="text-end fw-bold">Phí vận chuyển:</td>
                         <td class="text-end fw-bold"><fmt:formatNumber value="${donHang.phiVanChuyen}" type="currency" currencySymbol="₫" maxFractionDigits="0"/></td>
                     </tr>

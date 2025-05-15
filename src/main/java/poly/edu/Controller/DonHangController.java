@@ -379,21 +379,7 @@ public class DonHangController {
         summaryTable.setHorizontalAlignment(Element.ALIGN_RIGHT);
         summaryTable.setSpacingBefore(15);
 
-        // Tiền hàng
-        cell = new PdfPCell(new Phrase("Tổng tiền hàng:", boldFont));
-        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-        cell.setBorder(0);
-        cell.setPadding(5);
-        summaryTable.addCell(cell);
-
-        String tongTienHangStr = currencyFormat.format(donHang.getTongTienHang()).replace("₫", "đ");
-        cell = new PdfPCell(new Phrase(tongTienHangStr, normalFont));
-        cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-        cell.setBorder(0);
-        cell.setPadding(5);
-        summaryTable.addCell(cell);
-
-        // Phí vận chuyển
+        // Phí vận chuyển (Removing the "Tổng tiền hàng" section)
         cell = new PdfPCell(new Phrase("Phí vận chuyển:", boldFont));
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         cell.setBorder(0);
@@ -444,7 +430,7 @@ public class DonHangController {
         footer.add(Chunk.NEWLINE);
         footer.add(new Chunk("Mọi thắc mắc và yêu cầu hỗ trợ vui lòng liên hệ:", normalFont));
         footer.add(Chunk.NEWLINE);
-        footer.add(new Chunk("Hotline: 1900 1234 - Email: hotro@autocu.com.vn", normalFont));
+        footer.add(new Chunk("Hotline: +84 382 948 198 - Email: hotro@autocu.com.vn", normalFont));
         footer.setAlignment(Element.ALIGN_CENTER);
         footer.setSpacingBefore(30);
         document.add(footer);
