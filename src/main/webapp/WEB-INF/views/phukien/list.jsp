@@ -42,7 +42,7 @@
             </div>
 
             <table class="table table-bordered table-hover text-center">
-                <thead class="table-dark">
+                <thead class="table-success text-white">
                     <tr>
                         <th>Mã</th>
                         <th>Tên phụ kiện</th>

@@ -6,7 +6,7 @@
     <!-- Các thẻ meta và CSS như cũ -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sửa Thông Tin Nhân Viên</title>
+    <title>Sửa Thông Tin Tài Khoản</title>
     <!-- Bootstrap CSS -->
     <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
@@ -31,7 +31,7 @@
         <!-- Main Content -->
         <main class="col-md-9 ms-sm-auto col-lg-9 main-content">
             <div class="d-flex justify-content-between align-items-center">
-                <h2>Sửa thông tin nhân viên</h2>
+                <h2>Sửa Thông Tin Tài Khoản</h2>
                 <form class="d-flex">
                     <div class="input-group">
                         <input class="form-control" type="search" placeholder="Tìm kiếm" aria-label="Search">
@@ -43,12 +43,11 @@
             </div>
 
             <div class="form-container mt-4">
-                <h3>Thông tin</h3>
                 <form action="${pageContext.request.contextPath}/suanhanvien" method="post" onsubmit="return validateForm()">
                     <input type="hidden" name="id" value="${user.id}">
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="hovaten" class="form-label">Họ và tên</label>
+                            <label for="hovaten" class="form-label text-bold">Họ và tên</label>
                             <input type="text" class="form-control" id="hovaten" name="hovaten" placeholder="Nhập họ và tên" value="${user.hovaten}">
                             <span id="hovatenError" class="text-danger"></span>
                         </div>

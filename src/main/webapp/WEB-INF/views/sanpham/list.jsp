@@ -35,7 +35,7 @@
             
             <div class="table-responsive">
                 <table class="table table-striped table-hover text-center">
-                    <thead class="table-dark">
+                    <thead class="table-success text-white">
                         <tr>
                             <th>Mã</th>
                             <th>Tên</th>

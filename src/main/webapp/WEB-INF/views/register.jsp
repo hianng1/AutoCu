@@ -50,7 +50,13 @@
                             <div class="mb-3">
 							    <label for="password" class="form-label">Mật khẩu</label>
 							    <input type="password" class="form-control" name="password" id="password" required pattern="(?=.*[a-z])(?=.*[A-Z]).{6,}">
-							    <div class="form-text" style="color: red;">Mật khẩu ít nhất 6 ký tự và chứa ít nhất một chữ hoa và một chữ thường.</div>
+							    <div class="form-text">
+							        <ul>
+							            <li>Ít nhất 6 ký tự</li>
+							            <li>Chứa ít nhất một chữ hoa (A-Z)</li>
+							            <li>Chứa ít nhất một chữ thường (a-z)</li>
+							        </ul>
+							    </div>
 							    <div class="invalid-feedback">Vui lòng nhập mật khẩu hợp lệ (ít nhất 6 ký tự và chứa ít nhất một chữ hoa và một chữ thường).</div>
 							</div>
                             <div class="mb-3">
