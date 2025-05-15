@@ -56,8 +56,9 @@ prefix="c" %>
                 <a
                     class="nav-link ${param.activeMenu == 'user' ? 'active' : ''}"
                     href="/quantri"
+                    disabled
                 >
-                    <i class="fas fa-users"></i> Quản lý user
+                    <i class="fas fa-users"></i> Sửa thông tin tài khoản
                 </a>
             </li>
             <li class="nav-item">

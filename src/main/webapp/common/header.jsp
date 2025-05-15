@@ -25,16 +25,6 @@
         </a>
       </div>
     </div>
-    <div class="flex items-center space-x-4">
-      <div>
-        <i class="fas fa-truck text-green-600"> </i>
-        <a href="${pageContext.request.contextPath}/order-tracking">Order Tracking</a>
-      </div>
-      <div>
-        <i class="fas fa-heart text-red-600"> </i>
-        <a href="#">Wishlist</a>
-      </div>
-    </div>
   </div>
 </div>
 
