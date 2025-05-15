@@ -27,19 +27,19 @@
         <!-- Main content -->
         <main class="col-md-9 ms-sm-auto col-lg-9 main-content">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Danh sách sản phẩm</h2>
-                <a href="${pageContext.request.contextPath}/sanpham/them" class="btn btn-primary">
+                <h2 class="class="mb-4 text-primary">Danh sách sản phẩm</h2>
+                <a href="${pageContext.request.contextPath}/sanpham/them" class="btn btn-success">
                     <i class="fas fa-plus"></i> Thêm sản phẩm
                 </a>
             </div>
             
             <div class="table-responsive">
-                <table class="table table-striped table-hover">
+                <table class="table table-striped table-hover text-center">
                     <thead class="table-dark">
                         <tr>
                             <th>Mã</th>
                             <th>Tên</th>
-                            <th>Giá</th>
+                            <th>Truyền động</th>
                             <th>Số ghế</th>
                             <th>Hãng</th>
                             <th>Ảnh</th>
@@ -51,9 +51,7 @@
                             <tr>
                                 <td>${sp.productID}</td>
                                 <td>${sp.tenSanPham}</td>
-                                <td>
-                                    <fmt:formatNumber value="${sp.gia}" type="number" groupingUsed="true" maxFractionDigits="0" />₫
-                                </td>
+                                <td>${sp.truyenDong}</td>
                                 <td>${sp.soGhe}</td>
                                 <td>${sp.hangXe}</td>
                                 <td>

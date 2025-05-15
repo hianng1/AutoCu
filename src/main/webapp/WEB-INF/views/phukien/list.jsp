@@ -41,10 +41,10 @@
                 <a href="/phukien/form" class="btn btn-success">+ Thêm phụ kiện</a>
             </div>
 
-            <table class="table table-bordered table-hover">
+            <table class="table table-bordered table-hover text-center">
                 <thead class="table-dark">
                     <tr>
-                        <th>ID</th>
+                        <th>Mã</th>
                         <th>Tên phụ kiện</th>
                         <th>Giá</th>
                         <th>Số lượng</th>
@@ -66,10 +66,22 @@
                                 <img src="/imgs/${item.anhDaiDien}" class="card-img-top object-cover" alt="${item.anhDaiDien}" style="height: 40px; width: 70px;">
                             </td>
                             <td>${item.danhMuc.tenDanhMuc}</td>
-                            <td>
+                            <%-- <td>
                                 <a href="/phukien/edit/${item.accessoryID}" class="btn btn-sm btn-warning">Sửa</a>
                                 <a href="/phukien/delete/${item.accessoryID}" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</a>
-                            </td>
+                            </td> --%>
+                            <td>
+                                    <div class="btn-group">
+                                        <a href="/phukien/edit/${item.accessoryID}" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-edit"></i> Sửa
+                                        </a>
+                                        <a href="/phukien/delete/${item.accessoryID}" 
+                                           class="btn btn-danger btn-sm" 
+                                           onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')">
+                                            <i class="fas fa-trash"></i> Xóa
+                                        </a>
+                                    </div>
+                                </td>
                         </tr>
                     </c:forEach>
                 </tbody>
