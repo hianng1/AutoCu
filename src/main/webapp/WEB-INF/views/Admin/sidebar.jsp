@@ -12,6 +12,14 @@ prefix="c" %>
         <ul class="nav flex-column">
             <li class="nav-item">
                 <a
+                    class="nav-link ${param.activeMenu == 'trangchu' ? 'active' : ''}"
+                    href="${pageContext.request.contextPath}/"
+                >
+                    <i class="fas fa-home"></i> Trang chủ
+                </a>
+            </li>
+            <li class="nav-item">
+                <a
                     class="nav-link ${param.activeMenu == 'quantri' ? 'active' : ''}"
                     href="${pageContext.request.contextPath}/quantri"
                 >
