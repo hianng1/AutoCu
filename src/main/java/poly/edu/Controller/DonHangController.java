@@ -177,7 +177,7 @@ public class DonHangController {
         document.add(companyName);
 
         Paragraph companyDetails = new Paragraph(
-                "Địa chỉ: 123 Nguyễn Văn Linh, Quận 7, TP.HCM\nĐiện thoại: (028) 1234 5678 - Email: info@autocu.com.vn\nWebsite: www.autocu.com.vn",
+                "Địa chỉ: 123 Nguyễn Văn Linh, Quận 7, TP.HCM\nĐiện thoại: (028) 5267 3916 - Email: info@autocu.com.vn\nWebsite: www.autocu.com.vn",
                 smallFont);
         companyDetails.setAlignment(Element.ALIGN_CENTER);
         document.add(companyDetails);

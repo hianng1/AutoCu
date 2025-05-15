@@ -37,7 +37,7 @@ public class ChiTietDonHang implements Serializable {
     @JoinColumn(name = "AccessoryID", referencedColumnName = "AccessoryID")
     private PhuKienOto phuKienOto;
 
-    @Column(name = "TenSanPham", nullable = false, length = 255)
+    @Column(name = "TenSanPham", nullable = false, columnDefinition = "NVARCHAR(255)")
     private String tenSanPham;
 
     @Column(name = "SoLuong", nullable = false)
