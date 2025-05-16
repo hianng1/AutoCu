@@ -125,10 +125,13 @@ public class CartServiceImp implements CartService {
     @Override
     @Transactional
     public GioHang update(long cartId, int newQuantity) {
+        log.info("Updating cart item ID {} with new quantity: {}", cartId, newQuantity);
+
         // First check if the item is in the map
         GioHang giohang = maps.get(cartId);
+        boolean foundInMap = giohang != null;
 
-        if (giohang == null) {
+        if (!foundInMap) {
             // If not in map, try to find it in the database
             Optional<GioHang> giohangOpt = gioHangRepository.findById(cartId);
             if (giohangOpt.isPresent()) {
@@ -146,6 +149,14 @@ public class CartServiceImp implements CartService {
         if (newQuantity > 0) {
             log.info("Updating quantity for cart item ID {}: {} -> {}", cartId, giohang.getSoLuong(), newQuantity);
             giohang.setSoLuong(newQuantity);
+
+            // Verify product stock levels before saving
+            if (giohang.getPhuKienOto() != null && giohang.getPhuKienOto().getSoLuong() < newQuantity) {
+                log.warn("Requested quantity ({}) exceeds available stock ({}) for product ID {}",
+                        newQuantity, giohang.getPhuKienOto().getSoLuong(), giohang.getPhuKienOto().getAccessoryID());
+                // You could throw an exception here or handle differently
+            }
+
             // Save to database
             GioHang savedItem = gioHangRepository.save(giohang);
             // Update the map with the saved item
@@ -248,8 +259,6 @@ public class CartServiceImp implements CartService {
 
     @Override
     public GioHang findById(Long id) {
-        // This implementation is empty which could cause issues
-        // Need to properly implement findById to get a cart item
         if (id == null)
             return null;
 
