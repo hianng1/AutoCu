@@ -19,9 +19,9 @@
             background-color: #f8f9fa;
         }
         .hero-section {
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), url('/imgs/accessories-bg.jpg');
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), url('${pageContext.request.contextPath}/imgs/mau-sieu-xe-cai-lam-hinh-nen.jpg');
             background-size: cover;
-            background-position: center;
+            background-position: center 30%; /* Adjusted position to show more of the car */
             padding: 80px 0;
             color: white;
             margin-bottom: 30px;

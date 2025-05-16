@@ -19,7 +19,7 @@
             background-color: #f8f9fa;
         }
         .hero-section {
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), url('/imgs/car-showroom.jpg');
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), url('${pageContext.request.contextPath}/imgs/905a7c51285be48ad16a41b2b4a7aaf8c4b076a6.jpg');
             background-size: cover;
             background-position: center;
             padding: 80px 0;
