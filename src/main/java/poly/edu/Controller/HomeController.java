@@ -116,13 +116,14 @@ public class HomeController {
             @RequestParam String hovaten,
             @RequestParam(required = true) String sodienthoai,
             @RequestParam String soNha,
+            @RequestParam String tenDuong, // Thay đổi từ soNha thành 2 tham số riêng biệt
             @RequestParam String phuongXa,
             @RequestParam String quanHuyen,
             @RequestParam String tinhThanh,
             Model model,
             RedirectAttributes redirectAttributes) {
         // Kết hợp các phần thông tin địa chỉ để tạo thành địa chỉ đầy đủ
-        String diaChiFull = String.join(", ", soNha, phuongXa, quanHuyen, tinhThanh);
+        String diaChiFull = String.format("%s, %s, %s, %s, %s", soNha, tenDuong, phuongXa, quanHuyen, tinhThanh);
 
         // Gọi service để thực hiện đăng ký
         // Lưu ý: UserService.registerUser cần mã hóa mật khẩu trước khi lưu vào DB
@@ -135,10 +136,6 @@ public class HomeController {
 
         // Nếu đăng ký thất bại, gửi thông báo lỗi tới model và trả về trang đăng ký
         model.addAttribute("message", result);
-        // Giữ lại các giá trị đã nhập để người dùng không phải nhập lại (tùy chọn, cần
-        // thêm logic)
-        // model.addAttribute("username", username);
-        // ... các field khác ...
         return "register"; // Nếu đăng ký thất bại, vẫn ở trang đăng ký
     }
 
