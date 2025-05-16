@@ -27,4 +27,6 @@ public interface CartService {
 	void add(GioHang item);
 
 	void xoaGioHangSauKhiDatHang(String username);
+
+	GioHang findById(Long id);
 }

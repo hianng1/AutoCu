@@ -607,93 +607,96 @@
     <%-- Include your footer --%>
     <jsp:include page="/common/footer.jsp" />
 
-     <%-- jQuery (Cần cho Bootstrap JS và các script tùy chỉnh dễ dàng hơn) --%>
+    <%-- jQuery (Cần cho Bootstrap JS và các script tùy chỉnh dễ dàng hơn) --%>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <%-- Bootstrap JS (Cần thiết cho Modal, Toast và các thành phần JS khác của Bootstrap) --%>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-
     <script>
-    // Function to update quantity input and potentially submit form
-    function updateQuantity(cartID, delta) { // Dùng cartID
-        const quantityInput = document.querySelector(`input[data-cart-item-id='${cartID}']`); // Dùng cartID
-        if (quantityInput) {
-            let currentValue = parseInt(quantityInput.value);
-            let newValue = currentValue + delta;
-            if (newValue >= 1) { // Ensure quantity is at least 1
-                quantityInput.value = newValue;
-                // Automatically submit the form after quantity change
-                submitUpdateForm(cartID); // Dùng cartID
-            } else if (newValue === 0) {
-                 // If reducing to 0, confirm and redirect to remove
-                 if (confirm('Bạn có muốn xóa sản phẩm này khỏi giỏ hàng không?')) {
-                     // THÊM contextPath vào link xóa trong JS
-                     window.location.href = "${pageContext.request.contextPath}/cart/remove/" + cartID; // Dùng cartID
-                 } else {
-                     // Revert the input value if the user cancels
-                     quantityInput.value = currentValue;
-                 }
+    // Fixed updateQuantity function that correctly identifies and updates cart items
+    function updateQuantity(cartID, delta) {
+        // Find the form by its ID
+        const form = document.getElementById(`updateForm_${cartID}`);
+        if (!form) {
+            console.error(`Form with ID updateForm_${cartID} not found`);
+            return;
+        }
+        
+        // Find the quantity input within the form
+        const quantityInput = form.querySelector('input[name="soLuong"]');
+        if (!quantityInput) {
+            console.error(`Quantity input not found in form updateForm_${cartID}`);
+            return;
+        }
+        
+        // Get current quantity and calculate new value
+        let currentValue = parseInt(quantityInput.value) || 1;
+        let newValue = currentValue + delta;
+        
+        // Handle quantity changes
+        if (newValue >= 1) {
+            // Set the new value and submit the form
+            quantityInput.value = newValue;
+            form.submit();
+        } else {
+            // For zero or negative quantities, ask to remove the item
+            if (confirm('Bạn có muốn xóa sản phẩm này khỏi giỏ hàng không?')) {
+                window.location.href = "${pageContext.request.contextPath}/cart/remove/" + cartID;
             }
         }
     }
 
- // Function to submit the update form for a specific cart item
+    // Function to submit update form for direct input changes
     function submitUpdateForm(cartID) {
         const form = document.getElementById(`updateForm_${cartID}`);
         if (form) {
-            setTimeout(() => {
-                 form.submit();
-            }, 100);
+            form.submit();
         }
     }
 
-    // START: SCRIPT XỬ LÝ TOAST VÀ MODAL CHECKOUT SUCCESS
-    $(document).ready(function(){
-        // Display success toast if successMessage is present (from RedirectAttributes for non-checkout actions)
-        <c:if test="${not empty successMessage}">
+    // Set up event handlers when document is loaded
+    $(document).ready(function() {
+        // Handle direct input changes
+        const quantityInputs = document.querySelectorAll('.quantity-input');
+        quantityInputs.forEach(input => {
+            input.addEventListener('change', function() {
+                if (parseInt(this.value) < 1) {
+                    this.value = 1; // Ensure minimum 1
+                }
+                const cartID = this.getAttribute('data-cart-item-id');
+                submitUpdateForm(cartID);
+            });
+        });
+        
+        // Toast notifications handling
+        var hasSuccessMessage = ${not empty successMessage}; 
+        var hasErrorMessage = ${not empty errorMessage};
+        var isCheckoutSuccess = ${checkoutSuccess eq true};
+        
+        if (hasSuccessMessage) {
             var successToast = new bootstrap.Toast($('#successToast'));
             successToast.show();
-        </c:if>
+        }
 
-        // Display error toast if errorMessage is present (from RedirectAttributes for errors)
-        <c:if test="${not empty errorMessage}">
+        if (hasErrorMessage) {
             var errorToast = new bootstrap.Toast($('#errorToast'));
             errorToast.show();
-        </c:if>
+        }
 
-        // CHECK FOR CHECKOUT SUCCESS FLAG AND SHOW MODAL
-        // Kiểm tra cờ checkoutSuccess được gửi từ controller thông qua Model
-        <c:if test="${checkoutSuccess eq true}">
-            // Lấy instance của modal thông báo thành công
+        // Checkout success modal handling
+        if (isCheckoutSuccess) {
             var checkoutSuccessModal = new bootstrap.Modal($('#checkoutSuccessModal'));
-
-            // Hiển thị modal
             checkoutSuccessModal.show();
-
-            // Bắt sự kiện click vào nút OK trong modal
+            
             $('#checkoutSuccessOkBtn').on('click', function() {
-                // Ẩn modal (không bắt buộc nếu chuyển hướng ngay)
-                // checkoutSuccessModal.hide();
-
-                // Chuyển hướng về trang chủ sau khi đóng modal
                 window.location.href = "${pageContext.request.contextPath}/trangchu";
             });
-
-             // Tùy chọn: Xử lý sự kiện khi modal bị ẩn (ví dụ: do data-bs-backdrop="static" không cho đóng bằng click ngoài)
-             // Mặc dù nút OK đã xử lý, đây là fallback tốt.
-             $('#checkoutSuccessModal').on('hidden.bs.modal', function () {
-                 // Nếu modal bị ẩn vì lý do nào đó, vẫn chuyển hướng về trang chủ
-                  window.location.href = "${pageContext.request.contextPath}/trangchu";
-             });
-
-        </c:if>
+            
+            $('#checkoutSuccessModal').on('hidden.bs.modal', function() {
+                window.location.href = "${pageContext.request.contextPath}/trangchu";
+            });
+        }
     });
-    // END: SCRIPT XỬ LÝ TOAST VÀ MODAL CHECKOUT SUCCESS
-    
-
-    <%-- The AJAX checkout script was commented out as your controller uses a form submission. --%>
-    <%-- If you decide to implement AJAX checkout later, you can use and adapt this. --%>
     </script>
-
 </body>
 </html>

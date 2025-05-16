@@ -49,7 +49,8 @@ public class CartServiceImp implements CartService {
             log.debug("Session updated with {} cart items.", maps.size());
         } catch (IllegalStateException e) {
             log.warn("Could not update session - perhaps no active request context?", e);
-            // Handle cases where this might be called outside a request context if necessary
+            // Handle cases where this might be called outside a request context if
+            // necessary
         }
     }
 
@@ -63,22 +64,25 @@ public class CartServiceImp implements CartService {
             throw new IllegalStateException("Người dùng chưa đăng nhập để thêm vào giỏ hàng.");
         }
         if (newItem.getPhuKienOto() == null || newItem.getPhuKienOto().getAccessoryID() == null) {
-             log.error("Cannot add item to cart: Item or Product ID is null.");
-             throw new IllegalArgumentException("Sản phẩm không hợp lệ.");
+            log.error("Cannot add item to cart: Item or Product ID is null.");
+            throw new IllegalArgumentException("Sản phẩm không hợp lệ.");
         }
 
         Long productId = newItem.getPhuKienOto().getAccessoryID();
         int quantityToAdd = newItem.getSoLuong() <= 0 ? 1 : newItem.getSoLuong(); // Ensure at least 1 is added
 
-        // Check if an item for this product already exists for the current user in the DB
+        // Check if an item for this product already exists for the current user in the
+        // DB
         Optional<GioHang> existingCartItemOpt = gioHangRepository.findByUserAndPhuKien(currentUser.getId(), productId);
 
         if (existingCartItemOpt.isPresent()) {
             // --- Item already exists, update quantity ---
             GioHang existingItem = existingCartItemOpt.get();
-            log.info("Product ID {} already in cart for user {}. Updating quantity.", productId, currentUser.getUsername());
+            log.info("Product ID {} already in cart for user {}. Updating quantity.", productId,
+                    currentUser.getUsername());
             existingItem.setSoLuong(existingItem.getSoLuong() + quantityToAdd);
-            // Update price if it can change - Assuming newItem.getGia() holds the current price
+            // Update price if it can change - Assuming newItem.getGia() holds the current
+            // price
             existingItem.setGia(newItem.getGia());
 
             GioHang savedItem = gioHangRepository.save(existingItem); // Save changes to DB
@@ -111,9 +115,9 @@ public class CartServiceImp implements CartService {
             log.warn("Attempted to remove non-existent cart item with ID: {}", cartId);
             // Optionally check DB just in case map and DB are out of sync
             if (gioHangRepository.existsById(cartId)) {
-                 gioHangRepository.deleteById(cartId);
-                 log.warn("Item with ID {} existed in DB but not in session map. Removed from DB.", cartId);
-                 // No session update needed if it wasn't in the map
+                gioHangRepository.deleteById(cartId);
+                log.warn("Item with ID {} existed in DB but not in session map. Removed from DB.", cartId);
+                // No session update needed if it wasn't in the map
             }
         }
     }
@@ -121,33 +125,40 @@ public class CartServiceImp implements CartService {
     @Override
     @Transactional
     public GioHang update(long cartId, int newQuantity) {
-        GioHang giohang = maps.get(cartId); // Get from map using CartID
+        // First check if the item is in the map
+        GioHang giohang = maps.get(cartId);
 
-        if (giohang != null) {
-            if (newQuantity > 0) {
-                log.info("Updating quantity for cart item ID {}: {} -> {}", cartId, giohang.getSoLuong(), newQuantity);
-                giohang.setSoLuong(newQuantity);
-                gioHangRepository.save(giohang); // Update in DB
-                updateSession(); // Update session state
+        if (giohang == null) {
+            // If not in map, try to find it in the database
+            Optional<GioHang> giohangOpt = gioHangRepository.findById(cartId);
+            if (giohangOpt.isPresent()) {
+                giohang = giohangOpt.get();
+                // Add it to the map if found in database
+                maps.put(giohang.getCartID(), giohang);
+                log.info("Cart item ID {} found in DB but not in session map. Added to map.", cartId);
             } else {
-                // If quantity is 0 or less, remove the item
-                log.info("Quantity for cart item ID {} set to {}. Removing item.", cartId, newQuantity);
-                remove(cartId); // Use the remove method which handles DB and map removal
-                return null; // Indicate item was removed
+                log.warn("Attempted to update non-existent cart item with ID: {}", cartId);
+                return null;
             }
-        } else {
-             log.warn("Attempted to update non-existent cart item with ID: {}", cartId);
-             // Optionally, try fetching from DB to see if it exists there
-             Optional<GioHang> giohangOpt = gioHangRepository.findById(cartId);
-             if (giohangOpt.isPresent()) {
-                 log.warn("Item {} found in DB but not in session map. Cannot update session state.", cartId);
-                 // Decide if you want to update the DB anyway, or just log
-                 // GioHang dbItem = giohangOpt.get();
-                 // dbItem.setSoLuong(newQuantity);
-                 // gioHangRepository.save(dbItem);
-             }
         }
-        return giohang; // Return updated item or null
+
+        // Now we have the item either from map or database
+        if (newQuantity > 0) {
+            log.info("Updating quantity for cart item ID {}: {} -> {}", cartId, giohang.getSoLuong(), newQuantity);
+            giohang.setSoLuong(newQuantity);
+            // Save to database
+            GioHang savedItem = gioHangRepository.save(giohang);
+            // Update the map with the saved item
+            maps.put(cartId, savedItem);
+            // Update session
+            updateSession();
+            return savedItem;
+        } else {
+            // If quantity is 0 or less, remove the item
+            log.info("Quantity for cart item ID {} set to {}. Removing item.", cartId, newQuantity);
+            remove(cartId);
+            return null;
+        }
     }
 
     @Override
@@ -181,16 +192,15 @@ public class CartServiceImp implements CartService {
     // Optional: Get total number of individual items (sum of quantities)
     public int getTotalQuantity() {
         return maps.values().stream()
-                   .mapToInt(GioHang::getSoLuong)
-                   .sum();
+                .mapToInt(GioHang::getSoLuong)
+                .sum();
     }
-
 
     @Override
     public BigDecimal getAmounts() {
         return maps.values().stream()
-                   .map(item -> item.getGia().multiply(BigDecimal.valueOf(item.getSoLuong()))) // gia * soLuong
-                   .reduce(BigDecimal.ZERO, BigDecimal::add); // Sum them up
+                .map(item -> item.getGia().multiply(BigDecimal.valueOf(item.getSoLuong()))) // gia * soLuong
+                .reduce(BigDecimal.ZERO, BigDecimal::add); // Sum them up
     }
 
     @Override
@@ -227,12 +237,38 @@ public class CartServiceImp implements CartService {
 
     private User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated() || "anonymousUser".equals(authentication.getPrincipal())) {
-             log.warn("No authenticated user found in Security Context.");
+        if (authentication == null || !authentication.isAuthenticated()
+                || "anonymousUser".equals(authentication.getPrincipal())) {
+            log.warn("No authenticated user found in Security Context.");
             return null;
         }
         String username = authentication.getName();
         return userRepo.findByUsername(username);
+    }
+
+    @Override
+    public GioHang findById(Long id) {
+        // This implementation is empty which could cause issues
+        // Need to properly implement findById to get a cart item
+        if (id == null)
+            return null;
+
+        // First check in our session map
+        GioHang item = maps.get(id);
+        if (item != null) {
+            return item;
+        }
+
+        // If not in map, try to find in database
+        Optional<GioHang> optItem = gioHangRepository.findById(id);
+        if (optItem.isPresent()) {
+            // Add to our map for future reference
+            GioHang dbItem = optItem.get();
+            maps.put(dbItem.getCartID(), dbItem);
+            return dbItem;
+        }
+
+        return null;
     }
 
 }
