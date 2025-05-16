@@ -352,7 +352,6 @@ public class HomeController {
     @GetMapping("/cars")
     public String showUsedCarsPage(
             @RequestParam(value = "category", required = false) String categoryName,
-            @RequestParam(value = "priceMax", required = false) Integer priceMax,
             @RequestParam(value = "yearFrom", required = false) Integer yearFrom,
             @RequestParam(value = "yearTo", required = false) Integer yearTo,
             @RequestParam(value = "fuelType", required = false) String fuelType,
@@ -376,13 +375,14 @@ public class HomeController {
             }
         }
 
-        // Apply Price Filter
-        if (priceMax != null) {
-            double maxPrice = priceMax * 1000000.0; // Convert to VND (if slider uses millions)
-            carsList = carsList.stream()
-                    .filter(car -> car.getGia() <= maxPrice)
-                    .collect(java.util.stream.Collectors.toList());
-        }
+        // Apply Price Filter - REMOVED since gia field no longer exists
+        // if (priceMax != null) {
+        // double maxPrice = priceMax * 1000000.0; // Convert to VND (if slider uses
+        // millions)
+        // carsList = carsList.stream()
+        // .filter(car -> car.getGia() <= maxPrice)
+        // .collect(java.util.stream.Collectors.toList());
+        // }
 
         // Apply Year Filter
         if (yearFrom != null) {
@@ -420,15 +420,16 @@ public class HomeController {
                     .collect(java.util.stream.Collectors.toList());
         }
 
-        // Apply Sorting
+        // Apply Sorting - MODIFIED to remove price-related sorting
         if (sort != null && !sort.isEmpty()) {
             switch (sort) {
-                case "price-desc":
-                    carsList.sort((car1, car2) -> Double.compare(car2.getGia(), car1.getGia()));
-                    break;
-                case "price-asc":
-                    carsList.sort((car1, car2) -> Double.compare(car1.getGia(), car2.getGia()));
-                    break;
+                // Remove price-based sorting options
+                // case "price-desc":
+                // carsList.sort((car1, car2) -> Double.compare(car2.getGia(), car1.getGia()));
+                // break;
+                // case "price-asc":
+                // carsList.sort((car1, car2) -> Double.compare(car1.getGia(), car2.getGia()));
+                // break;
                 case "year-desc":
                     carsList.sort((car1, car2) -> {
                         if (car1.getNgaySanXuat() == null)

@@ -302,10 +302,6 @@
                                             <span><i class="fas fa-cog text-warning me-1"></i> ${xe.truyenDong}</span>
                                         </div>
 
-                                        <p class="price-text mb-4">
-                                            <fmt:formatNumber value="${xe.gia}" pattern="#,##0" /> VND
-                                        </p>
-
                                         <a href="${pageContext.request.contextPath}/details/${xe.productID}" class="btn btn-outline-primary w-100">
                                             <i class="fas fa-info-circle me-2"></i>Chi tiết
                                         </a>
@@ -353,18 +349,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // Price range slider
-    const priceRange = document.getElementById('price-range');
-    const priceValue = document.getElementById('price-value');
-    
-    priceRange.addEventListener('input', function() {
-        const value = this.value * 1000000;
-        priceValue.textContent = new Intl.NumberFormat('vi-VN', {
-            style: 'currency',
-            currency: 'VND',
-            minimumFractionDigits: 0
-        }).format(value);
-    });
+
     
     // Debounce function to prevent too many form submissions
     function debounce(func, wait) {
@@ -378,11 +363,6 @@
             }, wait);
         };
     }
-    
-    // Submit form when the range input changes, but debounced
-    priceRange.addEventListener('change', debounce(function() {
-        document.getElementById('filterForm').submit();
-    }, 500));
 </script>
 </body>
 </html>

@@ -116,11 +116,6 @@
                             <span><i class="fas fa-gas-pump text-primary me-1"></i> ${xe.nhienLieu}</span>
                             <span><i class="fas fa-cog text-warning me-1"></i> ${xe.truyenDong}</span>
                         </div>
-
-                        <p class="price-text mb-4">
-                            <fmt:formatNumber value="${xe.gia}" pattern="#,##0" /> VND
-                        </p>
-
                    
                          <a href="${pageContext.request.contextPath}/details/${xe.productID}" class="btn btn-outline-primary w-100">
                             <i class="fas fa-info-circle me-2"></i>Chi tiết
@@ -218,7 +213,6 @@
                         <form action="/cart/add/${phukien.accessoryID}" method="post">
 		                     <%-- Controller add method uses @PathVariable("id") -> product ID goes in URL path --%>
 		                     <%-- No need for productId input here if using path variable --%>
-		                     <%-- <input type="hidden" name="productId" value="${phukien.accessoryID}" /> --%>
 		
 		                    <%-- Input cho số lượng (mặc định 1) --%>
 		                    <%-- Controller add method uses @RequestParam("quantity") -> quantity needs to be a request parameter --%>

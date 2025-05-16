@@ -320,9 +320,6 @@
             </div>
         </div>
         <div class="col-md-4 text-md-end">
-            <div class="product-price">
-                <fmt:formatNumber value="${details[0].gia}" type="number"/> VND
-            </div>
             <div class="text-muted">
                 <i class="fas fa-map-marker-alt me-1"></i> ${details[0].diaDiemLayXe}
             </div>
@@ -487,10 +484,6 @@
                                 <span><i class="fas fa-gas-pump text-primary me-1"></i> ${sp.nhienLieu}</span>
                                 <span><i class="fas fa-cog text-warning me-1"></i> ${sp.truyenDong}</span>
                             </div>
-
-                            <p class="price-text mb-4">
-                                <fmt:formatNumber value="${sp.gia}" pattern="#,##0" /> VND
-                            </p>
 
                             <a href="${pageContext.request.contextPath}/details/${sp.productID}" class="btn btn-outline-primary w-100">
                                 <i class="fas fa-info-circle me-2"></i>Chi tiết
