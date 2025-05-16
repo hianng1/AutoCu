@@ -46,6 +46,94 @@ prefix="c"%> <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
                 border-radius: 0.5rem;
                 padding: 1rem;
             }
+            .order-table {
+                width: 100%;
+                border-collapse: separate;
+                border-spacing: 0;
+            }
+            .order-table th,
+            .order-table td {
+                padding: 0.75rem;
+                vertical-align: middle;
+            }
+            .order-table thead th {
+                background-color: #f9fafb;
+                font-weight: 600;
+                text-align: left;
+                border-bottom: 2px solid #e5e7eb;
+            }
+            .order-table tbody tr {
+                transition: background-color 0.2s;
+            }
+            .order-table tbody tr:hover {
+                background-color: #f9fafb;
+            }
+            .order-table tbody td {
+                border-bottom: 1px solid #e5e7eb;
+            }
+            .order-table .status-badge {
+                display: inline-block;
+                padding: 0.25rem 0.75rem;
+                border-radius: 9999px;
+                font-size: 0.75rem;
+                font-weight: 500;
+            }
+            .badge-waiting {
+                background-color: #fef3c7;
+                color: #b45309;
+            }
+            .badge-processing {
+                background-color: #dbeafe;
+                color: #1e40af;
+            }
+            .badge-shipping {
+                background-color: #e0e7ff;
+                color: #3730a3;
+            }
+            .badge-delivered {
+                background-color: #d1fae5;
+                color: #065f46;
+            }
+            .badge-cancelled {
+                background-color: #fee2e2;
+                color: #b91c1c;
+            }
+            .view-order-btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0.5rem 1rem;
+                border-radius: 0.375rem;
+                font-weight: 500;
+                font-size: 0.875rem;
+                transition: all 0.2s;
+                background-color: #f59e0b;
+                color: white;
+            }
+            .view-order-btn:hover {
+                background-color: #d97706;
+            }
+            .cancel-order-btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0.5rem 1rem;
+                border-radius: 0.375rem;
+                font-weight: 500;
+                font-size: 0.875rem;
+                transition: all 0.2s;
+                background-color: #ef4444;
+                color: white;
+                border: none;
+                cursor: pointer;
+            }
+            .cancel-order-btn:hover {
+                background-color: #dc2626;
+            }
+            .flex.gap-2 {
+                display: flex;
+                gap: 0.5rem;
+            }
         </style>
     </head>
     <body class="bg-gray-100">
@@ -60,62 +148,152 @@ prefix="c"%> <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
                 </p>
             </div>
 
+            <!-- Đơn hàng của bạn - Bảng danh sách đơn hàng của khách hàng -->
             <div class="bg-white shadow-lg rounded-lg p-6 mb-8">
-                <form
-                    action="${pageContext.request.contextPath}/theodoidonhang/trangthai"
-                    method="get"
-                    class="mb-6"
-                >
-                    <div class="mb-4">
-                        <label
-                            for="orderid"
-                            class="block text-gray-700 font-medium mb-2"
-                        >
-                            Mã Đơn Hàng:
-                        </label>
-                        <div class="flex">
-                            <input
-                                type="text"
-                                id="orderid"
-                                name="orderid"
-                                class="flex-1 shadow-sm border border-gray-300 rounded-l-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-                                placeholder="Nhập mã đơn hàng để kiểm tra"
-                                required
-                            />
-                            <button
-                                type="submit"
-                                class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-r-lg transition duration-200"
+                <h2 class="text-xl font-bold mb-4 text-gray-800">
+                    <i class="fas fa-shopping-bag mr-2 text-orange-500"></i>Đơn
+                    hàng của bạn
+                </h2>
+
+                <c:choose>
+                    <c:when test="${empty userOrders}">
+                        <div class="bg-gray-50 p-8 text-center rounded-lg">
+                            <i
+                                class="fas fa-box-open text-gray-400 text-5xl mb-4"
+                            ></i>
+                            <h3 class="text-lg font-medium text-gray-600 mb-2">
+                                Bạn chưa có đơn hàng nào
+                            </h3>
+                            <p class="text-gray-500 mb-4">
+                                Khi bạn đặt hàng, các đơn hàng sẽ hiển thị ở đây
+                            </p>
+                            <a
+                                href="${pageContext.request.contextPath}/trangchu"
+                                class="inline-flex items-center px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors"
                             >
-                                <i class="fas fa-search mr-2"></i>Tra Cứu
-                            </button>
+                                <i class="fas fa-shopping-cart mr-2"></i>Mua sắm
+                                ngay
+                            </a>
                         </div>
-                    </div>
-                </form>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="overflow-x-auto">
+                            <table class="order-table">
+                                <thead>
+                                    <tr>
+                                        <th>Mã đơn hàng</th>
+                                        <th>Ngày đặt</th>
+                                        <th>Tổng tiền</th>
+                                        <th>Trạng thái</th>
+                                        <th>Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <c:forEach
+                                        var="order"
+                                        items="${userOrders}"
+                                    >
+                                        <tr>
+                                            <td class="font-medium">
+                                                #${order.orderID}
+                                            </td>
+                                            <td>
+                                                <fmt:formatDate
+                                                    value="${order.ngayDatHang}"
+                                                    pattern="dd/MM/yyyy HH:mm"
+                                                />
+                                            </td>
+                                            <td
+                                                class="font-medium text-orange-600"
+                                            >
+                                                <fmt:formatNumber
+                                                    value="${order.tongThanhToan}"
+                                                    pattern="#,##0 đ"
+                                                />
+                                            </td>
+                                            <td>
+                                                <c:choose>
+                                                    <c:when
+                                                        test="${order.trangThai eq 'CHO_XAC_NHAN'}"
+                                                    >
+                                                        <span
+                                                            class="status-badge badge-waiting"
+                                                            >Chờ xác nhận</span
+                                                        >
+                                                    </c:when>
+                                                    <c:when
+                                                        test="${order.trangThai eq 'DANG_XU_LY'}"
+                                                    >
+                                                        <span
+                                                            class="status-badge badge-processing"
+                                                            >Đang xử lý</span
+                                                        >
+                                                    </c:when>
+                                                    <c:when
+                                                        test="${order.trangThai eq 'DANG_GIAO'}"
+                                                    >
+                                                        <span
+                                                            class="status-badge badge-shipping"
+                                                            >Đang giao</span
+                                                        >
+                                                    </c:when>
+                                                    <c:when
+                                                        test="${order.trangThai eq 'DA_GIAO'}"
+                                                    >
+                                                        <span
+                                                            class="status-badge badge-delivered"
+                                                            >Đã giao</span
+                                                        >
+                                                    </c:when>
+                                                    <c:when
+                                                        test="${order.trangThai eq 'DA_HUY'}"
+                                                    >
+                                                        <span
+                                                            class="status-badge badge-cancelled"
+                                                            >Đã hủy</span
+                                                        >
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <span
+                                                            class="status-badge badge-processing"
+                                                            >Đang xử lý</span
+                                                        >
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </td>
+                                            <td class="flex gap-2">
+                                                <a
+                                                    href="${pageContext.request.contextPath}/theodoidonhang/trangthai?orderid=${order.orderID}"
+                                                    class="view-order-btn"
+                                                >
+                                                    <i
+                                                        class="fas fa-eye mr-2"
+                                                    ></i
+                                                    >Xem chi tiết
+                                                </a>
 
-                <c:if test="${not empty errorMessage}">
-                    <div
-                        class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4"
-                        role="alert"
-                    >
-                        <p class="font-bold">Lỗi</p>
-                        <p>${errorMessage}</p>
-                    </div>
-                </c:if>
-
-                <div
-                    class="bg-blue-50 border-l-4 border-blue-500 text-blue-700 p-4"
-                    role="alert"
-                >
-                    <h4 class="font-bold mb-2">Thông tin hữu ích</h4>
-                    <p>
-                        Mã đơn hàng được gửi trong email xác nhận đơn hàng của
-                        bạn.
-                    </p>
-                    <p>
-                        Nếu bạn gặp khó khăn trong việc tìm mã đơn hàng, vui
-                        lòng liên hệ với bộ phận hỗ trợ khách hàng.
-                    </p>
-                </div>
+                                                <!-- Chỉ hiển thị nút hủy đơn hàng nếu đơn hàng đang ở trạng thái chờ xác nhận hoặc đang xử lý -->
+                                                <c:if
+                                                    test="${order.trangThai eq 'CHO_XAC_NHAN' || order.trangThai eq 'DANG_XU_LY'}"
+                                                >
+                                                    <button
+                                                        onclick="confirmCancelOrder(${order.orderID})"
+                                                        class="cancel-order-btn ml-2"
+                                                    >
+                                                        <i
+                                                            class="fas fa-times-circle mr-2"
+                                                        ></i
+                                                        >Hủy đơn
+                                                    </button>
+                                                </c:if>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+                                </tbody>
+                            </table>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
             </div>
 
             <div class="bg-white shadow-lg rounded-lg p-6 mb-8">
@@ -211,5 +389,15 @@ prefix="c"%> <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
         </div>
 
         <jsp:include page="/common/footer.jsp" />
+
+        <script>
+            function confirmCancelOrder(orderId) {
+                if (confirm("Bạn có chắc chắn muốn hủy đơn hàng này không?")) {
+                    window.location.href =
+                        "${pageContext.request.contextPath}/theodoidonhang/cancel?orderid=" +
+                        orderId;
+                }
+            }
+        </script>
     </body>
 </html>
