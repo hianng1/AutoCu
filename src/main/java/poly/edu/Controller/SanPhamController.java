@@ -41,7 +41,6 @@ public class SanPhamController {
 
     @Value("${upload.path}")
     private String uploadDir;
-  
 
     // Hiển thị danh sách sản phẩm
     @GetMapping
@@ -57,11 +56,11 @@ public class SanPhamController {
         model.addAttribute("danhMucs", sanPhamService.getAllDanhMuc());
         return "sanpham/form"; // Trả về trang form.jsp
     }
- 
+
     @PostMapping("/saveSanPham")
     public String saveSanPham(@ModelAttribute SanPham sanPham,
-                              @RequestParam("categoryID") Long categoryID,
-                              @RequestParam("file") MultipartFile file) {
+            @RequestParam("categoryID") Long categoryID,
+            @RequestParam("file") MultipartFile file) {
         try {
             // Kiểm tra nếu có upload file
             if (!file.isEmpty()) {
@@ -98,11 +97,6 @@ public class SanPhamController {
 
         return "redirect:/sanpham";
     }
-
-
-
-
-
 
     // Hiển thị form sửa sản phẩm
     @GetMapping("/sua/{productID}")

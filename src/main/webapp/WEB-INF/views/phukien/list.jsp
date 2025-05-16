@@ -30,15 +30,25 @@
         <div class="container py-4">
             <h2 class="mb-4 text-primary">Danh sách phụ kiện ô tô</h2>
             
+            <!-- Success/Error messages -->
+            <c:if test="${not empty successMessage}">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    ${successMessage}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </c:if>
+            
             <c:if test="${not empty errorMessage}">
-                <p style="color: red;">
-                    ${errorMessage}  
-                    <a class="nav-link" href="${pageContext.request.contextPath}/phukien/list" style="font-size: 18px; font-weight: bold;">Quay lại</a>
-                </p>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    ${errorMessage}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
             </c:if>
             
             <div class="mb-3">
-                <a href="/phukien/form" class="btn btn-success">+ Thêm phụ kiện</a>
+                <a href="/phukien/form" class="btn btn-success">
+                    <i class="fas fa-plus"></i> Thêm phụ kiện
+                </a>
             </div>
 
             <table class="table table-bordered table-hover text-center">

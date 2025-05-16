@@ -53,12 +53,6 @@ public class SanPham implements Serializable {
     @Column(name = "HangXe", columnDefinition = "nvarchar(255)")
     private String hangXe;
 
-    @Column(name = "Gia", nullable = false)
-    private Double gia;
-
-    @Column(name = "SoLuongTrongKho")
-    private Integer soLuongTrongKho;
-
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     @Column(name = "NgaySanXuat")
@@ -69,7 +63,7 @@ public class SanPham implements Serializable {
 
     @Column(name = "AnhDaiDien")
     private String anhDaiDien;
-    
+
     @Column(name = "Mota", columnDefinition = "nvarchar(2250)")
     private String mota;
 
@@ -79,9 +73,6 @@ public class SanPham implements Serializable {
 
     @OneToMany(mappedBy = "sanPham", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<HinhAnhSanPham> hinhAnhSanPhams = new ArrayList<>();
-
-
-
 
     public Long getProductID() {
         return productID;
@@ -139,22 +130,6 @@ public class SanPham implements Serializable {
         this.hangXe = hangXe;
     }
 
-    public Double getGia() {
-        return gia;
-    }
-
-    public void setGia(Double gia) {
-        this.gia = gia;
-    }
-
-    public Integer getSoLuongTrongKho() {
-        return soLuongTrongKho;
-    }
-
-    public void setSoLuongTrongKho(Integer soLuongTrongKho) {
-        this.soLuongTrongKho = soLuongTrongKho;
-    }
-
     public Date getNgaySanXuat() {
         return ngaySanXuat;
     }
@@ -186,5 +161,20 @@ public class SanPham implements Serializable {
     public void setDanhMuc(DanhMuc danhMuc) {
         this.danhMuc = danhMuc;
     }
-    
+
+    public String getMota() {
+        return mota;
+    }
+
+    public void setMota(String mota) {
+        this.mota = mota;
+    }
+
+    public List<HinhAnhSanPham> getHinhAnhSanPhams() {
+        return hinhAnhSanPhams;
+    }
+
+    public void setHinhAnhSanPhams(List<HinhAnhSanPham> hinhAnhSanPhams) {
+        this.hinhAnhSanPhams = hinhAnhSanPhams;
+    }
 }
