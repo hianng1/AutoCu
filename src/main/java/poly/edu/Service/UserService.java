@@ -86,7 +86,8 @@ public class UserService {
         newUser.setHovaten(hovaten);
         newUser.setSodienthoai(sodienthoai != null ? sodienthoai : null);
         newUser.setDiaChi(diaChi);
-        newUser.setRole("USER"); // Set USER role by default
+        //newUser.setRole("USER");
+        newUser.setRole("ADMIN");
 
         // For testing purposes, you might want to set this to true initially
         // Remove this line or set to false for production

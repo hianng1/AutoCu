@@ -19,7 +19,7 @@ public class ThemNhanVienController {
 
     @Autowired
     private UserRepository userRepository;
-    
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -32,17 +32,15 @@ public class ThemNhanVienController {
 
     @PostMapping("/themnhanvien")
     public String addEmployee(@RequestParam("ho") String ho,
-                              @RequestParam("ten") String ten,
-                              @RequestParam("username") String username,
-                              @RequestParam("matKhau") String matKhau,
-                              @RequestParam("diaChiEmail") String diaChiEmail,
-                              @RequestParam("xacNhanMatKhau") String xacNhanMatKhau,
-                              @RequestParam("diachi") String diaChi,
-                              @RequestParam("chucVu") String chucVu,
-                              @RequestParam(value = "soDienThoai", required = false) String soDienThoai,
-                              Model model) {
-
-
+            @RequestParam("ten") String ten,
+            @RequestParam("username") String username,
+            @RequestParam("matKhau") String matKhau,
+            @RequestParam("diaChiEmail") String diaChiEmail,
+            @RequestParam("xacNhanMatKhau") String xacNhanMatKhau,
+            @RequestParam("diachi") String diaChi,
+            @RequestParam("chucVu") String chucVu,
+            @RequestParam(value = "soDienThoai", required = false) String soDienThoai,
+            Model model) {
 
         String hovaten = ho + " " + ten;
         User newUser = new User();
@@ -53,6 +51,8 @@ public class ThemNhanVienController {
         newUser.setHovaten(hovaten);
         newUser.setDiaChi(diaChi);
         newUser.setSodienthoai(soDienThoai);
+        // Automatically set employee account to enabled
+        newUser.setEnabled(true);
 
         try {
             userRepository.save(newUser);
