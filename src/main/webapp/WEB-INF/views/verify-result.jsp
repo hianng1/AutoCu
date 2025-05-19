@@ -6,7 +6,7 @@ prefix="c"%>
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Kết quả xác thực - AutoCu</title>
+        <title>Xác thực tài khoản - AutoCu</title>
         <script src="https://cdn.tailwindcss.com"></script>
         <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -24,54 +24,71 @@ prefix="c"%>
             <div class="row justify-content-center">
                 <div class="col-md-8 col-lg-6">
                     <div class="card shadow-sm">
-                        <div class="card-body p-4 text-center">
+                        <div class="card-body text-center p-5">
                             <c:choose>
                                 <c:when
-                                    test="${message.startsWith('Xác thực tài khoản thành công')}"
+                                    test="${message.contains('thành công')}"
                                 >
-                                    <i
-                                        class="fas fa-check-circle text-success fa-5x mb-3"
-                                    ></i>
-                                    <h2 class="card-title text-success mb-4">
+                                    <div class="mb-4">
+                                        <i
+                                            class="fas fa-check-circle text-success"
+                                            style="font-size: 4rem"
+                                        ></i>
+                                    </div>
+                                    <h1 class="h3 mb-3">
                                         Xác thực thành công!
-                                    </h2>
-                                    <p class="mb-4">${message}</p>
-                                    <a
-                                        href="${loginUrl}"
-                                        class="btn btn-primary"
-                                    >
-                                        <i class="fas fa-sign-in-alt me-2"></i>
-                                        Đăng nhập ngay
-                                    </a>
-                                </c:when>
-                                <c:otherwise>
-                                    <i
-                                        class="fas fa-times-circle text-danger fa-5x mb-3"
-                                    ></i>
-                                    <h2 class="card-title text-danger mb-4">
-                                        Xác thực thất bại
-                                    </h2>
-                                    <p class="mb-4">${message}</p>
-                                    <div
-                                        class="d-flex justify-content-center gap-3"
-                                    >
+                                    </h1>
+                                    <p class="text-muted mb-4">
+                                        Tài khoản của bạn đã được xác thực thành
+                                        công. Bạn có thể đăng nhập ngay bây giờ.
+                                    </p>
+                                    <div class="d-grid">
                                         <a
-                                            href="/resend-verification"
-                                            class="btn btn-outline-primary"
+                                            href="${loginUrl}"
+                                            class="btn btn-primary btn-lg"
                                         >
                                             <i
-                                                class="fas fa-paper-plane me-2"
-                                            ></i>
-                                            Gửi lại email xác thực
+                                                class="fas fa-sign-in-alt me-2"
+                                            ></i
+                                            >Đăng nhập
                                         </a>
+                                    </div>
+                                </c:when>
+                                <c:otherwise>
+                                    <div class="mb-4">
+                                        <i
+                                            class="fas fa-exclamation-triangle text-warning"
+                                            style="font-size: 4rem"
+                                        ></i>
+                                    </div>
+                                    <h1 class="h3 mb-3">
+                                        Xác thực không thành công
+                                    </h1>
+                                    <div class="alert alert-warning">
+                                        ${message}
+                                    </div>
+                                    <p class="text-muted mb-4">
+                                        Vui lòng thử lại hoặc yêu cầu gửi lại
+                                        email xác thực.
+                                    </p>
+                                    <div class="d-grid gap-2">
                                         <a
-                                            href="/register"
+                                            href="/resend-verification"
                                             class="btn btn-primary"
                                         >
                                             <i
-                                                class="fas fa-user-plus me-2"
-                                            ></i>
-                                            Đăng ký mới
+                                                class="fas fa-paper-plane me-2"
+                                            ></i
+                                            >Gửi lại email xác nhận
+                                        </a>
+                                        <a
+                                            href="/login"
+                                            class="btn btn-outline-primary"
+                                        >
+                                            <i
+                                                class="fas fa-sign-in-alt me-2"
+                                            ></i
+                                            >Đi đến trang đăng nhập
                                         </a>
                                     </div>
                                 </c:otherwise>

@@ -24,37 +24,36 @@ prefix="c"%>
             <div class="row justify-content-center">
                 <div class="col-md-8 col-lg-6">
                     <div class="card shadow-sm">
-                        <div class="card-body p-4 text-center">
-                            <i
-                                class="fas fa-envelope text-primary fa-5x mb-3"
-                            ></i>
-                            <h2 class="card-title mb-4">Đăng ký thành công!</h2>
-                            <div class="alert alert-success">
-                                ${message != null ? message : 'Vui lòng kiểm tra
-                                email của bạn để xác thực tài khoản.'}
+                        <div class="card-body text-center p-5">
+                            <div class="mb-4">
+                                <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
                             </div>
-                            <p class="mb-4">
-                                Chúng tôi đã gửi một email xác thực đến địa chỉ
-                                email mà bạn đã đăng ký.<br />
-                                Vui lòng kiểm tra hộp thư đến và nhấn vào liên
-                                kết xác thực để hoàn tất quá trình đăng ký.
+                            <h1 class="h3 mb-3">Đăng ký thành công!</h1>
+                            
+                            <c:if test="${not empty message}">
+                                <div class="alert alert-info">${message}</div>
+                            </c:if>
+                            
+                            <p class="text-muted mb-4">
+                                Chúng tôi đã gửi một email xác nhận đến địa chỉ email bạn đã đăng ký. 
+                                Vui lòng kiểm tra hộp thư đến và nhấp vào liên kết xác nhận để kích hoạt tài khoản của bạn.
                             </p>
-                            <p class="mb-4">
-                                <strong>Không nhận được email?</strong><br />
-                                Hãy kiểm tra thư mục spam hoặc nhấn vào nút bên
-                                dưới để gửi lại email xác thực.
-                            </p>
-                            <div class="d-flex justify-content-center gap-3">
-                                <a
-                                    href="/resend-verification"
-                                    class="btn btn-outline-primary"
-                                >
-                                    <i class="fas fa-paper-plane me-2"></i> Gửi
-                                    lại email xác thực
+                            
+                            <div class="alert alert-warning">
+                                <p><i class="fas fa-exclamation-triangle me-2"></i> <strong>Không nhận được email?</strong></p>
+                                <ul class="mb-0 text-start ps-3">
+                                    <li>Vui lòng kiểm tra thư mục spam hoặc thùng rác</li>
+                                    <li>Đảm bảo địa chỉ email đã nhập chính xác</li>
+                                    <li>Đợi vài phút vì email có thể bị trì hoãn</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="d-grid gap-2 mt-4">
+                                <a href="/resend-verification" class="btn btn-outline-primary">
+                                    <i class="fas fa-paper-plane me-2"></i>Gửi lại email xác nhận
                                 </a>
                                 <a href="/login" class="btn btn-primary">
-                                    <i class="fas fa-sign-in-alt me-2"></i> Đi
-                                    đến trang đăng nhập
+                                    <i class="fas fa-sign-in-alt me-2"></i>Đi đến trang đăng nhập
                                 </a>
                             </div>
                         </div>
@@ -67,4 +66,5 @@ prefix="c"%>
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     </body>
+</html>
 </html>

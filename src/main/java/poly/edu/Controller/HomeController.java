@@ -136,15 +136,22 @@ public class HomeController {
         // Call service to register user
         String result = userService.registerUser(username, password, email, hovaten, sodienthoai, diaChiFull);
 
-        if ("Đăng ký thành công!".equals(result)) {
-            redirectAttributes.addFlashAttribute("message", "Đăng ký thành công! Vui lòng đăng nhập.");
-            return "redirect:/login";
+        // Kiểm tra kết quả và chuyển hướng
+        if (result.startsWith("Đăng ký thành công!")) {
+            redirectAttributes.addFlashAttribute("message", result);
+            return "redirect:/register-success"; // Redirect to registration success page
         }
 
         // If registration fails, send error message to model and return to registration
         // page
         model.addAttribute("message", result);
         return "register";
+    }
+
+    // Trang thông báo đăng ký thành công
+    @GetMapping("/register-success")
+    public String registerSuccess() {
+        return "register-success";
     }
 
     // --- Đăng nhập ---

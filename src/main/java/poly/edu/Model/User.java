@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 // Import các lớp Java Collection
 import java.util.Collection;
 import java.util.Collections; // Cần cho Collections.singletonList
+import java.util.Date;
 
 // Import Lombok (giữ nguyên)
 import lombok.AllArgsConstructor;
@@ -55,11 +56,22 @@ public class User implements UserDetails {
     @Column(name = "DiaChi", nullable = false, length = 255, columnDefinition = "nvarchar(255)")
     private String diaChi;
 
+    // Thêm các trường cho xác thực email
+    @Column(name = "verification_token")
+    private String verificationToken;
+
+    @Column(name = "token_expiry")
+    private Date tokenExpiry;
+
+    @Column(name = "enabled", nullable = false)
+    private boolean enabled = false; // Mặc định là false cho đến khi email được xác thực
+
     // --- TRIỂN KHAI CÁC PHƯƠNG THỨC BẮT BUỘC CỦA UserDetails ---
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Phương thức này trả về danh sách các quyền hạn (GrantedAuthority) của người dùng.
+        // Phương thức này trả về danh sách các quyền hạn (GrantedAuthority) của người
+        // dùng.
         // Chúng ta sử dụng trường 'role' để tạo quyền hạn.
         // Spring Security thường mong đợi vai trò có tiền tố "ROLE_".
         if (this.role == null || this.role.isEmpty()) {
@@ -71,14 +83,17 @@ public class User implements UserDetails {
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + this.role));
 
         // Nếu vai trò trong DB của bạn đã là "ROLE_USER", "ROLE_ADMIN" đầy đủ,
-        // thì chỉ cần: return Collections.singletonList(new SimpleGrantedAuthority(this.role));
+        // thì chỉ cần: return Collections.singletonList(new
+        // SimpleGrantedAuthority(this.role));
     }
 
-    // Lombok @Getter đã tạo getPassword(), nhưng bạn vẫn cần khai báo nó trong interface
+    // Lombok @Getter đã tạo getPassword(), nhưng bạn vẫn cần khai báo nó trong
+    // interface
     // @Override
     // public String getPassword() { return password; }
 
-    // Lombok @Getter đã tạo getUsername(), nhưng bạn vẫn cần khai báo nó trong interface
+    // Lombok @Getter đã tạo getUsername(), nhưng bạn vẫn cần khai báo nó trong
+    // interface
     // @Override
     // public String getUsername() { return username; }
 
@@ -105,10 +120,8 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        // Trả về true nếu tài khoản đang hoạt động (được kích hoạt).
-        // Nếu bạn có trường 'enabled' hoặc 'active' trong DB, hãy kiểm tra nó ở đây.
-        // Nếu không có, cứ để true.
-        return true;
+        // Trả về giá trị trường enabled để kiểm tra tài khoản đã được xác thực chưa
+        return enabled;
     }
 
     // Lombok đã tạo Getters, Setters, NoArgsConstructor, AllArgsConstructor.
