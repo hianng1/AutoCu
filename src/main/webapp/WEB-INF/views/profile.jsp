@@ -145,6 +145,49 @@ page import="java.util.Locale" %>
                             </nav>
                         </div>
                     </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <i class="fas fa-user-circle me-2"></i> Tài khoản
+                            của tôi
+                        </div>
+                        <div class="list-group list-group-flush">
+                            <a
+                                href="${pageContext.request.contextPath}/profile"
+                                class="list-group-item list-group-item-action active"
+                            >
+                                <i class="fas fa-user me-2"></i> Thông tin tài
+                                khoản
+                            </a>
+                            <a
+                                href="${pageContext.request.contextPath}/user/orders"
+                                class="list-group-item list-group-item-action"
+                            >
+                                <i class="fas fa-shopping-bag me-2"></i> Đơn
+                                hàng của tôi
+                            </a>
+                            <a
+                                href="${pageContext.request.contextPath}/reviews/user-reviews"
+                                class="list-group-item list-group-item-action"
+                            >
+                                <i class="fas fa-star me-2"></i> Đánh giá của
+                                tôi
+                            </a>
+                            <a
+                                href="${pageContext.request.contextPath}/user/review-eligible"
+                                class="list-group-item list-group-item-action"
+                            >
+                                <i class="fas fa-edit me-2"></i> Viết đánh giá
+                            </a>
+                            <a
+                                href="${pageContext.request.contextPath}/logout"
+                                class="list-group-item list-group-item-action text-danger"
+                            >
+                                <i class="fas fa-sign-out-alt me-2"></i> Đăng
+                                xuất
+                            </a>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="col-lg-9">

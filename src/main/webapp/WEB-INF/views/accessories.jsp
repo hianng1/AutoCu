@@ -345,12 +345,22 @@
                                         <h5 class="card-title fw-bold mb-2">${phukien.tenPhuKien}</h5>
                                         
                                         <div class="star-rating mb-2">
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="far fa-star"></i>
-                                            <span class="text-muted ms-1">(4.0)</span>
+                                            <c:choose>
+                                                <c:when test="${phukien.soLuongDanhGia > 0}">
+                                                    <c:forEach begin="1" end="5" var="i">
+                                                        <i class="fas fa-star ${i <= phukien.trungBinhSao ? 'filled' : ''}"></i>
+                                                    </c:forEach>
+                                                    <span class="text-muted ms-1">(${phukien.soLuongDanhGia})</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <i class="fas fa-star text-muted"></i>
+                                                    <i class="fas fa-star text-muted"></i>
+                                                    <i class="fas fa-star text-muted"></i>
+                                                    <i class="fas fa-star text-muted"></i>
+                                                    <i class="fas fa-star text-muted"></i>
+                                                    <span class="text-muted ms-1">(0)</span>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </div>
                                         
                                         <div class="d-flex justify-content-between align-items-center mb-2">

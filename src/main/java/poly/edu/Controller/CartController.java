@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 // Bỏ import org.slf4j.Logger; // Đã bỏ
 // Bỏ import org.slf4j.LoggerFactory; // Đã bỏ
@@ -141,11 +142,15 @@ public class CartController {
 			// *** Kết thúc lấy User từ SecurityContextHolder ***
 
 			// --- Các kiểm tra sản phẩm và tồn kho ---
-			PhuKienOto product = phuKienOtoService.findById(id);
-			if (product == null) {
+			// Fix: Properly handle Optional<PhuKienOto>
+			Optional<PhuKienOto> productOptional = phuKienOtoService.findById(id);
+			if (!productOptional.isPresent()) {
 				redirectAttributes.addFlashAttribute("error", "Sản phẩm không tồn tại.");
 				return getPreviousPageUrl(request);
 			}
+
+			// Extract the actual PhuKienOto object from the Optional
+			PhuKienOto product = productOptional.get();
 
 			if (quantity <= 0) {
 				redirectAttributes.addFlashAttribute("error", "Số lượng phải lớn hơn 0.");

@@ -139,6 +139,7 @@ prefix="c"%> <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
                     <i class="fas fa-user"></i>
                     <sec:authentication property="principal.username" />
                 </a>
+
                 <%-- Hiển thị nút "Quản Trị" chỉ khi user có role "ADMIN" --%>
                 <sec:authorize access="hasRole('ADMIN')">
                     <a

@@ -191,43 +191,36 @@
 
                         <div class="d-flex align-items-center mb-2">
                             <div class="text-warning small">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="far fa-star"></i>
+                                <!-- Replace static stars with dynamic rating display -->
+                                <c:choose>
+                                    <c:when test="${phukien.soLuongDanhGia > 0}">
+                                        <c:forEach begin="1" end="5" var="i">
+                                            <i class="fas fa-star ${i <= phukien.trungBinhSao ? 'text-warning' : 'text-muted'}"></i>
+                                        </c:forEach>
+                                        <span class="text-muted ms-2">(${phukien.soLuongDanhGia})</span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <i class="fas fa-star text-muted"></i>
+                                        <i class="fas fa-star text-muted"></i>
+                                        <i class="fas fa-star text-muted"></i>
+                                        <i class="fas fa-star text-muted"></i>
+                                        <i class="fas fa-star text-muted"></i>
+                                        <span class="text-muted ms-2">(0)</span>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
-                            <span class="text-muted small ms-2">(15 đánh giá)</span>
                         </div>
 
                         <p class="price-text mb-2">
                             <fmt:formatNumber value="${phukien.gia}" pattern="#,##0" /> VND
                         </p>
-
-                        <%-- <form action="/addToCart" method="post">
-                            <input type="hidden" name="productId" value="${phukien.accessoryID}" />
-                            <input type="hidden" name="quantity" value="1" />
-                            <a class="btn btn-primary w-full bg-black text-yellow-400 py-2 rounded-full font-semibold mt-3 hover:bg-gray-800" href="/cart/add/${phukien.accessoryID}">Thêm vào giỏ</a>
-                        </form> --%>
                         
                         <form action="/cart/add/${phukien.accessoryID}" method="post">
-		                     <%-- Controller add method uses @PathVariable("id") -> product ID goes in URL path --%>
-		                     <%-- No need for productId input here if using path variable --%>
-		
-		                    <%-- Input cho số lượng (mặc định 1) --%>
-		                    <%-- Controller add method uses @RequestParam("quantity") -> quantity needs to be a request parameter --%>
-		                    <input type="hidden" name="quantity" value="1" />
-		
-		                    <%-- Nếu bạn dùng Spring Security và CSRF, bỏ comment dòng dưới --%>
-		                    <%-- <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> --%>
-		
-		                    <%-- Nút submit form --%>
-		                    <%-- Thay thẻ <a> bằng thẻ <button type="submit"> --%>
-		                    <button type="submit" class="btn btn-primary w-full bg-black text-yellow-400 py-2 rounded-full font-semibold mt-3 hover:bg-gray-800">
-		                        Thêm vào giỏ
-		                    </button>
-		                </form>
-
+                            <input type="hidden" name="quantity" value="1" />
+                            <button type="submit" class="btn btn-primary w-full bg-black text-yellow-400 py-2 rounded-full font-semibold mt-3 hover:bg-gray-800">
+                                <i class="fas fa-shopping-cart me-2"></i>Thêm vào giỏ
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>

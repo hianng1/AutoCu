@@ -18,13 +18,15 @@ public interface DonHangRepository extends JpaRepository<DonHang, Long> {
 
     @Query("SELECT d.trangThai, COUNT(d) FROM DonHang d GROUP BY d.trangThai")
     List<Object[]> thongKeDonHangTheoTrangThai();
-    // Tìm đơn hàng theo ID và người dùng
-	Optional<DonHang> findByOrderIDAndUser(Long orderID, User user);
 
-	// Tìm đơn hàng theo người dùng (giữ lại phương thức này và bỏ findAllByUser)
+    // Tìm đơn hàng theo ID và người dùng
+    Optional<DonHang> findByOrderIDAndUser(Long orderID, User user);
+
+    // Tìm đơn hàng theo người dùng (giữ lại phương thức này và bỏ findAllByUser)
     List<DonHang> findByUser(User user);
 
-    // Tìm đơn hàng theo người dùng (phân trang) - Giữ nguyên vì chữ ký khác findByUser List
+    // Tìm đơn hàng theo người dùng (phân trang) - Giữ nguyên vì chữ ký khác
+    // findByUser List
     Page<DonHang> findByUser(User user, Pageable pageable);
 
     // Tìm đơn hàng theo trạng thái - Sử dụng kiểu Enum DonHang.TrangThai
@@ -32,16 +34,19 @@ public interface DonHangRepository extends JpaRepository<DonHang, Long> {
 
     // Tìm đơn hàng trong khoảng thời gian - Giữ nguyên
     List<DonHang> findByNgayDatHangBetween(Date startDate, Date endDate);
-    
+
     // Tìm đơn hàng theo khoảng thời gian và trạng thái - Mới thêm
     List<DonHang> findByNgayDatHangBetweenAndTrangThai(Date startDate, Date endDate, DonHang.TrangThai trangThai);
 
-    // Tìm đơn hàng theo người dùng và trạng thái - Sử dụng kiểu Enum DonHang.TrangThai
+    // Tìm đơn hàng theo người dùng và trạng thái - Sử dụng kiểu Enum
+    // DonHang.TrangThai
     List<DonHang> findByUserAndTrangThai(User user, DonHang.TrangThai trangThai); // <-- Sửa từ String
 
     // Đếm số đơn hàng theo trạng thái - Sử dụng kiểu Enum DonHang.TrangThai
     Long countByTrangThai(DonHang.TrangThai trangThai); // <-- Sửa từ String
 
+    // Tìm đơn hàng đã giao theo người dùng - Phương thức mới thêm
+    List<DonHang> findByUserAndTrangThai(User user, DonHang.TrangThai trangThaiDelivered);
 
     // Tìm đơn hàng với tổng thanh toán cao nhất (Top N) - Giữ nguyên
     // Phương thức này sẽ dùng Pageable để giới hạn số lượng kết quả (top N)
@@ -59,6 +64,7 @@ public interface DonHangRepository extends JpaRepository<DonHang, Long> {
     @Query("SELECT DISTINCT d FROM DonHang d JOIN d.chiTietDonHangs c WHERE c.phuKienOto.accessoryID = ?1")
     List<DonHang> findByProductId(Long accessoryID);
 
-    // *** Đã loại bỏ phương thức sau vì trùng lặp chức năng với findByUser(User user) ***
+    // *** Đã loại bỏ phương thức sau vì trùng lặp chức năng với findByUser(User
+    // user) ***
     // List<DonHang> findAllByUser(User user);
 }
