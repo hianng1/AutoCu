@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Xác thực tài khoản AutoCu</title>
+        <style>
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+                line-height: 1.6;
+                color: #333333;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+            .container {
+                padding: 20px;
+            }
+            .header {
+                background-color: #ff6600;
+                padding: 20px;
+                text-align: center;
+                color: white;
+            }
+            .content {
+                padding: 20px;
+                background-color: #f9f9f9;
+                border: 1px solid #e0e0e0;
+            }
+            .footer {
+                text-align: center;
+                margin-top: 20px;
+                font-size: 12px;
+                color: #777777;
+            }
+            .button {
+                display: inline-block;
+                background-color: #ff6600;
+                color: white;
+                text-decoration: none;
+                padding: 12px 25px;
+                border-radius: 4px;
+                margin: 20px 0;
+            }
+            .note {
+                font-size: 13px;
+                color: #777777;
+                margin-top: 15px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>AutoCu - Chuyên xe cũ & phụ tùng</h1>
+            </div>
+
+            <div class="content">
+                <h2>Xác thực tài khoản của bạn</h2>
+
+                <p>Xin chào <span th:text="${user.hovaten}"></span>,</p>
+
+                <p>
+                    Cảm ơn bạn đã đăng ký tài khoản tại AutoCu. Để hoàn tất quá
+                    trình đăng ký, vui lòng xác thực email của bạn bằng cách
+                    nhấn vào nút bên dưới:
+                </p>
+
+                <div style="text-align: center">
+                    <a th:href="${confirmationUrl}" class="button"
+                        >Xác thực tài khoản</a
+                    >
+                </div>
+
+                <p>
+                    Hoặc bạn có thể sao chép và dán liên kết sau vào trình duyệt
+                    của mình:
+                </p>
+
+                <p style="word-break: break-all">
+                    <a
+                        th:href="${confirmationUrl}"
+                        th:text="${confirmationUrl}"
+                    ></a>
+                </p>
+
+                <p class="note">
+                    Lưu ý: Liên kết này sẽ hết hạn sau 24 giờ. Nếu bạn không
+                    thực hiện yêu cầu này, vui lòng bỏ qua email này.
+                </p>
+            </div>
+
+            <div class="footer">
+                <p>&copy; 2023 AutoCu. Tất cả các quyền được bảo lưu.</p>
+                <p>Địa chỉ: 123 Nguyễn Văn Linh, Quận 7, TP.HCM</p>
+                <p>Email: autocu@gmail.com | Điện thoại: +84 382 948 198</p>
+            </div>
+        </div>
+    </body>
+</html>

@@ -112,31 +112,39 @@ public class HomeController {
     @PostMapping("/register")
     public String register(@RequestParam String username,
             @RequestParam String password,
+            @RequestParam String confirmPassword,
             @RequestParam String email,
             @RequestParam String hovaten,
             @RequestParam(required = true) String sodienthoai,
             @RequestParam String soNha,
-            @RequestParam String tenDuong, // Thay đổi từ soNha thành 2 tham số riêng biệt
+            @RequestParam String tenDuong,
             @RequestParam String phuongXa,
             @RequestParam String quanHuyen,
             @RequestParam String tinhThanh,
             Model model,
             RedirectAttributes redirectAttributes) {
-        // Kết hợp các phần thông tin địa chỉ để tạo thành địa chỉ đầy đủ
+
+        // Check if passwords match
+        if (!password.equals(confirmPassword)) {
+            model.addAttribute("message", "Mật khẩu xác nhận không khớp");
+            return "register";
+        }
+
+        // Combine address components into full address
         String diaChiFull = String.format("%s, %s, %s, %s, %s", soNha, tenDuong, phuongXa, quanHuyen, tinhThanh);
 
-        // Gọi service để thực hiện đăng ký
-        // Lưu ý: UserService.registerUser cần mã hóa mật khẩu trước khi lưu vào DB
+        // Call service to register user
         String result = userService.registerUser(username, password, email, hovaten, sodienthoai, diaChiFull);
 
         if ("Đăng ký thành công!".equals(result)) {
             redirectAttributes.addFlashAttribute("message", "Đăng ký thành công! Vui lòng đăng nhập.");
-            return "redirect:/login"; // Chuyển hướng đến trang login nếu đăng ký thành công
+            return "redirect:/login";
         }
 
-        // Nếu đăng ký thất bại, gửi thông báo lỗi tới model và trả về trang đăng ký
+        // If registration fails, send error message to model and return to registration
+        // page
         model.addAttribute("message", result);
-        return "register"; // Nếu đăng ký thất bại, vẫn ở trang đăng ký
+        return "register";
     }
 
     // --- Đăng nhập ---

@@ -128,14 +128,23 @@ prefix="c" %> <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
                                     <label for="password" class="form-label"
                                         >Mật khẩu</label
                                     >
-                                    <input
-                                        type="password"
-                                        class="form-control"
-                                        name="password"
-                                        id="password"
-                                        required
-                                        pattern="(?=.*[a-z])(?=.*[A-Z]).{6,}"
-                                    />
+                                    <div class="input-group">
+                                        <input
+                                            type="password"
+                                            class="form-control"
+                                            name="password"
+                                            id="password"
+                                            required
+                                            pattern="(?=.*[a-z])(?=.*[A-Z]).{6,}"
+                                        />
+                                        <button
+                                            class="btn btn-outline-secondary"
+                                            type="button"
+                                            id="togglePassword"
+                                        >
+                                            <i class="fas fa-eye-slash"></i>
+                                        </button>
+                                    </div>
                                     <div class="form-text">
                                         <ul>
                                             <li>Ít nhất 6 ký tự</li>
@@ -154,6 +163,40 @@ prefix="c" %> <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
                                         chữ thường).
                                     </div>
                                 </div>
+
+                                <!-- Add confirmation password field -->
+                                <div class="mb-3">
+                                    <label
+                                        for="confirmPassword"
+                                        class="form-label"
+                                        >Xác nhận mật khẩu</label
+                                    >
+                                    <div class="input-group">
+                                        <input
+                                            type="password"
+                                            class="form-control"
+                                            name="confirmPassword"
+                                            id="confirmPassword"
+                                            required
+                                        />
+                                        <button
+                                            class="btn btn-outline-secondary"
+                                            type="button"
+                                            id="toggleConfirmPassword"
+                                        >
+                                            <i class="fas fa-eye-slash"></i>
+                                        </button>
+                                    </div>
+                                    <div
+                                        id="passwordMatchMessage"
+                                        class="form-text"
+                                    ></div>
+                                    <div class="invalid-feedback">
+                                        Mật khẩu xác nhận không khớp với mật
+                                        khẩu.
+                                    </div>
+                                </div>
+
                                 <div class="mb-3">
                                     <label class="form-label">Họ và tên</label>
                                     <input
@@ -319,6 +362,81 @@ prefix="c" %> <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <script>
+            // Add show/hide password functionality
+            document.addEventListener("DOMContentLoaded", function () {
+                // Password fields and show/hide functionality
+                const passwordInput = document.getElementById("password");
+                const confirmPasswordInput =
+                    document.getElementById("confirmPassword");
+                const passwordMatchMessage = document.getElementById(
+                    "passwordMatchMessage"
+                );
+
+                // Show/hide password for password field
+                document
+                    .getElementById("togglePassword")
+                    .addEventListener("click", function () {
+                        const icon = this.querySelector("i");
+
+                        if (passwordInput.type === "password") {
+                            passwordInput.type = "text";
+                            icon.classList.remove("fa-eye-slash");
+                            icon.classList.add("fa-eye");
+                        } else {
+                            passwordInput.type = "password";
+                            icon.classList.remove("fa-eye");
+                            icon.classList.add("fa-eye-slash");
+                        }
+                    });
+
+                // Show/hide password for confirm password field
+                document
+                    .getElementById("toggleConfirmPassword")
+                    .addEventListener("click", function () {
+                        const icon = this.querySelector("i");
+
+                        if (confirmPasswordInput.type === "password") {
+                            confirmPasswordInput.type = "text";
+                            icon.classList.remove("fa-eye-slash");
+                            icon.classList.add("fa-eye");
+                        } else {
+                            confirmPasswordInput.type = "password";
+                            icon.classList.remove("fa-eye");
+                            icon.classList.add("fa-eye-slash");
+                        }
+                    });
+
+                // Real-time password match checking
+                function checkPasswordMatch() {
+                    if (confirmPasswordInput.value === "") {
+                        passwordMatchMessage.innerHTML = "";
+                        passwordMatchMessage.className = "form-text";
+                        return;
+                    }
+
+                    if (passwordInput.value === confirmPasswordInput.value) {
+                        passwordMatchMessage.innerHTML = "Mật khẩu khớp";
+                        passwordMatchMessage.className =
+                            "form-text text-success";
+                        confirmPasswordInput.classList.remove("is-invalid");
+                        confirmPasswordInput.classList.add("is-valid");
+                    } else {
+                        passwordMatchMessage.innerHTML = "Mật khẩu không khớp";
+                        passwordMatchMessage.className =
+                            "form-text text-danger";
+                        confirmPasswordInput.classList.remove("is-valid");
+                        confirmPasswordInput.classList.add("is-invalid");
+                    }
+                }
+
+                // Add event listeners for password matching
+                passwordInput.addEventListener("keyup", checkPasswordMatch);
+                confirmPasswordInput.addEventListener(
+                    "keyup",
+                    checkPasswordMatch
+                );
+            });
+
             // Form validation
             (() => {
                 "use strict";
@@ -339,8 +457,13 @@ prefix="c" %> <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
                             // Kiểm tra thêm điều kiện cho mật khẩu
                             const passwordInput =
                                 form.querySelector("#password");
-                            if (passwordInput) {
+                            const confirmPasswordInput =
+                                form.querySelector("#confirmPassword");
+
+                            if (passwordInput && confirmPasswordInput) {
                                 const passwordValue = passwordInput.value;
+                                const confirmPasswordValue =
+                                    confirmPasswordInput.value;
                                 const hasUpperCase = /[A-Z]/.test(
                                     passwordValue
                                 );
@@ -348,6 +471,8 @@ prefix="c" %> <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
                                     passwordValue
                                 );
                                 const isLongEnough = passwordValue.length >= 6;
+                                const passwordsMatch =
+                                    passwordValue === confirmPasswordValue;
 
                                 if (
                                     !isLongEnough ||
@@ -359,6 +484,18 @@ prefix="c" %> <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
                                     event.stopPropagation();
                                 } else {
                                     passwordInput.classList.remove(
+                                        "is-invalid"
+                                    );
+                                }
+
+                                if (!passwordsMatch) {
+                                    confirmPasswordInput.classList.add(
+                                        "is-invalid"
+                                    );
+                                    event.preventDefault();
+                                    event.stopPropagation();
+                                } else {
+                                    confirmPasswordInput.classList.remove(
                                         "is-invalid"
                                     );
                                 }
