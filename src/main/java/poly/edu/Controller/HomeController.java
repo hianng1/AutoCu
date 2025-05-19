@@ -351,6 +351,40 @@ public class HomeController {
         return "redirect:/profile";
     }
 
+    // Add this new method to handle password changes from the profile page
+    @PostMapping("/profile/change-password")
+    public String changePasswordFromProfile(
+            @RequestParam("currentPassword") String currentPassword,
+            @RequestParam("newPassword") String newPassword,
+            @RequestParam("confirmPassword") String confirmPassword,
+            RedirectAttributes redirectAttributes) {
+
+        // Get the current user
+        User currentUser = getCurrentUser();
+        if (currentUser == null) {
+            redirectAttributes.addFlashAttribute("errorMessage",
+                    "Phiên đăng nhập đã hết hạn hoặc người dùng không tồn tại.");
+            return "redirect:/login";
+        }
+
+        // Verify password confirmation
+        if (!newPassword.equals(confirmPassword)) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Mật khẩu xác nhận không khớp với mật khẩu mới.");
+            return "redirect:/profile";
+        }
+
+        // Change password using the existing service method
+        String result = userService.changePassword(currentUser.getId(), currentPassword, newPassword);
+
+        if (result.contains("thành công")) {
+            redirectAttributes.addFlashAttribute("successMessage", result);
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", result);
+        }
+
+        return "redirect:/profile";
+    }
+
     @Autowired
     private DanhMucService categoryService;
 
