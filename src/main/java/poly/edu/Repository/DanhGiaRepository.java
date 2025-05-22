@@ -15,23 +15,29 @@ import poly.edu.Model.User;
 @Repository
 public interface DanhGiaRepository extends JpaRepository<DanhGia, Long> {
 
-    List<DanhGia> findByPhuKienOtoAndHienThiTrue(PhuKienOto phuKienOto);
+        List<DanhGia> findByPhuKienOtoAndHienThiTrue(PhuKienOto phuKienOto);
 
-    List<DanhGia> findByUserAndPhuKienOto(User user, PhuKienOto phuKienOto);
+        List<DanhGia> findByUserAndPhuKienOto(User user, PhuKienOto phuKienOto);
 
-    @Query("SELECT AVG(d.saoDanhGia) FROM DanhGia d WHERE d.phuKienOto = ?1 AND d.hienThi = true")
-    Double calculateAverageRating(PhuKienOto phuKienOto);
+        @Query("SELECT AVG(d.saoDanhGia) FROM DanhGia d WHERE d.phuKienOto = ?1 AND d.hienThi = true")
+        Double calculateAverageRating(PhuKienOto phuKienOto);
 
-    @Query("SELECT COUNT(d) FROM DanhGia d WHERE d.phuKienOto = ?1 AND d.hienThi = true")
-    Integer countRatingsByPhuKienOto(PhuKienOto phuKienOto);
+        @Query("SELECT COUNT(d) FROM DanhGia d WHERE d.phuKienOto = ?1 AND d.hienThi = true")
+        Integer countRatingsByPhuKienOto(PhuKienOto phuKienOto);
 
-    @Query("SELECT d FROM DanhGia d WHERE d.donHang.orderID = ?1 AND d.phuKienOto.accessoryID = ?2 AND d.user.id = ?3")
-    DanhGia findByOrderAndProductAndUser(Long orderId, Long productId, Integer userId);
+        @Query("SELECT d FROM DanhGia d WHERE d.donHang.orderID = ?1 AND d.phuKienOto.accessoryID = ?2 AND d.user.id = ?3")
+        DanhGia findByOrderAndProductAndUser(Long orderId, Long productId, Integer userId);
 
-    // Fixed query: Use parameter instead of direct enum reference
-    @Query("SELECT DISTINCT ct.phuKienOto FROM ChiTietDonHang ct " +
-            "WHERE ct.donHang.user.id = :userId AND ct.donHang.trangThai = :status " +
-            "AND NOT EXISTS (SELECT 1 FROM DanhGia d WHERE d.phuKienOto = ct.phuKienOto AND d.user.id = :userId)")
-    List<PhuKienOto> findProductsEligibleForReview(@Param("userId") Integer userId,
-            @Param("status") DonHang.TrangThai status);
+        // Fixed query: Use parameter instead of direct enum reference
+        @Query("SELECT DISTINCT ct.phuKienOto FROM ChiTietDonHang ct " +
+                        "WHERE ct.donHang.user.id = :userId AND ct.donHang.trangThai = :status " +
+                        "AND NOT EXISTS (SELECT 1 FROM DanhGia d WHERE d.phuKienOto = ct.phuKienOto AND d.user.id = :userId)")
+        List<PhuKienOto> findProductsEligibleForReview(@Param("userId") Integer userId,
+                        @Param("status") DonHang.TrangThai status);
+
+        // Add the missing method
+        List<DanhGia> findByUser(User user);
+
+        // Additional helpful methods
+        List<DanhGia> findByUserOrderByNgayDanhGiaDesc(User user);
 }

@@ -1,22 +1,21 @@
 package poly.edu.Model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+// Import các lớp Java Collection
+import java.util.Collection;
+import java.util.Collections; // Cần cho Collections.singletonList
+import java.util.Date;
 
 // Import các lớp của Spring Security UserDetails
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-// Import các lớp Java Collection
-import java.util.Collection;
-import java.util.Collections; // Cần cho Collections.singletonList
-import java.util.Date;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 // Import Lombok (giữ nguyên)
 import lombok.AllArgsConstructor;
 import lombok.Getter;

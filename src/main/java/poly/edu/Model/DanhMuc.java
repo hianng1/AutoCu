@@ -31,7 +31,7 @@ public class DanhMuc implements Serializable {
 
     @Column(name = "MoTa", columnDefinition = "nvarchar(255)")
     private String moTa; // Thuộc tính tùy chọn
-    
+
     @Column(name = "Loai", columnDefinition = "nvarchar(50)")
     private String loai;
 

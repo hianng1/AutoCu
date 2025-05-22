@@ -53,7 +53,6 @@ public class DonHang implements Serializable {
         }
     }
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "OrderID")
@@ -71,7 +70,6 @@ public class DonHang implements Serializable {
     @Column(name = "DiaChiGiaoHang", columnDefinition = "NVARCHAR(MAX)", nullable = false) // <-- THÊM TRƯỜNG ĐỊA CHỈ
     private String diaChiGiaoHang;
 
-
     @Column(name = "PhuongThucVanChuyen", nullable = false, length = 50)
     private String phuongThucVanChuyen; // "standard" hoặc "fast"
 
@@ -86,7 +84,6 @@ public class DonHang implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "TrangThai", nullable = false, length = 50)
     private TrangThai trangThai = TrangThai.CHO_XAC_NHAN; // Sử dụng Enum và gán giá trị mặc định
-
 
     @Column(name = "TongTienHang", precision = 19, scale = 2, nullable = false)
     private BigDecimal tongTienHang = BigDecimal.ZERO; // Khởi tạo mặc định
@@ -105,14 +102,15 @@ public class DonHang implements Serializable {
     @EqualsAndHashCode.Exclude // Exclude from Lombok's EqualsAndHashCode
     private List<ChiTietDonHang> chiTietDonHangs = new ArrayList<>(); // Khởi tạo list rỗng mặc định
 
-
-    // Phương thức tiện ích để tính toán tổng tiền dựa trên chi tiết đơn hàng và phí vận chuyển
-    // Đảm bảo rằng chiTietDonHangs đã được thêm vào order và phiVanChuyen đã được set trước khi gọi method này
+    // Phương thức tiện ích để tính toán tổng tiền dựa trên chi tiết đơn hàng và phí
+    // vận chuyển
+    // Đảm bảo rằng chiTietDonHangs đã được thêm vào order và phiVanChuyen đã được
+    // set trước khi gọi method này
     public void tinhTongTien() {
         BigDecimal calculatedTongTienHang = BigDecimal.ZERO;
         if (this.chiTietDonHangs != null) {
             for (ChiTietDonHang ct : this.chiTietDonHangs) {
-                 // Kiểm tra null cho donGia trong trường hợp ChiTietDonHang chưa được set đầy đủ
+                // Kiểm tra null cho donGia trong trường hợp ChiTietDonHang chưa được set đầy đủ
                 BigDecimal donGia = ct.getDonGia() != null ? ct.getDonGia() : BigDecimal.ZERO;
                 BigDecimal thanhTien = donGia.multiply(BigDecimal.valueOf(ct.getSoLuong()));
                 calculatedTongTienHang = calculatedTongTienHang.add(thanhTien);
@@ -126,7 +124,9 @@ public class DonHang implements Serializable {
     }
 
     // Getter và Setter (Lombok @Data tự tạo)
-    // Riêng cho Enum TrangThai, có thể thêm getters/setters thủ công nếu cần logic đặc biệt,
-    // nhưng Lombok @Data đã tạo sẵn getTrangThai() và setTrangThai(TrangThai trangThai).
+    // Riêng cho Enum TrangThai, có thể thêm getters/setters thủ công nếu cần logic
+    // đặc biệt,
+    // nhưng Lombok @Data đã tạo sẵn getTrangThai() và setTrangThai(TrangThai
+    // trangThai).
     // Nếu bạn muốn lấy mô tả, dùng getTrangThai().getMoTa();
 }

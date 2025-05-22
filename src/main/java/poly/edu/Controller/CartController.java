@@ -24,7 +24,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession; // Giữ lại nếu còn cần cho helper method hoặc lý do khác
-import jakarta.transaction.Transactional;
 import poly.edu.Model.ChiTietDonHang;
 import poly.edu.Model.DonHang;
 import poly.edu.Model.DonHang.TrangThai;

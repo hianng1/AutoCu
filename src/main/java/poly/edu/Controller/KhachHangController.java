@@ -8,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import poly.edu.DAO.KhachHangDAO;
-import poly.edu.Model.KhachHang;
 import poly.edu.Model.User;
 import poly.edu.Repository.UserRepository;
 
@@ -17,7 +16,7 @@ public class KhachHangController {
 
     @Autowired
     private KhachHangDAO khachHangDAO;
-    
+
     @Autowired
     private UserRepository userRepo;
 

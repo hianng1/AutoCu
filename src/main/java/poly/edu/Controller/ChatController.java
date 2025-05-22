@@ -1,14 +1,15 @@
 package poly.edu.Controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
+
 import poly.edu.Model.Message;
 import poly.edu.Model.User;
 import poly.edu.Service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Controller
 public class ChatController {
@@ -36,7 +37,7 @@ public class ChatController {
 
     @MessageMapping("/chat.addUser")
     @SendTo("/topic/public")
-    public Message addUser(@Payload Message chatMessage, 
+    public Message addUser(@Payload Message chatMessage,
                           SimpMessageHeaderAccessor headerAccessor) {
         headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
         User user = userService.findByUsername(chatMessage.getSender());
@@ -53,4 +54,4 @@ public class ChatController {
         }
         return chatMessage;
     }
-} 
+}

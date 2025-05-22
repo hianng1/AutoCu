@@ -28,7 +28,7 @@ public interface SanPhamDAO extends JpaRepository<SanPham, Long> {
     // Tìm kiếm xe theo từ khóa (tìm trong tên sản phẩm)
     @Query("SELECT sp FROM SanPham sp WHERE LOWER(sp.tenSanPham) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     List<SanPham> findByTenSanPhamContaining(@Param("keyword") String keyword);
-    
+
     // Tìm kiếm xe theo từ khóa (tìm trong tên sản phẩm hoặc hãng xe)
     @Query("SELECT sp FROM SanPham sp WHERE LOWER(sp.tenSanPham) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(sp.hangXe) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     List<SanPham> searchByKeyword(@Param("keyword") String keyword);

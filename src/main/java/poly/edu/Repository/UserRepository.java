@@ -10,7 +10,8 @@ import poly.edu.Model.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
-    Optional<User> findById(Integer id);
+    @Override
+	Optional<User> findById(Integer id);
 
     User findByUsername(String username);
 
@@ -18,7 +19,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     User findByVerificationToken(String verificationToken);
 
-    List<User> findAll();
+    @Override
+	List<User> findAll();
 
     boolean existsByUsername(String username); // Kiểm tra username đã tồn tại chưa
 

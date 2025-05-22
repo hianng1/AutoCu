@@ -10,6 +10,6 @@ import poly.edu.Model.DanhMuc;
 
 @Repository
 public interface DanhMucRepository extends JpaRepository<DanhMuc, Long> {
-	
+
 	List<DanhMuc> findByLoai(String loai);
 }

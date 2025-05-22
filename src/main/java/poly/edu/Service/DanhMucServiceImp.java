@@ -1,14 +1,13 @@
 package poly.edu.Service;
 
-import poly.edu.Model.DanhMuc; // Đảm bảo đúng package của Model DanhMuc
-import poly.edu.Repository.DanhMucRepository; // Đảm bảo đúng package của Repository DanhMuc
-import poly.edu.Service.DanhMucService; // Đảm bảo đúng package của Service Interface
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import poly.edu.Model.DanhMuc; // Đảm bảo đúng package của Model DanhMuc
+import poly.edu.Repository.DanhMucRepository; // Đảm bảo đúng package của Repository DanhMuc
 
 @Service // Đánh dấu đây là một Spring Service
 public class DanhMucServiceImp implements DanhMucService {
@@ -40,7 +39,7 @@ public class DanhMucServiceImp implements DanhMucService {
     public List<DanhMuc> getAccessoryCategories() {
         return danhMucRepository.findByLoai("phu_kien"); // Gọi phương thức custom với tham số "phu_kien"
     }
-    
+
     @Override
     public Optional<DanhMuc> getCategoryByName(String name) {
          // Để tìm theo tên hiệu quả, bạn nên thêm phương thức findByTenDanhMuc(String tenDanhMuc) vào Repository
@@ -52,7 +51,7 @@ public class DanhMucServiceImp implements DanhMucService {
                  .filter(cat -> cat.getTenDanhMuc() != null && cat.getTenDanhMuc().equalsIgnoreCase(name))
                  .findFirst(); // Lấy phần tử đầu tiên tìm thấy
     }
-    
+
     @Override
     public Optional<DanhMuc> getCategoryById(Long id) {
         return danhMucRepository.findById(id); // Sử dụng phương thức có sẵn của JpaRepository

@@ -259,8 +259,9 @@ public class CartServiceImp implements CartService {
 
     @Override
     public GioHang findById(Long id) {
-        if (id == null)
-            return null;
+        if (id == null) {
+			return null;
+		}
 
         // First check in our session map
         GioHang item = maps.get(id);

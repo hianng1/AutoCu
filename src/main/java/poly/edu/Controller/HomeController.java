@@ -478,10 +478,12 @@ public class HomeController {
                 // break;
                 case "year-desc":
                     carsList.sort((car1, car2) -> {
-                        if (car1.getNgaySanXuat() == null)
-                            return 1;
-                        if (car2.getNgaySanXuat() == null)
-                            return -1;
+                        if (car1.getNgaySanXuat() == null) {
+							return 1;
+						}
+                        if (car2.getNgaySanXuat() == null) {
+							return -1;
+						}
                         return car2.getNgaySanXuat().compareTo(car1.getNgaySanXuat());
                     });
                     break;

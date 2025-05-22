@@ -64,6 +64,9 @@ public interface DonHangRepository extends JpaRepository<DonHang, Long> {
     @Query("SELECT DISTINCT d FROM DonHang d JOIN d.chiTietDonHangs c WHERE c.phuKienOto.accessoryID = ?1")
     List<DonHang> findByProductId(Long accessoryID);
 
+    // Tìm đơn hàng theo người dùng, sắp xếp theo ngày đặt hàng giảm dần
+    List<DonHang> findByUserOrderByNgayDatHangDesc(User user);
+
     // *** Đã loại bỏ phương thức sau vì trùng lặp chức năng với findByUser(User
     // user) ***
     // List<DonHang> findAllByUser(User user);

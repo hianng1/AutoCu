@@ -1,13 +1,12 @@
 package poly.edu.Repository;
 
 import java.util.List;
-import java.util.Optional; // Cần import Optional nếu phương thức trả về Optional (như findById từ JpaRepository)
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import poly.edu.Model.SanPham; // Đảm bảo đúng package của Entity SanPham
 import poly.edu.Model.DanhMuc; // >>> THÊM DÒNG IMPORT NÀY <<< Đảm bảo đúng package của Entity DanhMuc
+import poly.edu.Model.SanPham; // Đảm bảo đúng package của Entity SanPham
 
 @Repository
 public interface SanPhamRepository extends JpaRepository<SanPham, Long> {

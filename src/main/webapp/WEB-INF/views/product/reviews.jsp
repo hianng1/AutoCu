@@ -21,15 +21,50 @@ prefix="c" %> <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
             .star-rating {
                 color: #ccc;
             }
-            .star-rating .filled {
-                color: #ffb700;
+            .star-filled {
+                color: #ffc107;
+            }
+            .star-rating .star-filled {
+                color: #ffc107;
             }
             .review-card {
-                border-bottom: 1px solid #eee;
-                padding: 20px 0;
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+                border-left: 4px solid transparent;
             }
-            .review-card:last-child {
-                border-bottom: none;
+            .review-card:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            }
+            .review-card.rating-5 {
+                border-left-color: #28a745;
+            }
+            .review-card.rating-4 {
+                border-left-color: #17a2b8;
+            }
+            .review-card.rating-3 {
+                border-left-color: #fd7e14;
+            }
+            .review-card.rating-2 {
+                border-left-color: #ffc107;
+            }
+            .review-card.rating-1 {
+                border-left-color: #dc3545;
+            }
+            .reviewer-info {
+                font-size: 0.9rem;
+            }
+            .review-date {
+                color: #6c757d;
+                font-size: 0.85rem;
+            }
+            .rating-breakdown .progress {
+                height: 8px;
+            }
+            .rating-count {
+                min-width: 30px;
+            }
+            .rating-label {
+                min-width: 60px;
             }
         </style>
     </head>

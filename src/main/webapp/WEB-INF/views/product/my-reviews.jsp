@@ -20,6 +20,17 @@
             transform: translateY(-3px);
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
         }
+        .star-rating {
+            color: #ffc107;
+            font-size: 18px;
+        }
+        .star-rating .far {
+            color: #e0e0e0;
+        }
+        .review-date {
+            color: #6c757d;
+            font-size: 0.85rem;
+        }
     </style>
 </head>
 <body>
@@ -57,88 +68,108 @@
                         <a href="${pageContext.request.contextPath}/user/review-eligible" class="list-group-item list-group-item-action">
                             <i class="fas fa-edit me-2"></i> Viết đánh giá
                         </a>
-                        <a href="${pageContext.request.contextPath}/logout" class="list-group-item list-group-item-action text-danger">
-                            <i class="fas fa-sign-out-alt me-2"></i> Đăng xuất
-                        </a>
                     </div>
                 </div>
             </div>
             
             <div class="col-md-9">
-                <h2 class="mb-4 fw-bold">Đánh giá của tôi</h2>
-                
-                <c:if test="${not empty success}">
-                    <div class="alert alert-success" role="alert">
-                        <i class="fas fa-check-circle me-2"></i> ${success}
-                    </div>
-                </c:if>
-                
-                <c:if test="${not empty error}">
-                    <div class="alert alert-danger" role="alert">
-                        <i class="fas fa-exclamation-circle me-2"></i> ${error}
-                    </div>
-                </c:if>
-                
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <p class="mb-0 text-muted">Tổng số đánh giá: <span class="fw-bold">${userReviews.size()}</span></p>
-                    <a href="${pageContext.request.contextPath}/user/review-eligible" class="btn btn-primary">
-                        <i class="fas fa-plus-circle me-2"></i>Viết đánh giá mới
-                    </a>
-                </div>
+                <h2 class="mb-4"><i class="fas fa-star me-2 text-warning"></i>Đánh giá của tôi</h2>
                 
                 <c:choose>
-                    <c:when test="${not empty userReviews}">
-                        <div class="row">
-                            <c:forEach var="review" items="${userReviews}">
-                                <div class="col-md-12 mb-4">
-                                    <div class="card review-card shadow-sm">
+                    <c:when test="${empty reviews}">
+                        <div class="text-center py-5">
+                            <i class="fas fa-comment-slash text-muted" style="font-size: 4rem;"></i>
+                            <h3 class="mt-3">Bạn chưa có đánh giá nào</h3>
+                            <p class="text-muted">Hãy đánh giá sản phẩm để chia sẻ trải nghiệm của bạn với người khác.</p>
+                            <a href="${pageContext.request.contextPath}/user/review-eligible" class="btn btn-primary mt-3">
+                                <i class="fas fa-edit me-2"></i>Viết đánh giá ngay
+                            </a>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="row row-cols-1 g-4">
+                            <c:forEach var="review" items="${reviews}">
+                                <div class="col">
+                                    <div class="card review-card h-100">
                                         <div class="card-body">
-                                            <div class="d-flex mb-3">
-                                                <div class="flex-shrink-0">
-                                                    <img src="${pageContext.request.contextPath}/imgs/${review.phuKienOto.anhDaiDien}" 
-                                                         alt="${review.phuKienOto.tenPhuKien}" class="img-fluid rounded" 
-                                                         style="width: 80px; height: 80px; object-fit: cover;">
-                                                </div>
-                                                <div class="ms-3">
+                                            <div class="d-flex align-items-center mb-3">
+                                                <img src="${pageContext.request.contextPath}/imgs/${review.phuKienOto.anhDaiDien}" 
+                                                    class="img-thumbnail me-3" style="width: 80px; height: 80px; object-fit: cover;" 
+                                                    alt="${review.phuKienOto.tenPhuKien}">
+                                                <div>
                                                     <h5 class="card-title mb-1">${review.phuKienOto.tenPhuKien}</h5>
-                                                    <p class="text-muted small mb-2">${review.phuKienOto.hangSanXuat}</p>
-                                                    <div class="mb-1">
+                                                    <div class="star-rating">
                                                         <c:forEach begin="1" end="5" var="i">
-                                                            <i class="fas fa-star ${i <= review.saoDanhGia ? 'text-warning' : 'text-muted'}"></i>
+                                                            <c:choose>
+                                                                <c:when test="${i <= review.saoDanhGia}">
+                                                                    <i class="fas fa-star"></i>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <i class="far fa-star"></i>
+                                                                </c:otherwise>
+                                                            </c:choose>
                                                         </c:forEach>
-                                                        <span class="text-muted ms-2 small">
-                                                            <fmt:formatDate value="${review.ngayDanhGia}" pattern="dd/MM/yyyy" />
-                                                        </span>
                                                     </div>
+                                                    <p class="review-date">
+                                                        Đánh giá ngày: <fmt:formatDate value="${review.ngayDanhGia}" pattern="dd/MM/yyyy"/>
+                                                    </p>
                                                 </div>
                                             </div>
-                                            <p class="card-text mb-0">${review.noiDung}</p>
+                                            
+                                            <div class="border-top pt-3">
+                                                <p class="card-text">${review.noiDung}</p>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer bg-white">
+                                            <div class="d-flex justify-content-between">
+                                                <small class="text-muted">Mã đơn hàng: #${review.donHang.orderID}</small>
+                                                <div>
+                                                    <a href="${pageContext.request.contextPath}/reviews/edit/${review.reviewId}" 
+                                                       class="btn btn-sm btn-outline-primary me-2">
+                                                        <i class="fas fa-edit me-1"></i>Chỉnh sửa
+                                                    </a>
+                                                    <a href="${pageContext.request.contextPath}/product/details/${review.phuKienOto.accessoryID}" 
+                                                       class="btn btn-sm btn-outline-secondary">
+                                                        <i class="fas fa-eye me-1"></i>Xem sản phẩm
+                                                    </a>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </c:forEach>
                         </div>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="text-center p-5 bg-light rounded">
-                            <i class="fas fa-star text-muted mb-3" style="font-size: 3rem;"></i>
-                            <h3 class="mb-3">Bạn chưa có đánh giá nào!</h3>
-                            <p class="text-muted mb-4">Hãy mua sắm và đánh giá các sản phẩm để chia sẻ trải nghiệm của bạn.</p>
-                            <div>
-                                <a href="${pageContext.request.contextPath}/accessories" class="btn btn-primary me-2">
-                                    <i class="fas fa-shopping-cart me-2"></i>Mua sắm ngay
-                                </a>
-                                <a href="${pageContext.request.contextPath}/user/review-eligible" class="btn btn-outline-primary">
-                                    <i class="fas fa-edit me-2"></i>Kiểm tra sản phẩm có thể đánh giá
-                                </a>
-                            </div>
-                        </div>
+                        
+                        <!-- Pagination if needed -->
+                        <c:if test="${totalPages > 1}">
+                            <nav aria-label="Page navigation" class="mt-4">
+                                <ul class="pagination justify-content-center">
+                                    <li class="page-item ${currentPage == 0 ? 'disabled' : ''}">
+                                        <a class="page-link" href="${pageContext.request.contextPath}/reviews/user-reviews?page=${currentPage - 1}" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    
+                                    <c:forEach begin="0" end="${totalPages - 1}" var="i">
+                                        <li class="page-item ${currentPage == i ? 'active' : ''}">
+                                            <a class="page-link" href="${pageContext.request.contextPath}/reviews/user-reviews?page=${i}">${i + 1}</a>
+                                        </li>
+                                    </c:forEach>
+                                    
+                                    <li class="page-item ${currentPage == totalPages - 1 ? 'disabled' : ''}">
+                                        <a class="page-link" href="${pageContext.request.contextPath}/reviews/user-reviews?page=${currentPage + 1}" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </c:if>
                     </c:otherwise>
                 </c:choose>
             </div>
         </div>
     </div>
-
+    
     <jsp:include page="/common/footer.jsp" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

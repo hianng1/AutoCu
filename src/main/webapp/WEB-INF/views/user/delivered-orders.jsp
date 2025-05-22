@@ -21,13 +21,18 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/"><i class="fas fa-home"></i> Trang chủ</a></li>
-                        <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/user/orders">Đơn hàng của tôi</a></li>
+                        <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/profile">Tài khoản</a></li>
+                        <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/user/orders">Đơn hàng</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Đơn hàng đã giao</li>
                     </ol>
                 </nav>
+                
+                <h2 class="mb-4"><i class="fas fa-check-circle me-2 text-success"></i>Đơn hàng đã giao</h2>
+                
+                <p class="text-muted">Dưới đây là danh sách những đơn hàng đã giao thành công. Bạn có thể đánh giá sản phẩm hoặc xem chi tiết.</p>
             </div>
         </div>
-
+        
         <div class="row">
             <div class="col-md-3">
                 <div class="card mb-4">
@@ -38,132 +43,144 @@
                         <a href="${pageContext.request.contextPath}/profile" class="list-group-item list-group-item-action">
                             <i class="fas fa-user me-2"></i> Thông tin tài khoản
                         </a>
-                        <a href="${pageContext.request.contextPath}/user/orders" class="list-group-item list-group-item-action active">
+                        <a href="${pageContext.request.contextPath}/user/orders" class="list-group-item list-group-item-action">
                             <i class="fas fa-shopping-bag me-2"></i> Đơn hàng của tôi
                         </a>
-                        <a href="${pageContext.request.contextPath}/user/review-eligible" class="list-group-item list-group-item-action">
-                            <i class="fas fa-star me-2"></i> Đánh giá sản phẩm
+                        <a href="${pageContext.request.contextPath}/user/delivered-orders" class="list-group-item list-group-item-action active">
+                            <i class="fas fa-check-circle me-2"></i> Đơn hàng đã giao
                         </a>
-                        <a href="${pageContext.request.contextPath}/logout" class="list-group-item list-group-item-action text-danger">
-                            <i class="fas fa-sign-out-alt me-2"></i> Đăng xuất
+                        <a href="${pageContext.request.contextPath}/reviews/user-reviews" class="list-group-item list-group-item-action">
+                            <i class="fas fa-star me-2"></i> Đánh giá của tôi
                         </a>
                     </div>
                 </div>
             </div>
             
             <div class="col-md-9">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2 class="mb-0 fw-bold">Đơn hàng đã giao</h2>
-                    <a href="${pageContext.request.contextPath}/user/review-eligible" class="btn btn-outline-primary">
-                        <i class="fas fa-star me-2"></i>Viết đánh giá sản phẩm
-                    </a>
-                </div>
-                
                 <c:choose>
-                    <c:when test="${not empty orders}">
-                        <c:forEach var="order" items="${orders}">
-                            <div class="card shadow-sm mb-4">
-                                <div class="card-header bg-light d-flex justify-content-between align-items-center">
-                                    <span>
-                                        <strong>Mã đơn hàng:</strong> #${order.orderID}
-                                    </span>
-                                    <span class="badge bg-success">Đã giao</span>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row mb-3">
-                                        <div class="col-md-6">
-                                            <p class="mb-1"><strong>Ngày đặt:</strong> <fmt:formatDate value="${order.ngayDatHang}" pattern="dd/MM/yyyy HH:mm" /></p>
-                                            <p class="mb-1"><strong>Phương thức thanh toán:</strong> ${order.phuongThucThanhToan}</p>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <p class="mb-1"><strong>Địa chỉ giao hàng:</strong> ${order.diaChiGiaoHang}</p>
-                                            <p class="mb-1"><strong>Trạng thái thanh toán:</strong> ${order.daThanhToan ? 'Đã thanh toán' : 'Chưa thanh toán'}</p>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered table-hover">
-                                            <thead class="table-light">
-                                                <tr>
-                                                    <th scope="col">Sản phẩm</th>
-                                                    <th scope="col" class="text-center">Số lượng</th>
-                                                    <th scope="col" class="text-end">Đơn giá</th>
-                                                    <th scope="col" class="text-end">Thành tiền</th>
-                                                    <th scope="col" class="text-center">Đánh giá</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <c:forEach var="item" items="${order.chiTietDonHangs}">
-                                                    <tr>
-                                                        <td>
-                                                            <div class="d-flex align-items-center">
-                                                                <c:if test="${item.phuKienOto != null}">
-                                                                    <img src="${pageContext.request.contextPath}/imgs/${item.phuKienOto.anhDaiDien}" 
-                                                                        alt="${item.tenSanPham}" class="me-2" style="width: 50px; height: 50px; object-fit: cover;">
-                                                                </c:if>
-                                                                <div>
-                                                                    <p class="mb-0 fw-medium">${item.tenSanPham}</p>
-                                                                    <small class="text-muted">SKU: ${item.phuKienOto != null ? item.phuKienOto.accessoryID : 'N/A'}</small>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td class="text-center">${item.soLuong}</td>
-                                                        <td class="text-end"><fmt:formatNumber value="${item.donGia}" type="currency" currencySymbol="" />đ</td>
-                                                        <td class="text-end"><fmt:formatNumber value="${item.thanhTien}" type="currency" currencySymbol="" />đ</td>
-                                                        <td class="text-center">
-                                                            <c:choose>
-                                                                <c:when test="${item.phuKienOto != null && reviewedProductMap[item.phuKienOto.accessoryID]}">
-                                                                    <span class="badge bg-success"><i class="fas fa-check-circle me-1"></i>Đã đánh giá</span>
-                                                                </c:when>
-                                                                <c:when test="${item.phuKienOto != null}">
-                                                                    <a href="${pageContext.request.contextPath}/user/write-review/${item.phuKienOto.accessoryID}/${order.orderID}" 
-                                                                       class="btn btn-sm btn-outline-primary">
-                                                                        <i class="fas fa-star me-1"></i>Đánh giá
-                                                                    </a>
-                                                                </c:when>
-                                                                <c:otherwise>
-                                                                    <span class="badge bg-secondary">Không khả dụng</span>
-                                                                </c:otherwise>
-                                                            </c:choose>
-                                                        </td>
-                                                    </tr>
-                                                </c:forEach>
-                                            </tbody>
-                                            <tfoot class="table-light">
-                                                <tr>
-                                                    <td colspan="3" class="text-end"><strong>Phí vận chuyển:</strong></td>
-                                                    <td class="text-end"><fmt:formatNumber value="${order.phiVanChuyen}" type="currency" currencySymbol="" />đ</td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="3" class="text-end"><strong>Tổng tiền:</strong></td>
-                                                    <td class="text-end fw-bold"><fmt:formatNumber value="${order.tongThanhToan}" type="currency" currencySymbol="" />đ</td>
-                                                    <td></td>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </c:forEach>
+                    <c:when test="${empty deliveredOrders}">
+                        <div class="text-center py-5">
+                            <i class="fas fa-shipping-fast text-muted" style="font-size: 4rem;"></i>
+                            <h3 class="mt-3">Không có đơn hàng nào đã giao</h3>
+                            <p class="text-muted">Khi đơn hàng của bạn được giao thành công, chúng sẽ xuất hiện ở đây.</p>
+                            <a href="${pageContext.request.contextPath}/user/orders" class="btn btn-primary mt-3">
+                                <i class="fas fa-shopping-bag me-2"></i>Xem tất cả đơn hàng
+                            </a>
+                        </div>
                     </c:when>
                     <c:otherwise>
-                        <div class="card">
-                            <div class="card-body text-center py-5">
-                                <i class="fas fa-shopping-bag text-muted mb-3" style="font-size: 3rem;"></i>
-                                <h4>Bạn chưa có đơn hàng nào đã giao</h4>
-                                <p class="text-muted">Khi đơn hàng của bạn được giao thành công, chúng sẽ xuất hiện ở đây.</p>
-                                <a href="${pageContext.request.contextPath}/accessories" class="btn btn-primary mt-3">
-                                    <i class="fas fa-shopping-cart me-2"></i>Mua sắm ngay
-                                </a>
-                            </div>
+                        <div class="order-list">
+                            <c:forEach var="order" items="${deliveredOrders}">
+                                <div class="card mb-4 order-card border-success">
+                                    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                                        <span>
+                                            <strong>Mã đơn hàng:</strong> #${order.orderID}
+                                        </span>
+                                        <span class="badge bg-success">
+                                            Đã giao thành công
+                                        </span>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <p><strong><i class="far fa-calendar-alt me-2"></i>Ngày đặt:</strong> 
+                                                    <fmt:formatDate value="${order.ngayDatHang}" pattern="dd/MM/yyyy HH:mm"/>
+                                                </p>
+                                                <p><strong><i class="fas fa-calendar-check me-2"></i>Ngày giao:</strong> 
+                                                    <fmt:formatDate value="${order.ngayCapNhat}" pattern="dd/MM/yyyy HH:mm"/>
+                                                </p>
+                                            </div>
+                                            <div class="col-md-6 text-md-end">
+                                                <p><strong><i class="fas fa-money-bill-wave me-2"></i>Tổng tiền:</strong> 
+                                                    <span class="text-success fw-bold">
+                                                        <fmt:formatNumber value="${order.tongThanhToan}" type="currency" currencySymbol="₫" maxFractionDigits="0"/>
+                                                    </span>
+                                                </p>
+                                                <p><strong><i class="fas fa-map-marker-alt me-2"></i>Địa chỉ:</strong> 
+                                                    <span class="text-truncate d-inline-block" style="max-width: 250px;">
+                                                        ${order.diaChiGiaoHang}
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="order-products mb-3">
+                                            <h6><i class="fas fa-box-open me-2"></i>Sản phẩm</h6>
+                                            <div class="row">
+                                                <c:forEach var="item" items="${order.chiTietDonHangs}">
+                                                    <div class="col-md-6 mb-2">
+                                                        <div class="d-flex align-items-center">
+                                                            <img src="${pageContext.request.contextPath}/imgs/${item.phuKienOto.anhDaiDien}" 
+                                                                class="img-thumbnail me-3" style="width: 60px; height: 60px; object-fit: cover;" 
+                                                                alt="${item.tenSanPham}">
+                                                            <div>
+                                                                <p class="mb-0 fw-bold">${item.tenSanPham}</p>
+                                                                <p class="text-muted small mb-0">
+                                                                    <fmt:formatNumber value="${item.donGia}" type="currency" currencySymbol="₫" maxFractionDigits="0"/> 
+                                                                    x ${item.soLuong}
+                                                                </p>
+                                                                <a href="${pageContext.request.contextPath}/reviews/write?productId=${item.phuKienOto.accessoryID}&orderId=${order.orderID}" 
+                                                                    class="btn btn-sm btn-outline-warning mt-1">
+                                                                    <i class="fas fa-star me-1"></i>Đánh giá
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </c:forEach>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <a href="${pageContext.request.contextPath}/theodoidonhang/trangthai?orderid=${order.orderID}" 
+                                                class="btn btn-outline-primary btn-sm">
+                                                <i class="fas fa-info-circle me-1"></i>Chi tiết
+                                            </a>
+                                            
+                                            <a href="${pageContext.request.contextPath}/user/buy-again?orderid=${order.orderID}" 
+                                                class="btn btn-outline-success btn-sm">
+                                                <i class="fas fa-redo me-1"></i>Mua lại
+                                            </a>
+                                            
+                                            <a href="${pageContext.request.contextPath}/user/review-eligible" 
+                                                class="btn btn-outline-warning btn-sm">
+                                                <i class="fas fa-star me-1"></i>Đánh giá sản phẩm
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:forEach>
                         </div>
+                        
+                        <!-- Pagination if needed -->
+                        <c:if test="${totalPages > 1}">
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-center">
+                                    <li class="page-item ${currentPage == 0 ? 'disabled' : ''}">
+                                        <a class="page-link" href="${pageContext.request.contextPath}/user/delivered-orders?page=${currentPage - 1}" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    
+                                    <c:forEach begin="0" end="${totalPages - 1}" var="i">
+                                        <li class="page-item ${currentPage == i ? 'active' : ''}">
+                                            <a class="page-link" href="${pageContext.request.contextPath}/user/delivered-orders?page=${i}">${i + 1}</a>
+                                        </li>
+                                    </c:forEach>
+                                    
+                                    <li class="page-item ${currentPage == totalPages - 1 ? 'disabled' : ''}">
+                                        <a class="page-link" href="${pageContext.request.contextPath}/user/delivered-orders?page=${currentPage + 1}" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </c:if>
                     </c:otherwise>
                 </c:choose>
             </div>
         </div>
     </div>
-
+    
     <jsp:include page="/common/footer.jsp" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

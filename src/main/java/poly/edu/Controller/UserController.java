@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Comparator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -13,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import poly.edu.Model.ChiTietDonHang;
@@ -52,15 +54,26 @@ public class UserController {
 	}
 
 	@GetMapping("/orders")
-	public String viewOrders(Model model, RedirectAttributes redirectAttributes) {
+	public String viewOrders(
+			@RequestParam(required = false) DonHang.TrangThai status,
+			Model model) {
+
 		User currentUser = getCurrentUser();
 		if (currentUser == null) {
-			redirectAttributes.addFlashAttribute("error", "Vui lòng đăng nhập để xem đơn hàng");
 			return "redirect:/login";
 		}
 
-		List<DonHang> allOrders = donHangRepository.findByUser(currentUser);
-		model.addAttribute("orders", allOrders);
+		List<DonHang> orders;
+		if (status != null) {
+			orders = donHangRepository.findByUserAndTrangThai(currentUser, status);
+		} else {
+			// Get all orders and sort them manually to avoid using the undefined method
+			orders = donHangRepository.findByUser(currentUser);
+			orders.sort(Comparator.comparing(DonHang::getNgayDatHang).reversed());
+		}
+
+		model.addAttribute("orders", orders);
+		model.addAttribute("statusFilter", status);
 		return "user/orders";
 	}
 
@@ -106,33 +119,28 @@ public class UserController {
 			return "redirect:/login";
 		}
 
-		// Get all delivered orders for this user
-		List<DonHang> deliveredOrders = donHangRepository.findByUserAndTrangThai(currentUser,
-				DonHang.TrangThai.DA_GIAO);
+		// Get products eligible for review
+		List<PhuKienOto> eligibleProducts = danhGiaService.getProductsEligibleForReview(currentUser);
 
-		// Get all products from these orders
-		List<PhuKienOto> orderProducts = new ArrayList<>();
-		Map<Long, Long> productToOrderMap = new HashMap<>(); // Maps product IDs to order IDs
+		// Get all delivered orders for the user
+		List<DonHang> deliveredOrders = donHangRepository.findByUserAndTrangThai(
+				currentUser, DonHang.TrangThai.DA_GIAO);
 
-		for (DonHang order : deliveredOrders) {
-			for (ChiTietDonHang detail : order.getChiTietDonHangs()) {
-				if (detail.getPhuKienOto() != null) {
-					PhuKienOto product = detail.getPhuKienOto();
+		// Create a map of product ID to list of orders that contain that product
+		Map<Long, List<DonHang>> ordersByProduct = new HashMap<>();
 
-					// Check if user has already reviewed this product
-					List<DanhGia> reviews = danhGiaRepository.findByUserAndPhuKienOto(currentUser, product);
+		for (PhuKienOto product : eligibleProducts) {
+			List<DonHang> ordersWithProduct = deliveredOrders.stream()
+					.filter(order -> order.getChiTietDonHangs().stream()
+							.anyMatch(item -> item.getPhuKienOto() != null &&
+									item.getPhuKienOto().getAccessoryID().equals(product.getAccessoryID())))
+					.toList();
 
-					if (reviews.isEmpty()) {
-						// Only add products that haven't been reviewed yet
-						orderProducts.add(product);
-						productToOrderMap.put(product.getAccessoryID(), order.getOrderID());
-					}
-				}
-			}
+			ordersByProduct.put(product.getAccessoryID(), ordersWithProduct);
 		}
 
-		model.addAttribute("eligibleProducts", orderProducts);
-		model.addAttribute("productToOrderMap", productToOrderMap);
+		model.addAttribute("eligibleProducts", eligibleProducts);
+		model.addAttribute("ordersByProduct", ordersByProduct);
 
 		return "user/eligible-reviews";
 	}

@@ -37,6 +37,27 @@ prefix="c"%>
                                 </div>
                             </c:if>
 
+                            <c:if test="${not empty error}">
+                                <div class="alert alert-danger" role="alert">
+                                    <i
+                                        class="fas fa-exclamation-circle me-2"
+                                    ></i
+                                    >${error}
+                                </div>
+                            </c:if>
+
+                            <c:if test="${not empty success}">
+                                <div class="alert alert-success" role="alert">
+                                    <i class="fas fa-check-circle me-2"></i
+                                    >${success}
+                                </div>
+                            </c:if>
+
+                            <p class="text-muted mb-4">
+                                Nhập email đăng ký của bạn để nhận lại email xác
+                                thực.
+                            </p>
+
                             <form
                                 action="/resend-verification"
                                 method="post"

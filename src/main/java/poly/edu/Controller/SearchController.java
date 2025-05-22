@@ -19,32 +19,32 @@ public class SearchController {
 
     @Autowired
     private PhuKienOtoDAO phuKienOtoDAO;
-    
+
     @Autowired
     private SanPhamDAO sanPhamDAO;
 
     @GetMapping("/search")
-    public String search(@RequestParam(required = false) String keyword, 
+    public String search(@RequestParam(required = false) String keyword,
                           @RequestParam(required = false, defaultValue = "all") String type,
                           Model model) {
         try {
             if (keyword != null && !keyword.trim().isEmpty()) {
                 // Chỉ trim() từ khóa, không thêm % vì đã được xử lý trong query
                 String searchKeyword = keyword.trim();
-                
+
                 // Danh sách kết quả cho phụ kiện và xe
                 List<PhuKienOto> phuKienResults = new ArrayList<>();
                 List<SanPham> sanPhamResults = new ArrayList<>();
-                
+
                 // Tìm kiếm theo loại được chọn
                 if ("all".equals(type) || "phukien".equals(type)) {
                     phuKienResults = phuKienOtoDAO.findByTenPhuKienContaining(searchKeyword);
                 }
-                
+
                 if ("all".equals(type) || "xe".equals(type)) {
                     sanPhamResults = sanPhamDAO.searchByKeyword(searchKeyword);
                 }
-                
+
                 // Thêm kết quả vào model
                 model.addAttribute("phuKienResults", phuKienResults);
                 model.addAttribute("sanPhamResults", sanPhamResults);

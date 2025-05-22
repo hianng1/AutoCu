@@ -1,6 +1,9 @@
 package poly.edu.Controller;
 
-import lombok.RequiredArgsConstructor;
+import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -9,39 +12,31 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import lombok.RequiredArgsConstructor;
 import poly.edu.Model.ChiTietDonHang;
 import poly.edu.Model.DonHang;
 import poly.edu.Repository.ChiTietDonHangRepository;
 import poly.edu.Repository.DonHangRepository;
-
-import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Phrase;
-import com.itextpdf.text.Chunk;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.pdf.BaseFont;
-import com.itextpdf.text.Rectangle;
-
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.util.ResourceUtils;
-
-import java.util.stream.Stream;
 
 @Controller
 @RequestMapping("/donhang")
@@ -395,13 +390,13 @@ public class DonHangController {
 
         // Vẽ đường kẻ
         cell = new PdfPCell(new Phrase(""));
-        cell.setBorder(PdfPCell.BOTTOM);
+        cell.setBorder(Rectangle.BOTTOM);
         cell.setBorderColor(new BaseColor(189, 195, 199));
         cell.setPadding(2);
         summaryTable.addCell(cell);
 
         cell = new PdfPCell(new Phrase(""));
-        cell.setBorder(PdfPCell.BOTTOM);
+        cell.setBorder(Rectangle.BOTTOM);
         cell.setBorderColor(new BaseColor(189, 195, 199));
         cell.setPadding(2);
         summaryTable.addCell(cell);
