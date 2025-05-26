@@ -1,0 +1,98 @@
+[33mfe76acb[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m update danh gia
+[33m50a21fb[m them danh gia
+[33mc3238fa[m fix them tai khoan nhan vien
+[33mb247b9c[m add xac thuc bang email
+[33m1a44b60[m add dang ky len header
+[33mb267577[m fixing profile
+[33mc1ceedf[m 1
+[33mec9588e[m fix db
+[33m552559e[m fix anh
+[33m7cfc26a[m add thêm tên data cho địa chỉ
+[33mb77a739[m fixed đăng ký
+[33m6a1d251[m fix remove gia from san pham
+[33m7a11f76[m fixed form phukienoto, fixing form san pham tiep
+[33mb6c3eb5[m add func for theodoidonhang
+[33m28539ba[m fixed update cart
+[33mf3d5cd8[m fixing update cart(not done yet)
+[33m6bd7522[m working on 2 pages
+[33me15be88[m sửa tra cứu
+[33m7ede449[m fixed sua thong tin tai khoan
+[33m984de6b[m thêm nút trang chủ cho trang admin
+[33m0663d79[m fix trang dang ky
+[33mf7a640a[m fix unicode char fr
+[33mb0fcdf7[m fix loi pdf
+[33mf121513[m almost done
+[33m51283c9[m working on admin folder
+[33m42dae6b[m fixxing admin
+[33mf980538[m 1
+[33m8aef459[m fix hình ảnh sp
+[33m903e626[m update hash đăng kýký
+[33m838c2cb[m Biểu đồ doanh thu
+[33ma18732c[m update ui don hanghang
+[33me5cd55b[m Merge branch 'main' of https://github.com/hianng1/AutoCu
+[33m1f54341[m tai hoa dondon
+[33m3e6b3f7[m commit 2
+[33m84c45ae[m Merge branch 'main' of https://github.com/hianng1/AutoCu
+[33m3990638[m[33m ([m[1;31morigin/fixadmin2[m[33m)[m commit
+[33ma605b5a[m them 2 trang
+[33made93c0[m[33m ([m[1;31morigin/anhhao5[m[33m)[m them phukien + oto
+[33m68284b6[m xoa file thua
+[33m07dcc63[m cap nhat tim kiem ca xe va phu kien
+[33m9cf503e[m Luu thong tin gui mail va cap nhat chuc nang chat truc tuyen
+[33m820b9e9[m fixadmin1
+[33m6548b6c[m fixadmin
+[33m72c1342[m fixing admin
+[33m3c711be[m working on admin
+[33m62f99cb[m Merge pull request #2 from hianng1/thongke-1
+[33m5d03650[m Add files via upload
+[33m326f7fb[m Sua dtb san pham va ui admin
+[33m914f766[m fix ui 3.0
+[33mbfc0f76[m fix ui 2.0
+[33m2d055d3[m[33m ([m[1;31morigin/anhhao4[m[33m)[m done profile
+[33m0ddb05b[m add contact
+[33mee380ed[m[33m ([m[1;31morigin/anhhao3[m[33m)[m commit 2
+[33me0967c1[m fix ui
+[33m63cab20[m commit
+[33m5ca9c5f[m working on donhang2.0
+[33mba57721[m Add thống kê đơn hàng, chi tiết đơn hàng
+[33madd86ad[m working on admin page
+[33m5537061[m[33m ([m[1;31morigin/anhhao2[m[33m)[m tam done don hang
+[33m76938ac[m commi1
+[33m9f6aee0[m fixing donhang
+[33m5fc75b2[m Merge branch 'main' of https://github.com/hianng1/AutoCu
+[33m871d5af[m[33m ([m[1;31morigin/anhhao[m[33m)[m working on luu vao don hang
+[33me959e42[m working
+[33mc8b3ace[m almost done
+[33m0a2689b[m Add hinh anh sp
+[33m03964f1[m fix crud sp
+[33m069fa2e[m add crud phu kien
+[33m65d9288[m fix don hang
+[33mdf40ed4[m Giải quyết conflict trong header.jsp
+[33m6ba3076[m Chỉnh sửa header.jsp
+[33me352c61[m commit
+[33m6996c49[m cap nhat trang ho tro
+[33m3d51ee3[m fix ctsp
+[33m9a287c0[m Merge branch 'main' of https://github.com/hianng1/AutoCu git pull
+[33m1d1e748[m Lưu thay đổi application.properties trước khi pull
+[33m26e8b09[m code mới fixxxx
+[33m647e76a[m[33m ([m[1;31morigin/change-pass[m[33m)[m Merge remote-tracking branch 'origin/login'
+[33md4146d7[m[33m ([m[1;31morigin/login[m[33m)[m update run oke
+[33m41c0bb2[m loginlogin
+[33m7402d7b[m rm zipzip
+[33mdc4ec29[m Merge pull request #1 from hianng1/dpost22-patch-1
+[33m520e820[m[33m ([m[1;31morigin/dpost22-patch-1[m[33m)[m Add files via upload
+[33m946c673[m Add files via upload
+[33mf4ad425[m đổi mât khẩu và quên ,ật khẩu
+[33me7f6e23[m[33m ([m[1;31morigin/new-branch-change-pass[m[33m)[m đổi mật khẩu và quên mật khẩu
+[33m1b282b7[m đổi mật khẩu với quên mật khẩu
+[33m10c0d99[m fixing don hang
+[33m9027f10[m fix unicode char
+[33m87eb7b1[m  hoan thien giao dien trang chu
+[33md1a2201[m sua dang ky và login
+[33ma972aec[m bản đã sửa user
+[33mbe66da8[m working on checkout
+[33me9d06cc[m  Sua lai gio hang, footer va them chuc nang hien thi san pham tren gio hang
+[33m90b21f4[m abc
+[33m62fb4b2[m commit
+[33m6e39e8c[m dang ky dang nhap
+[33m89dc40d[m first commit
