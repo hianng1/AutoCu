@@ -387,18 +387,6 @@ ENTRYPOINT ["java", "-jar", "/app.jar"]
     - Kiểm tra SMTP settings
     - Sử dụng App Password cho Gmail
 
-## Đóng góp
-
-1. Fork project
-2. Tạo feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to branch (`git push origin feature/AmazingFeature`)
-5. Tạo Pull Request
-
-## License
-
-Distributed under the MIT License. See `LICENSE` for more information.
-
 ## Liên hệ
 
 -   **Email**: baidman3501@gmail.com
