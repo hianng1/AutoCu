@@ -125,16 +125,25 @@ VALUES
 
 INSERT INTO phu_kien_oto(ten_phu_kien, mo_ta, gia, so_luong, hang_san_xuat, anh_dai_dien, CategoryID)
 VALUES
-(N'Camera hành trình Vietmap X9', N'Ghi hình Full HD, hỗ trợ GPS, cảnh báo tốc độ', 2500000, 100, N'Vietmap',N'VietmapX9.jpg', 11),
-(N'Cảm biến áp suất lốp Xiaomi 70mai', N'Giám sát áp suất lốp, cảnh báo khi có bất thường', 1200000, 200, N'Xiaomi',N'Xiaomi70mai.jpg', 12),
-(N'Bọc ghế da cao cấp', N'Chất liệu da PU, chống thấm, bền đẹp', 3500000, 50, N'AutoLeather', N'bocgheda.jpg', 13),
-(N'Thanh giá nóc Hamer', N'Hỗ trợ chở hàng trên nóc xe, lắp đặt dễ dàng', 2800000, 80, N'Hamer', N'ThanhgianocHamer.jpg', 14),
-(N'Bơm lốp ô tô mini Michelin', N'Bơm nhanh, màn hình LED hiển thị áp suất', 1500000, 120, N'Michelin', N'miniMichelin.jpg', 15),
-(N'Gạt mưa Bosch AeroTwin', N'Gạt nước hiệu quả, bền bỉ trong mọi thời tiết', 600000, 300, N'Bosch', N'BoschAeroTwin.jpg', 16),
-(N'Nước hoa ô tô Areon Ken', N'Hương thơm dịu nhẹ, giúp không gian xe dễ chịu', 250000, 500, N'Areon', N'AreonKe.png', 17),
-(N'Màn hình giải trí Android Gotech', N'Cảm ứng mượt, tích hợp GPS, Youtube, sim 4G', 8000000, 40, N'Gotech', N'AndroidGotech.jpg', 18),
-(N'Tấm che nắng kính lái', N'Phản xạ nhiệt, giữ nội thất xe mát mẻ', 350000, 400, N'AutoShield', N'chenang.jpg', 19),
-(N'Bạt phủ xe chống nước', N'Chất liệu chống tia UV, bảo vệ xe khỏi nắng mưa', 900000, 150, N'CarCover', N'batphuxe.jpg', 20);
+(N'Camera hành trình Vietmap X9', N'Camera hành trình cao cấp Vietmap X9 với độ phân giải 4K Ultra HD, góc quay rộng 170 độ và khả năng ghi hình ban đêm siêu nét. Tích hợp GPS thông minh giúp ghi lại tọa độ và tốc độ xe, cảnh báo tốc độ và điểm đen tai nạn. Hỗ trợ kết nối WiFi với điện thoại, tự động backup video và chia sẻ trực tiếp lên mạng xã hội. Thiết kế nhỏ gọn, sang trọng với màn hình cảm ứng 3 inch.', 2500000, 100, N'Vietmap',N'VietmapX9.jpg', 11),
+
+(N'Cảm biến áp suất lốp Xiaomi 70mai', N'Hệ thống cảm biến áp suất lốp thông minh Xiaomi 70mai với công nghệ cảm biến chính xác đến 0.1 PSI. Hiển thị thời gian thực thông qua app điện thoại, cảnh báo tức thì khi phát hiện áp suất bất thường, xì hơi hoặc nhiệt độ cao. Tích hợp pin lithium bền bỉ hoạt động liên tục 3-5 năm, chống nước chuẩn IP67. Dễ dàng lắp đặt và theo dõi cho cả 4 bánh xe, giúp tăng tuổi thọ lốp và tiết kiệm nhiên liệu.', 1200000, 200, N'Xiaomi',N'Xiaomi70mai.jpg', 12),
+
+(N'Bọc ghế da cao cấp', N'Bọc ghế da cao cấp được làm từ chất liệu da PU cao cấp nhập khẩu, độ bền cao, chống thấm nước và dễ dàng vệ sinh. Thiết kế ergonomic ôm sát ghế, thoáng khí và chống nhăn. Công nghệ may viền cao cấp với đường chỉ kép chắc chắn, có thể tùy chọn màu sắc theo yêu cầu. Tích hợp lớp đệm memory foam thoải mái, phù hợp với hầu hết các dòng xe phổ biến tại Việt Nam.', 3500000, 50, N'AutoLeather', N'bocgheda.jpg', 13),
+
+(N'Thanh giá nóc Hamer', N'Thanh giá nóc Hamer được thiết kế khoa học với khả năng chịu tải lên đến 150kg, làm từ hợp kim nhôm cao cấp chống gỉ sét. Tích hợp khóa an toàn chống trộm, khung bảo vệ cao su chống xước xe. Dễ dàng lắp đặt không cần khoan đục, thiết kế khí động học giảm tiếng ồn khi di chuyển. Phù hợp cho việc chở hành lý, xe đạp, ván lướt và các thiết bị thể thao.', 2800000, 80, N'Hamer', N'ThanhgianocHamer.jpg', 14),
+
+(N'Bơm lốp ô tô mini Michelin', N'Bơm lốp điện tử thông minh Michelin với công nghệ bơm nhanh Digital Smart Inflation, màn hình LED hiển thị áp suất chính xác. Tích hợp đèn LED chiếu sáng khẩn cấp và còi báo động. Thiết kế nhỏ gọn, hoạt động êm ái, tự động ngắt khi đạt áp suất cài đặt. Pin lithium 2000mAh có thể bơm liên tục 8 lốp xe, tích hợp cổng sạc USB có thể sạc điện thoại trong trường hợp khẩn cấp.', 1500000, 120, N'Michelin', N'miniMichelin.jpg', 15),
+
+(N'Gạt mưa Bosch AeroTwin', N'Gạt mưa cao cấp Bosch AeroTwin với công nghệ lưỡi gạt kép Power Protection Plus, đảm bảo khả năng gạt nước tuyệt vời trong mọi điều kiện thời tiết. Thiết kế khí động học giúp ép sát kính, hoạt động êm ái và không gây ồn. Lớp phủ graphite chống tia UV và thời tiết khắc nghiệt, tuổi thọ cao gấp 2 lần gạt mưa thông thường. Dễ dàng lắp đặt với hệ thống Quick-Clip.', 600000, 300, N'Bosch', N'BoschAeroTwin.jpg', 16),
+
+(N'Nước hoa ô tô Areon Ken', N'Nước hoa ô tô cao cấp Areon Ken với công thức hương thơm độc quyền từ Pháp, lưu hương bền lâu đến 60 ngày. Thiết kế sang trọng với vỏ thủy tinh cao cấp và nắp kim loại. Hương thơm tinh tế kết hợp giữa hoa cỏ và gỗ thơm, giúp khử mùi hiệu quả và tạo không gian thư giãn trong xe. An toàn với sức khỏe, không gây kích ứng và phù hợp với mọi loại xe.', 250000, 500, N'Areon', N'AreonKe.png', 17),
+
+(N'Màn hình giải trí Android Gotech', N'Màn hình giải trí thông minh Gotech với hệ điều hành Android 11, CPU 8 nhân mạnh mẽ và RAM 4GB. Màn hình IPS 10 inch độ phân giải 2K, hỗ trợ cảm ứng đa điểm. Tích hợp GPS cao cấp, hỗ trợ dẫn đường online/offline, kết nối 4G/WiFi. Hỗ trợ Apple CarPlay và Android Auto, xem YouTube, phát nhạc online. Tích hợp camera lùi, cảm biến áp suất lốp và điều khiển bằng giọng nói.', 8000000, 40, N'Gotech', N'AndroidGotech.jpg', 18),
+
+(N'Tấm che nắng kính lái', N'Tấm che nắng kính lái cao cấp với công nghệ phản xạ nhiệt Multi-Layer, giảm nhiệt độ trong xe đến 70%. Thiết kế 6 lớp với lớp nhôm phản xạ và lớp bọt khí cách nhiệt, chống tia UV lên đến 99%. Dễ dàng gấp gọn và lắp đặt với khung nhôm nhẹ và chắc chắn. Kích thước đa dạng phù hợp với hầu hết các dòng xe, túi đựng tiện lợi kèm theo.', 350000, 400, N'AutoShield', N'chenang.jpg', 19),
+
+(N'Bạt phủ xe chống nước', N'Bạt phủ xe cao cấp với chất liệu Oxford 190T cao cấp, chống nước tuyệt đối và chống tia UV. Lớp lót cotton mềm bảo vệ sơn xe, thiết kế có dây rút và khóa chống trộm. Phản quang an toàn ban đêm, chịu được mọi điều kiện thời tiết từ -30°C đến 70°C. Túi đựng tiện lợi kèm theo, dễ dàng vệ sinh và có thể giặt máy. Bảo hành 12 tháng cho đường may và chất liệu.', 900000, 150, N'CarCover', N'batphuxe.jpg', 20);
 
 INSERT INTO ton_kho (accessoryid, staffid, vi_tri_kho, so_luong, ngay_cap_nhat)
 VALUES

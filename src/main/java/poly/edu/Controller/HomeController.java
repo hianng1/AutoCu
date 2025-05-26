@@ -1,7 +1,9 @@
 package poly.edu.Controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional; // Có thể bỏ nếu không còn dùng Optional<User> trong controller này
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -588,9 +590,43 @@ public class HomeController {
         model.addAttribute("categoriesList", accessoryCategories);
 
         return "accessories";
-    } // Bạn có thể thêm các handler khác tại đây, ví dụ:
-    // @GetMapping("/details/{id}") để hiển thị chi tiết sản phẩm
-    // @PostMapping("/cart/add/{id}") để thêm vào giỏ hàng (như trong trang chủ)
+    }
+
+    // Handler cho trang chi tiết phụ kiện (URL mới)
+    @GetMapping("/accessories/{id}")
+    public String showAccessoryDetail(@PathVariable("id") Long id, Model model) {
+        // Lấy thông tin phụ kiện từ service
+        Optional<PhuKienOto> phuKienOpt = phuKienOtoService.findById(id);
+
+        if (!phuKienOpt.isPresent()) {
+            // Nếu không tìm thấy phụ kiện, chuyển hướng về trang phụ kiện
+            return "redirect:/accessories";
+        }
+
+        PhuKienOto phuKien = phuKienOpt.get();
+
+        // Lấy các phụ kiện khác cùng danh mục để hiển thị phần "Sản phẩm liên quan"
+        List<PhuKienOto> relatedAccessories = new ArrayList<>();
+        if (phuKien.getDanhMuc() != null) {
+            relatedAccessories = phuKienOtoService.getAccessoriesByCategory(phuKien.getDanhMuc()).stream()
+                    .filter(item -> !item.getAccessoryID().equals(id))
+                    .limit(4) // Chỉ lấy tối đa 4 sản phẩm liên quan
+                    .collect(Collectors.toList());
+        }
+
+        // Thêm dữ liệu vào model
+        model.addAttribute("phuKien", phuKien);
+        model.addAttribute("relatedAccessories", relatedAccessories);
+
+        return "accessory-detail";
+    }
+
+    // Handler cho trang chi tiết phụ kiện (URL cũ - cho tương thích ngược)
+    @GetMapping("/accessories/detail/{id}")
+    public String showAccessoryDetailOldUrl(@PathVariable("id") Long id) {
+        // Chuyển hướng tới URL mới để duy trì tính nhất quán
+        return "redirect:/accessories/" + id;
+    }
 
     private User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

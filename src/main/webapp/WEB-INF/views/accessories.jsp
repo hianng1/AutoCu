@@ -536,11 +536,10 @@
                                                     class="product-action-btn wishlist-btn" 
                                                     data-accessory-id="${phukien.accessoryID}"
                                                     title="Thêm vào danh sách yêu thích"
-                                                >
-                                                    <i class="far fa-heart text-danger"></i>
+                                                >                                                    <i class="far fa-heart text-danger"></i>
                                                 </button>
                                             </sec:authorize>
-                                            <a href="${pageContext.request.contextPath}/accessories/detail/${phukien.accessoryID}" 
+                                            <a href="${pageContext.request.contextPath}/accessories/${phukien.accessoryID}" 
                                                class="product-action-btn"
                                                title="Xem chi tiết">
                                                 <i class="fas fa-search text-primary"></i>

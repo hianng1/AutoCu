@@ -28,67 +28,54 @@ prefix="c"%>
                             <c:choose>
                                 <c:when test="${success}">
                                     <div class="mb-4">
-                                        <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+                                        <i
+                                            class="fas fa-check-circle text-success"
+                                            style="font-size: 4rem"
+                                        ></i>
                                     </div>
                                     <h2 class="mb-3">Xác thực thành công!</h2>
-                                    <p class="text-muted mb-4">Tài khoản của bạn đã được xác thực thành công. Bây giờ bạn có thể đăng nhập và sử dụng đầy đủ các tính năng của AutoCu.</p>
-                                    <a href="${pageContext.request.contextPath}/login" class="btn btn-primary">
-                                        <i class="fas fa-sign-in-alt me-2"></i>Đăng nhập ngay
+                                    <p class="text-muted mb-4">
+                                        Tài khoản của bạn đã được xác thực thành
+                                        công. Bây giờ bạn có thể đăng nhập và sử
+                                        dụng đầy đủ các tính năng của AutoCu.
+                                    </p>
+                                    <a
+                                        href="${pageContext.request.contextPath}/login"
+                                        class="btn btn-primary"
+                                    >
+                                        <i class="fas fa-sign-in-alt me-2"></i
+                                        >Đăng nhập ngay
                                     </a>
                                 </c:when>
                                 <c:otherwise>
                                     <div class="mb-4">
-                                        <i class="fas fa-times-circle text-danger" style="font-size: 4rem;"></i>
+                                        <i
+                                            class="fas fa-times-circle text-danger"
+                                            style="font-size: 4rem"
+                                        ></i>
                                     </div>
-                                    <h2 class="mb-3">Xác thực không thành công</h2>
+                                    <h2 class="mb-3">
+                                        Xác thực không thành công
+                                    </h2>
                                     <p class="text-muted mb-4">${message}</p>
-                                    <div class="d-flex justify-content-center gap-3">
-                                        <a href="${pageContext.request.contextPath}/resend-verification" class="btn btn-outline-primary">
-                                            <i class="fas fa-paper-plane me-2"></i>Gửi lại email xác thực
-                                        </a>
-                                        <a href="${pageContext.request.contextPath}/" class="btn btn-outline-secondary">
-                                            <i class="fas fa-home me-2"></i>Trang chủ
-                                        </a>
-                                    </div>
-                                </c:otherwise>
-                            </c:choose>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <jsp:include page="/common/footer.jsp" />
-        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    </body>
-</html>
-                                    </h1>
-                                    <div class="alert alert-warning">
-                                        ${message}
-                                    </div>
-                                    <p class="text-muted mb-4">
-                                        Vui lòng thử lại hoặc yêu cầu gửi lại
-                                        email xác thực.
-                                    </p>
-                                    <div class="d-grid gap-2">
+                                    <div
+                                        class="d-flex justify-content-center gap-3"
+                                    >
                                         <a
-                                            href="/resend-verification"
-                                            class="btn btn-primary"
+                                            href="${pageContext.request.contextPath}/resend-verification"
+                                            class="btn btn-outline-primary"
                                         >
                                             <i
                                                 class="fas fa-paper-plane me-2"
                                             ></i
-                                            >Gửi lại email xác nhận
+                                            >Gửi lại email xác thực
                                         </a>
                                         <a
-                                            href="/login"
-                                            class="btn btn-outline-primary"
+                                            href="${pageContext.request.contextPath}/"
+                                            class="btn btn-outline-secondary"
                                         >
-                                            <i
-                                                class="fas fa-sign-in-alt me-2"
-                                            ></i
-                                            >Đi đến trang đăng nhập
+                                            <i class="fas fa-home me-2"></i
+                                            >Trang chủ
                                         </a>
                                     </div>
                                 </c:otherwise>

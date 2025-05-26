@@ -168,4 +168,15 @@ public class PhuKienOtoController {
             return "phukien/list";
         }
     }
+
+    // Thêm endpoint chi tiết phụ kiện
+    @GetMapping("/detail/{id}")
+    public String viewDetail(@PathVariable("id") Long id, Model model) {
+        PhuKienOto phuKien = pkRepo.findById(id).orElse(null);
+        if (phuKien == null) {
+            return "redirect:/accessories"; // Nếu không tìm thấy phụ kiện, quay lại trang danh sách
+        }
+        model.addAttribute("phuKien", phuKien);
+        return "phukien/detail"; // Tên file JSP cho trang chi tiết
+    }
 }

@@ -305,9 +305,8 @@
         <c:forEach var="phukien" items="${phuKienOtoList}" >
             <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                 <div class="card h-100 card-hover-effect border-0 shadow-sm">
-                    <div class="position-relative">
-                        <img src="/imgs/${phukien.anhDaiDien}" class="card-img-top object-cover" alt="${phukien.tenPhuKien}" style="height: 200px;">                        <div class="position-absolute top-0 end-0 m-2 d-flex flex-column gap-2">
-                            <a href="${pageContext.request.contextPath}/accessories/detail/${phukien.accessoryID}" 
+                    <div class="position-relative">                        <img src="/imgs/${phukien.anhDaiDien}" class="card-img-top object-cover" alt="${phukien.tenPhuKien}" style="height: 200px;">                        <div class="position-absolute top-0 end-0 m-2 d-flex flex-column gap-2">
+                            <a href="${pageContext.request.contextPath}/accessories/${phukien.accessoryID}" 
                                class="btn btn-light btn-sm rounded-circle shadow-sm"
                                title="Xem chi tiết">
                                 <i class="fas fa-search text-primary"></i>
