@@ -192,8 +192,6 @@ AutoCu/
 -   **Database**: Microsoft SQL Server
 -   **Server**: localhost:1433
 -   **Database Name**: QuanLyXe2
--   **Username**: sa
--   **Password**: 123
 
 ### Các bảng chính
 
@@ -403,8 +401,8 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Liên hệ
 
--   **Email**: thiembinh16@gmail.com
--   **Project Link**: [https://github.com/your-username/AutoCu](https://github.com/your-username/AutoCu)
+-   **Email**: baidman3501@gmail.com
+-   **Project Link**: [https://github.com/your-username/AutoCu](https://github.com/hianng1/AutoCu)
 
 ## Cảm ơn
 
