@@ -16,14 +16,14 @@ prefix="c"%> <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
             </select>
             <div>
                 Gọi ngay cho chúng tôi:
-                <a class="text-gray-600" href="tel:+84382948198">
-                    +84 382 948 198
+                <a class="text-gray-600" href="">
+                    <b>+84 382 948 198</b>
                 </a>
             </div>
             <div>
                 Gửi mail cho chúng tôi:
-                <a class="text-gray-600" href="mailto:autocu@gmail.com">
-                    autocu@gmail.com
+                <a class="text-gray-600" href="">
+                    <b>autocu@gmail.com</b>
                 </a>
             </div>
         </div>
@@ -132,14 +132,17 @@ prefix="c"%> <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
                 />
             </a>
         </div>
-        
+
         <!-- Mobile Icons -->
         <div class="flex items-center space-x-4">
             <!-- Search Icon -->
-            <button id="mobile-search-btn" class="text-orange-500 text-xl hover:text-orange-600 transition-colors">
+            <button
+                id="mobile-search-btn"
+                class="text-orange-500 text-xl hover:text-orange-600 transition-colors"
+            >
                 <i class="fas fa-search"></i>
             </button>
-            
+
             <!-- Wishlist Icon -->
             <sec:authorize access="isAuthenticated()">
                 <a
@@ -173,9 +176,12 @@ prefix="c"%> <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
                     </span>
                 </c:if>
             </a>
-            
+
             <!-- Menu Toggle -->
-            <button id="mobile-menu-btn" class="text-orange-500 text-xl hover:text-orange-600 transition-colors">
+            <button
+                id="mobile-menu-btn"
+                class="text-orange-500 text-xl hover:text-orange-600 transition-colors"
+            >
                 <i class="fas fa-bars"></i>
             </button>
         </div>
@@ -301,7 +307,10 @@ prefix="c"%> <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 </nav>
 
 <!-- Mobile Navigation Menu -->
-<nav id="mobile-menu" class="bg-white border-t-2 border-orange-500 text-gray-800 md:hidden hidden shadow-lg">
+<nav
+    id="mobile-menu"
+    class="bg-white border-t-2 border-orange-500 text-gray-800 md:hidden hidden shadow-lg"
+>
     <div class="container mx-auto px-4 py-2">
         <!-- Main Navigation -->
         <div class="space-y-1">
@@ -310,7 +319,9 @@ prefix="c"%> <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
                 class="block px-3 py-3 rounded hover:bg-orange-50 hover:text-orange-600 transition-colors"
                 ><i class="fas fa-home w-5 text-orange-500"></i> Trang Chủ</a
             >
-            <a href="/cars" class="block px-3 py-3 rounded hover:bg-orange-50 hover:text-orange-600 transition-colors"
+            <a
+                href="/cars"
+                class="block px-3 py-3 rounded hover:bg-orange-50 hover:text-orange-600 transition-colors"
                 ><i class="fas fa-car w-5 text-orange-500"></i> Xe oto cũ</a
             >
             <a
@@ -334,7 +345,7 @@ prefix="c"%> <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
                 ><i class="fas fa-phone w-5 text-orange-500"></i> Liên hệ</a
             >
         </div>
-        
+
         <!-- User Menu -->
         <div class="border-t border-gray-200 mt-3 pt-3">
             <sec:authorize access="isAuthenticated()">
@@ -345,7 +356,7 @@ prefix="c"%> <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
                     <i class="fas fa-user w-5 text-orange-500"></i>
                     <sec:authentication property="principal.username" />
                 </a>
-                
+
                 <sec:authorize access="hasRole('ADMIN')">
                     <a
                         href="${pageContext.request.contextPath}/quantri"
@@ -354,25 +365,28 @@ prefix="c"%> <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
                         <i class="fas fa-cog w-5 text-orange-500"></i> Quản Trị
                     </a>
                 </sec:authorize>
-                
+
                 <a
                     href="${pageContext.request.contextPath}/logout"
                     class="block px-3 py-3 rounded hover:bg-orange-50 hover:text-orange-600 transition-colors"
                 >
-                    <i class="fas fa-sign-out-alt w-5 text-orange-500"></i> Đăng Xuất
+                    <i class="fas fa-sign-out-alt w-5 text-orange-500"></i> Đăng
+                    Xuất
                 </a>
             </sec:authorize>
-            
+
             <sec:authorize access="!isAuthenticated()">
                 <a
                     href="${pageContext.request.contextPath}/login"
                     class="block px-3 py-3 rounded hover:bg-orange-50 hover:text-orange-600 transition-colors"
-                    ><i class="fas fa-sign-in-alt w-5 text-orange-500"></i> Đăng Nhập</a
+                    ><i class="fas fa-sign-in-alt w-5 text-orange-500"></i> Đăng
+                    Nhập</a
                 >
                 <a
                     href="${pageContext.request.contextPath}/register"
                     class="block px-3 py-3 rounded hover:bg-orange-50 hover:text-orange-600 transition-colors"
-                    ><i class="fas fa-user-plus w-5 text-orange-500"></i> Đăng Ký</a
+                    ><i class="fas fa-user-plus w-5 text-orange-500"></i> Đăng
+                    Ký</a
                 >
             </sec:authorize>
         </div>

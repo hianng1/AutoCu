@@ -479,11 +479,11 @@ public class HomeController {
                 case "year-desc":
                     carsList.sort((car1, car2) -> {
                         if (car1.getNgaySanXuat() == null) {
-							return 1;
-						}
+                            return 1;
+                        }
                         if (car2.getNgaySanXuat() == null) {
-							return -1;
-						}
+                            return -1;
+                        }
                         return car2.getNgaySanXuat().compareTo(car1.getNgaySanXuat());
                     });
                     break;
@@ -588,9 +588,7 @@ public class HomeController {
         model.addAttribute("categoriesList", accessoryCategories);
 
         return "accessories";
-    }
-
-    // Bạn có thể thêm các handler khác tại đây, ví dụ:
+    } // Bạn có thể thêm các handler khác tại đây, ví dụ:
     // @GetMapping("/details/{id}") để hiển thị chi tiết sản phẩm
     // @PostMapping("/cart/add/{id}") để thêm vào giỏ hàng (như trong trang chủ)
 
