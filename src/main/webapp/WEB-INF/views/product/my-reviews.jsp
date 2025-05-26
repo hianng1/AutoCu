@@ -37,17 +37,6 @@
     <jsp:include page="/common/header.jsp" />
 
     <div class="container py-5">
-        <div class="row mb-4">
-            <div class="col-md-12">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/"><i class="fas fa-home"></i> Trang chủ</a></li>
-                        <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/profile">Tài khoản của tôi</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Đánh giá của tôi</li>
-                    </ol>
-                </nav>
-            </div>
-        </div>
 
         <div class="row">
             <div class="col-md-3">

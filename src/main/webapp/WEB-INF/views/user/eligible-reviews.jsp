@@ -31,26 +31,6 @@
     <jsp:include page="/common/header.jsp" />
     
     <div class="container py-5">
-        <div class="row mb-4">
-            <div class="col-md-12">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/"><i class="fas fa-home"></i> Trang chủ</a></li>
-                        <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/profile">Tài khoản</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Viết đánh giá</li>
-                    </ol>
-                </nav>
-                
-                <h2 class="mb-4"><i class="fas fa-edit me-2"></i>Sản phẩm chờ đánh giá</h2>
-                
-                <c:if test="${not empty message}">
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <i class="fas fa-check-circle me-2"></i>${message}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                </c:if>
-            </div>
-        </div>
         
         <div class="row">
             <div class="col-md-3">

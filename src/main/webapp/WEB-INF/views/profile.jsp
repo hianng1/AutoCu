@@ -146,7 +146,7 @@ page import="java.util.Locale" %>
                         </div>
                     </div>
 
-                    <div class="card mb-4">
+                    <div class="card mb-4 mt-4 shadow-sm">
                         <div class="card-header bg-primary text-white">
                             <i class="fas fa-user-circle me-2"></i> Tài khoản
                             của tôi
@@ -178,13 +178,6 @@ page import="java.util.Locale" %>
                                 class="list-group-item list-group-item-action"
                             >
                                 <i class="fas fa-edit me-2"></i> Viết đánh giá
-                            </a>
-                            <a
-                                href="${pageContext.request.contextPath}/logout"
-                                class="list-group-item list-group-item-action text-danger"
-                            >
-                                <i class="fas fa-sign-out-alt me-2"></i> Đăng
-                                xuất
                             </a>
                         </div>
                     </div>
