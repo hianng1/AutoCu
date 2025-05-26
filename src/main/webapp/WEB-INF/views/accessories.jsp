@@ -540,13 +540,6 @@
                                                     <i class="far fa-heart text-danger"></i>
                                                 </button>
                                             </sec:authorize>
-                                            <sec:authorize access="!isAuthenticated()">
-                                                <a href="${pageContext.request.contextPath}/login" 
-                                                   class="product-action-btn" 
-                                                   title="Đăng nhập để thêm vào yêu thích">
-                                                    <i class="far fa-heart text-danger"></i>
-                                                </a>
-                                            </sec:authorize>
                                             <a href="${pageContext.request.contextPath}/accessories/detail/${phukien.accessoryID}" 
                                                class="product-action-btn"
                                                title="Xem chi tiết">
