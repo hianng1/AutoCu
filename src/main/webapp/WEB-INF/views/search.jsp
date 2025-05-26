@@ -230,9 +230,6 @@
                                 </div>
                                 <p class="product-description">${car.mota}</p>
                                 <div class="product-footer">
-                                    <div class="price">
-                                        <fmt:formatNumber value="${car.gia}" pattern="#,##0" /> đ
-                                    </div>
                                     <a href="/detail/${car.productID}" class="add-to-cart">
                                         <i class="fas fa-info-circle"></i>
                                         Chi tiết
