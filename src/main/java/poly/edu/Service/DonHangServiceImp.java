@@ -117,11 +117,8 @@ public class DonHangServiceImp implements DonHangService { // Đảm bảo imple
 
 	@Override
 	public List<DonHang> getDeliveredOrdersByUser(User user) {
-		// Use the corrected method name
+		// Use the existing method with the DA_GIAO enum value
 		return donHangRepository.findByUserAndTrangThai(user, DonHang.TrangThai.DA_GIAO);
-
-		// OR use the @Query method if you implemented it
-		// return donHangRepository.findDeliveredOrdersByUser(user);
 	}
 
 	// ... Thêm triển khai cho các phương thức khác nếu bạn có

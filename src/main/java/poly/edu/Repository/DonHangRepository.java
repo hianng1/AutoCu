@@ -43,10 +43,10 @@ public interface DonHangRepository extends JpaRepository<DonHang, Long> {
     List<DonHang> findByUserAndTrangThai(User user, DonHang.TrangThai trangThai); // <-- Sửa từ String
 
     // Đếm số đơn hàng theo trạng thái - Sử dụng kiểu Enum DonHang.TrangThai
-    Long countByTrangThai(DonHang.TrangThai trangThai); // <-- Sửa từ String
-
-    // Tìm đơn hàng đã giao theo người dùng - Phương thức mới thêm
-    List<DonHang> findByUserAndTrangThai(User user, DonHang.TrangThai trangThaiDelivered);
+    Long countByTrangThai(DonHang.TrangThai trangThai); // <-- Sửa từ String // Tìm đơn hàng đã giao theo người dùng -
+                                                        // Phương thức mới thêm
+    // Phương thức đã trùng với findByUserAndTrangThai ở trên nên không cần định
+    // nghĩa lại
 
     // Tìm đơn hàng với tổng thanh toán cao nhất (Top N) - Giữ nguyên
     // Phương thức này sẽ dùng Pageable để giới hạn số lượng kết quả (top N)

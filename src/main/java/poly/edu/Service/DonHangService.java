@@ -51,10 +51,12 @@ public interface DonHangService {
     List<DonHang> findTopByOrderByTongThanhToanDesc(Pageable pageable);
 
     // Thống kê doanh thu theo tháng
-    List<Object[]> getMonthlyRevenue(int year);
+    List<Object[]> getMonthlyRevenue(int year); // Tìm đơn hàng có chứa sản phẩm phụ kiện cụ thể
 
-    // Tìm đơn hàng có chứa sản phẩm phụ kiện cụ thể
     List<DonHang> findByProductId(Long accessoryID);
+
+    // Lấy danh sách đơn hàng đã giao của người dùng
+    List<DonHang> getDeliveredOrdersByUser(User user);
 
     // ... Thêm các phương thức Service khác nếu cần logic nghiệp vụ phức tạp hơn
 }

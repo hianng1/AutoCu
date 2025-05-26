@@ -1,5 +1,7 @@
 package poly.edu.Controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,16 +22,16 @@ public class DetailController {
         ModelAndView modelAndView = new ModelAndView("detail1");
 
         // Lấy thông tin phụ kiện từ service
-        PhuKienOto phukien = phuKienOtoService.findById(accessoryID);
+        Optional<PhuKienOto> phukienOpt = phuKienOtoService.findById(accessoryID);
 
         // Kiểm tra xem phụ kiện có tồn tại không
-        if (phukien == null) {
+        if (!phukienOpt.isPresent()) {
             // Xử lý trường hợp không tìm thấy phụ kiện, ví dụ: chuyển hướng đến trang lỗi
             return new ModelAndView("error");
         }
 
         // Thêm thông tin phụ kiện vào model
-        modelAndView.addObject("phukien", phukien);
+        modelAndView.addObject("phukien", phukienOpt.get());
 
         return modelAndView;
     }
