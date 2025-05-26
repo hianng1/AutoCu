@@ -25,27 +25,40 @@
             padding: 80px 0;
             color: white;
             margin-bottom: 30px;
-        }
-        .card-product {
+        }        .card-product {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             border-radius: 10px;
             overflow: hidden;
             height: 100%;
             border: none;
+            display: flex;
+            flex-direction: column;
         }
         .card-product:hover {
             transform: translateY(-8px);
             box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
         }
-        .product-img-wrapper {
-            height: 200px;
+        .card-product .card-body {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .card-product form.mt-3 {
+            margin-top: auto !important;
+        }        .product-img-wrapper {
+            height: 220px;
             overflow: hidden;
             position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f8f9fa;
         }
         .product-img-wrapper img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
+            padding: 10px;
             transition: transform 0.5s;
         }
         .product-img-wrapper:hover img {
@@ -104,11 +117,24 @@
             background: #fd7e14;
             color: white;
             border-color: #fd7e14;
-        }
-        .product-price {
+        }        .product-price {
             font-size: 1.2rem;
             font-weight: 700;
             color: #e63946;
+        }
+        .card-title {
+            height: 48px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            line-clamp: 2;
+        }
+        .product-brand {
+            display: block;
+            margin-bottom: 5px;
+            color: #6c757d;
+            font-size: 0.9rem;
         }
         .section-title {
             position: relative;
@@ -177,6 +203,24 @@
         }
         .star-rating {
             color: #ffc107;
+        }
+        .star-rating .far.fa-star, .star-rating i.fas.fa-star.text-muted {
+            color: #e2e2e2;
+        }
+        .star-rating .fas.fa-star.filled {
+            color: #ffc107;
+        }
+        .dropdown-item.active {
+            background-color: #fd7e14;
+            color: white;
+        }
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+            color: #fd7e14;
+        }
+        .dropdown-item.active:hover {
+            background-color: #e96b02;
+            color: white;
         }
     </style>
 </head>
@@ -249,43 +293,55 @@
                         </div>
                     </div>
                 </div>
-                
-                <div class="filter-sidebar">
+                  <div class="filter-sidebar">
                     <h5 class="fw-bold mb-3">Đánh Giá</h5>
                     <div class="form-check mb-2">
-                        <input class="form-check-input" type="checkbox" value="5" id="rating5" name="rating"
+                        <input class="form-check-input" type="radio" value="5" id="rating5" name="rating"
                                ${param.rating eq '5' ? 'checked' : ''} onchange="document.getElementById('filterForm').submit()">
-                        <label class="form-check-label star-rating" for="rating5">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <span class="text-muted ms-2">(5)</span>
+                        <label class="form-check-label d-flex align-items-center" for="rating5">
+                            <div class="star-rating">
+                                <i class="fas fa-star filled"></i>
+                                <i class="fas fa-star filled"></i>
+                                <i class="fas fa-star filled"></i>
+                                <i class="fas fa-star filled"></i>
+                                <i class="fas fa-star filled"></i>
+                            </div>
+                            <span class="text-muted ms-2">(5 sao)</span>
                         </label>
                     </div>
                     <div class="form-check mb-2">
-                        <input class="form-check-input" type="checkbox" value="4" id="rating4" name="rating"
+                        <input class="form-check-input" type="radio" value="4" id="rating4" name="rating"
                                ${param.rating eq '4' ? 'checked' : ''} onchange="document.getElementById('filterForm').submit()">
-                        <label class="form-check-label star-rating" for="rating4">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="far fa-star"></i>
-                            <span class="text-muted ms-2">(4+)</span>
+                        <label class="form-check-label d-flex align-items-center" for="rating4">
+                            <div class="star-rating">
+                                <i class="fas fa-star filled"></i>
+                                <i class="fas fa-star filled"></i>
+                                <i class="fas fa-star filled"></i>
+                                <i class="fas fa-star filled"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                            <span class="text-muted ms-2">(4 sao trở lên)</span>
                         </label>
                     </div>
                     <div class="form-check mb-2">
-                        <input class="form-check-input" type="checkbox" value="3" id="rating3" name="rating"
+                        <input class="form-check-input" type="radio" value="3" id="rating3" name="rating"
                                ${param.rating eq '3' ? 'checked' : ''} onchange="document.getElementById('filterForm').submit()">
-                        <label class="form-check-label star-rating" for="rating3">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="far fa-star"></i>
-                            <i class="far fa-star"></i>
-                            <span class="text-muted ms-2">(3+)</span>
+                        <label class="form-check-label d-flex align-items-center" for="rating3">
+                            <div class="star-rating">
+                                <i class="fas fa-star filled"></i>
+                                <i class="fas fa-star filled"></i>
+                                <i class="fas fa-star filled"></i>
+                                <i class="far fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                            <span class="text-muted ms-2">(3 sao trở lên)</span>
+                        </label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" value="0" id="ratingAll" name="rating"
+                               ${empty param.rating ? 'checked' : param.rating eq '0' ? 'checked' : ''} onchange="document.getElementById('filterForm').submit()">
+                        <label class="form-check-label" for="ratingAll">
+                            <span>Tất cả đánh giá</span>
                         </label>
                     </div>
                 </div>
@@ -308,16 +364,42 @@
                             <span>0 kết quả</span>
                         </c:otherwise>
                     </c:choose>
-                </div>
-                <div class="dropdown">
+                </div>                <div class="dropdown">
                     <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-sort me-1"></i>Sắp xếp theo
+                        <i class="fas fa-sort me-1"></i>
+                        <c:choose>
+                            <c:when test="${param.sort eq 'price-desc'}">Giá cao đến thấp</c:when>
+                            <c:when test="${param.sort eq 'price-asc'}">Giá thấp đến cao</c:when>
+                            <c:when test="${param.sort eq 'rating-desc'}">Đánh giá cao nhất</c:when>
+                            <c:when test="${param.sort eq 'popular'}">Bán chạy nhất</c:when>
+                            <c:otherwise>Sắp xếp theo</c:otherwise>
+                        </c:choose>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
-                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/accessories?${not empty param.category ? 'category='.concat(param.category).concat('&') : ''}${not empty param.priceMax ? 'priceMax='.concat(param.priceMax).concat('&') : ''}${not empty param.brand ? 'brand='.concat(param.brand).concat('&') : ''}${not empty param.rating ? 'rating='.concat(param.rating).concat('&') : ''}sort=price-desc"><i class="fas fa-sort-amount-up me-2"></i>Giá cao đến thấp</a></li>
-                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/accessories?${not empty param.category ? 'category='.concat(param.category).concat('&') : ''}${not empty param.priceMax ? 'priceMax='.concat(param.priceMax).concat('&') : ''}${not empty param.brand ? 'brand='.concat(param.brand).concat('&') : ''}${not empty param.rating ? 'rating='.concat(param.rating).concat('&') : ''}sort=price-asc"><i class="fas fa-sort-amount-down me-2"></i>Giá thấp đến cao</a></li>
-                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/accessories?${not empty param.category ? 'category='.concat(param.category).concat('&') : ''}${not empty param.priceMax ? 'priceMax='.concat(param.priceMax).concat('&') : ''}${not empty param.brand ? 'brand='.concat(param.brand).concat('&') : ''}${not empty param.rating ? 'rating='.concat(param.rating).concat('&') : ''}sort=rating-desc"><i class="fas fa-star me-2"></i>Đánh giá cao nhất</a></li>
-                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/accessories?${not empty param.category ? 'category='.concat(param.category).concat('&') : ''}${not empty param.priceMax ? 'priceMax='.concat(param.priceMax).concat('&') : ''}${not empty param.brand ? 'brand='.concat(param.brand).concat('&') : ''}${not empty param.rating ? 'rating='.concat(param.rating).concat('&') : ''}sort=popular"><i class="fas fa-fire-alt me-2"></i>Bán chạy nhất</a></li>
+                        <li>
+                            <a class="dropdown-item ${param.sort eq 'price-desc' ? 'active' : ''}" 
+                               href="${pageContext.request.contextPath}/accessories?${not empty param.category ? 'category='.concat(param.category).concat('&') : ''}${not empty param.priceMax ? 'priceMax='.concat(param.priceMax).concat('&') : ''}${not empty param.rating ? 'rating='.concat(param.rating).concat('&') : ''}sort=price-desc">
+                                <i class="fas fa-sort-amount-up me-2"></i>Giá cao đến thấp
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item ${param.sort eq 'price-asc' ? 'active' : ''}"
+                               href="${pageContext.request.contextPath}/accessories?${not empty param.category ? 'category='.concat(param.category).concat('&') : ''}${not empty param.priceMax ? 'priceMax='.concat(param.priceMax).concat('&') : ''}${not empty param.rating ? 'rating='.concat(param.rating).concat('&') : ''}sort=price-asc">
+                                <i class="fas fa-sort-amount-down me-2"></i>Giá thấp đến cao
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item ${param.sort eq 'rating-desc' ? 'active' : ''}"
+                               href="${pageContext.request.contextPath}/accessories?${not empty param.category ? 'category='.concat(param.category).concat('&') : ''}${not empty param.priceMax ? 'priceMax='.concat(param.priceMax).concat('&') : ''}${not empty param.rating ? 'rating='.concat(param.rating).concat('&') : ''}sort=rating-desc">
+                                <i class="fas fa-star me-2"></i>Đánh giá cao nhất
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item ${param.sort eq 'popular' ? 'active' : ''}"
+                               href="${pageContext.request.contextPath}/accessories?${not empty param.category ? 'category='.concat(param.category).concat('&') : ''}${not empty param.priceMax ? 'priceMax='.concat(param.priceMax).concat('&') : ''}${not empty param.rating ? 'rating='.concat(param.rating).concat('&') : ''}sort=popular">
+                                <i class="fas fa-fire-alt me-2"></i>Bán chạy nhất
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -339,31 +421,38 @@
                                                 <i class="fas fa-search text-primary"></i>
                                             </button>
                                         </div>
-                                    </div>
-                                    <div class="card-body p-4">
-                                        <span class="product-brand">${phukien.hangSanXuat}</span>
+                                    </div>                                    <div class="card-body p-4">                                        <span class="product-brand">${phukien.hangSanXuat}</span>
                                         <h5 class="card-title fw-bold mb-2">${phukien.tenPhuKien}</h5>
-                                        
-                                        <div class="star-rating mb-2">
+                                          <div class="star-rating mb-2">
                                             <c:choose>
                                                 <c:when test="${phukien.soLuongDanhGia > 0}">
                                                     <c:forEach begin="1" end="5" var="i">
-                                                        <i class="fas fa-star ${i <= phukien.trungBinhSao ? 'filled' : ''}"></i>
+                                                        <c:choose>
+                                                            <c:when test="${i <= phukien.trungBinhSao}">
+                                                                <i class="fas fa-star filled"></i>
+                                                            </c:when>
+                                                            <c:when test="${i - phukien.trungBinhSao <= 0.5 && i - phukien.trungBinhSao > 0}">
+                                                                <i class="fas fa-star-half-alt filled"></i>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <i class="far fa-star"></i>
+                                                            </c:otherwise>
+                                                        </c:choose>
                                                     </c:forEach>
                                                     <span class="text-muted ms-1">(${phukien.soLuongDanhGia})</span>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <i class="fas fa-star text-muted"></i>
-                                                    <i class="fas fa-star text-muted"></i>
-                                                    <i class="fas fa-star text-muted"></i>
-                                                    <i class="fas fa-star text-muted"></i>
-                                                    <i class="fas fa-star text-muted"></i>
+                                                    <i class="far fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                    <i class="far fa-star"></i>
                                                     <span class="text-muted ms-1">(0)</span>
                                                 </c:otherwise>
                                             </c:choose>
                                         </div>
                                         
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
                                             <span class="product-price">
                                                 <fmt:formatNumber value="${phukien.gia}" pattern="#,##0" /> đ
                                             </span>
@@ -431,35 +520,30 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // Price range slider
-    const priceRange = document.getElementById('price-range');
-    const priceValue = document.getElementById('price-value');
-    
-    priceRange.addEventListener('input', function() {
-        priceValue.textContent = new Intl.NumberFormat('vi-VN', {
-            style: 'currency',
-            currency: 'VND',
-            minimumFractionDigits: 0
-        }).format(this.value);
+    document.addEventListener('DOMContentLoaded', function() {
+        // Price range slider
+        const priceRange = document.getElementById('price-range');
+        const priceValue = document.getElementById('price-value');
+        
+        if (priceRange && priceValue) {
+            priceRange.addEventListener('input', function() {
+                // Format the price with commas as thousands separators
+                const formattedPrice = new Intl.NumberFormat('vi-VN').format(this.value);
+                priceValue.textContent = formattedPrice + ' đ';
+            });
+            
+            // Delay form submission on range input to improve UX
+            priceRange.addEventListener('change', function() {
+                document.getElementById('filterForm').submit();
+            });
+        }
+        
+        // Initialize tooltips if needed
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        });
     });
-    
-    // Debounce function to prevent too many form submissions
-    function debounce(func, wait) {
-        let timeout;
-        return function() {
-            const context = this;
-            const args = arguments;
-            clearTimeout(timeout);
-            timeout = setTimeout(() => {
-                func.apply(context, args);
-            }, wait);
-        };
-    }
-    
-    // Submit form when the range input changes, but debounced
-    priceRange.addEventListener('change', debounce(function() {
-        document.getElementById('filterForm').submit();
-    }, 500));
 </script>
 </body>
 </html>

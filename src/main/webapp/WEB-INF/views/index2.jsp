@@ -32,6 +32,31 @@
             height: 1px;
             background-color: #e5e7eb;
         }
+        /* Card balancing styles */
+        .card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }        .card-title {
+            height: 48px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            line-clamp: 2;
+        }
+        .btn.mt-auto {
+            margin-top: auto !important;
+        }
     </style>
 </head>
 <body class="font-roboto bg-gray-50">
@@ -102,9 +127,14 @@
         <c:forEach var="xe" items="${sanPhamList}" begin="0" end="7">
             <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                 <div class="card h-100 card-hover-effect border-0 shadow-sm">
-                    <img src="/imgs/${xe.anhDaiDien}" class="card-img-top object-cover" alt="${xe.tenSanPham}" style="height: 200px;">
+                    <div class="position-relative">
+                        <img src="/imgs/${xe.anhDaiDien}" class="card-img-top object-cover" alt="${xe.tenSanPham}" style="height: 200px;">
+                        <div class="position-absolute top-0 end-0 m-2">
+                            <span class="badge bg-danger">Hot</span>
+                        </div>
+                    </div>
 
-                    <div class="card-body">
+                    <div class="card-body d-flex flex-column">
                         <h5 class="card-title fw-bold mb-3">${xe.tenSanPham}</h5>
 
                         <div class="d-flex justify-content-between text-muted small mb-2">
@@ -117,7 +147,7 @@
                             <span><i class="fas fa-cog text-warning me-1"></i> ${xe.truyenDong}</span>
                         </div>
                    
-                         <a href="${pageContext.request.contextPath}/details/${xe.productID}" class="btn btn-outline-primary w-100">
+                        <a href="${pageContext.request.contextPath}/details/${xe.productID}" class="btn btn-outline-primary w-100 mt-auto">
                             <i class="fas fa-info-circle me-2"></i>Chi tiết
                         </a>
                     </div>

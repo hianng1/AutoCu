@@ -136,23 +136,31 @@
             font-weight: 700;
             color: #e63946;
         }
-        .empty-state {
-            padding: 50px 20px;
-            text-align: center;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        /* Card balancing enhancements */
+        .card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
-        .breadcrumb {
-            background: transparent;
-            padding: 0;
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
         }
-        .breadcrumb-item a {
-            color: #6c757d;
-            text-decoration: none;
+        .card-title {
+            height: 48px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            line-clamp: 2;
         }
-        .breadcrumb-item.active {
-            color: #fd7e14;
+        .btn.mt-auto {
+            margin-top: auto !important;
+        }
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
         }
     </style>
 </head>
@@ -287,9 +295,7 @@
                             <div class="col-12 col-sm-6 col-md-4 col-lg-4">
                                 <!-- Using the same card design as index2.jsp -->
                                 <div class="card h-100 card-hover-effect border-0 shadow-sm">
-                                    <img src="${pageContext.request.contextPath}/imgs/${xe.anhDaiDien}" class="card-img-top object-cover" alt="${xe.tenSanPham}" style="height: 200px;">
-
-                                    <div class="card-body">
+                                    <img src="${pageContext.request.contextPath}/imgs/${xe.anhDaiDien}" class="card-img-top object-cover" alt="${xe.tenSanPham}" style="height: 200px;">                                    <div class="card-body d-flex flex-column">
                                         <h5 class="card-title fw-bold mb-3">${xe.tenSanPham}</h5>
 
                                         <div class="d-flex justify-content-between text-muted small mb-2">
@@ -302,7 +308,7 @@
                                             <span><i class="fas fa-cog text-warning me-1"></i> ${xe.truyenDong}</span>
                                         </div>
 
-                                        <a href="${pageContext.request.contextPath}/details/${xe.productID}" class="btn btn-outline-primary w-100">
+                                        <a href="${pageContext.request.contextPath}/details/${xe.productID}" class="btn btn-outline-primary w-100 mt-auto">
                                             <i class="fas fa-info-circle me-2"></i>Chi tiết
                                         </a>
                                     </div>
