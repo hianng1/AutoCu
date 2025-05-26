@@ -139,8 +139,7 @@
         .section-title {
             position: relative;
             margin-bottom: 30px;
-        }
-        .section-title:after {
+        }        .section-title:after {
             content: '';
             position: absolute;
             bottom: -10px;
@@ -148,6 +147,125 @@
             width: 80px;
             height: 3px;
             background-color: #fd7e14;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 40px 0;
+                background-position: center;
+            }
+            
+            .hero-section h1 {
+                font-size: 1.8rem;
+            }
+            
+            .hero-section p {
+                font-size: 0.95rem;
+            }
+            
+            .filter-category {
+                padding: 8px 12px;
+                margin: 3px;
+                font-size: 0.85rem;
+            }
+            
+            .card-product {
+                margin-bottom: 20px;
+            }
+            
+            .product-img-wrapper {
+                height: 180px;
+            }
+            
+            .card-title {
+                font-size: 1rem;
+                height: auto;
+                line-height: 1.3;
+            }
+            
+            .product-price {
+                font-size: 1.1rem;
+            }
+            
+            .btn-add-cart {
+                padding: 8px 16px;
+                font-size: 0.9rem;
+            }
+            
+            .product-actions {
+                gap: 5px;
+            }
+            
+            .product-action-btn {
+                width: 35px;
+                height: 35px;
+            }
+            
+            .star-rating {
+                font-size: 0.9rem;
+            }
+            
+            .stock-indicator {
+                font-size: 0.8rem;
+            }
+            
+            .filter-sidebar .card {
+                margin-bottom: 15px;
+            }
+            
+            .container {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+            
+            .row.g-4 {
+                margin: 0 -10px;
+            }
+            
+            .row.g-4 > * {
+                padding: 0 10px;
+                margin-bottom: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-section h1 {
+                font-size: 1.5rem;
+            }
+            
+            .filter-category {
+                display: block;
+                width: 100%;
+                text-align: center;
+                margin: 5px 0;
+            }
+            
+            .product-img-wrapper {
+                height: 160px;
+            }
+            
+            .card-title {
+                font-size: 0.95rem;
+            }
+            
+            .product-price {
+                font-size: 1rem;
+            }
+            
+            .btn-add-cart {
+                padding: 6px 12px;
+                font-size: 0.85rem;
+            }
+            
+            .product-action-btn {
+                width: 30px;
+                height: 30px;
+            }
+            
+            .product-action-btn i {
+                font-size: 0.8rem;
+            }
         }
         .filter-sidebar {
             background: white;
@@ -412,14 +530,28 @@
                                 <div class="card card-product shadow-sm">
                                     <div class="product-img-wrapper">
                                         <img src="${pageContext.request.contextPath}/imgs/${phukien.anhDaiDien}" alt="${phukien.tenPhuKien}">
-                                        <!-- <div class="discount-badge">-15%</div> -->
-                                        <div class="product-actions">
-                                            <button class="product-action-btn">
-                                                <i class="far fa-heart text-danger"></i>
-                                            </button>
-                                            <button class="product-action-btn">
+                                        <!-- <div class="discount-badge">-15%</div> -->                                        <div class="product-actions">
+                                            <sec:authorize access="isAuthenticated()">
+                                                <button 
+                                                    class="product-action-btn wishlist-btn" 
+                                                    data-accessory-id="${phukien.accessoryID}"
+                                                    title="Thêm vào danh sách yêu thích"
+                                                >
+                                                    <i class="far fa-heart text-danger"></i>
+                                                </button>
+                                            </sec:authorize>
+                                            <sec:authorize access="!isAuthenticated()">
+                                                <a href="${pageContext.request.contextPath}/login" 
+                                                   class="product-action-btn" 
+                                                   title="Đăng nhập để thêm vào yêu thích">
+                                                    <i class="far fa-heart text-danger"></i>
+                                                </a>
+                                            </sec:authorize>
+                                            <a href="${pageContext.request.contextPath}/accessories/detail/${phukien.accessoryID}" 
+                                               class="product-action-btn"
+                                               title="Xem chi tiết">
                                                 <i class="fas fa-search text-primary"></i>
-                                            </button>
+                                            </a>
                                         </div>
                                     </div>                                    <div class="card-body p-4">                                        <span class="product-brand">${phukien.hangSanXuat}</span>
                                         <h5 class="card-title fw-bold mb-2">${phukien.tenPhuKien}</h5>
@@ -536,13 +668,125 @@
             priceRange.addEventListener('change', function() {
                 document.getElementById('filterForm').submit();
             });
-        }
-        
+        }        
         // Initialize tooltips if needed
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl)
         });
+
+        // Wishlist functionality
+        document.querySelectorAll('.wishlist-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const accessoryId = this.getAttribute('data-accessory-id');
+                const heartIcon = this.querySelector('i');
+                
+                fetch('${pageContext.request.contextPath}/api/wishlist/toggle', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        accessoryId: accessoryId,
+                        productType: 'ACCESSORY'
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Toggle heart icon
+                        if (data.added) {
+                            heartIcon.className = 'fas fa-heart text-danger';
+                            showToast('Đã thêm vào danh sách yêu thích!', 'success');
+                        } else {
+                            heartIcon.className = 'far fa-heart text-danger';
+                            showToast('Đã xóa khỏi danh sách yêu thích!', 'info');
+                        }
+                        
+                        // Update wishlist count in header
+                        updateWishlistCount();
+                    } else {
+                        showToast('Có lỗi xảy ra. Vui lòng thử lại!', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showToast('Có lỗi xảy ra. Vui lòng thử lại!', 'error');
+                });
+            });
+        });        // Toast notification function
+        function showToast(message, type) {
+            // Create toast element
+            const toast = document.createElement('div');
+            let alertClass = 'alert alert-info';
+            let iconClass = 'fas fa-info-circle';
+            
+            if (type === 'success') {
+                alertClass = 'alert alert-success';
+                iconClass = 'fas fa-check-circle';
+            } else if (type === 'error') {
+                alertClass = 'alert alert-danger';
+                iconClass = 'fas fa-exclamation-circle';
+            }
+            
+            toast.className = alertClass + ' position-fixed';
+            toast.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+            toast.innerHTML = 
+                '<div class="d-flex align-items-center">' +
+                    '<i class="' + iconClass + ' me-2"></i>' +
+                    message +
+                    '<button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>' +
+                '</div>';
+            
+            document.body.appendChild(toast);
+            
+            // Auto remove after 3 seconds
+            setTimeout(function() {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 3000);
+        }
+
+        // Update wishlist count in header
+        function updateWishlistCount() {
+            const wishlistCountElement = document.getElementById('wishlist-count');
+            if (wishlistCountElement) {
+                fetch('${pageContext.request.contextPath}/api/wishlist/count')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.count > 0) {
+                            wishlistCountElement.textContent = data.count;
+                            wishlistCountElement.style.display = 'flex';
+                        } else {
+                            wishlistCountElement.style.display = 'none';
+                        }
+                    })
+                    .catch(error => console.log('Could not update wishlist count'));
+            }
+        }
+
+        // Load existing wishlist items to show filled hearts
+        function loadWishlistStatus() {
+            fetch('${pageContext.request.contextPath}/api/wishlist/items')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.items) {
+                        data.items.forEach(item => {
+                            if (item.accessoryId) {
+                                const button = document.querySelector(`[data-accessory-id="${item.accessoryId}"]`);
+                                if (button) {
+                                    button.querySelector('i').className = 'fas fa-heart text-danger';
+                                }
+                            }
+                        });
+                    }
+                })
+                .catch(error => console.log('Could not load wishlist status'));
+        }
+
+        // Load wishlist status on page load
+        loadWishlistStatus();
     });
 </script>
 </body>

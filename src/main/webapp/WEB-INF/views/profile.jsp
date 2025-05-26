@@ -81,9 +81,245 @@ page import="java.util.Locale" %>
                 background-color: #0d6efd;
                 color: white;
             }
-
             .btn-submit:hover {
                 background-color: #0b5ed7;
+            }
+
+            /* Mobile Responsive Improvements */
+            @media (max-width: 768px) {
+                .container {
+                    padding: 0 15px;
+                }
+
+                .py-5 {
+                    padding-top: 2rem !important;
+                    padding-bottom: 2rem !important;
+                }
+
+                .card {
+                    margin-bottom: 1.5rem;
+                }
+
+                .card-body {
+                    padding: 1rem;
+                }
+
+                .nav-pills .nav-link {
+                    padding: 8px 12px;
+                    margin-bottom: 8px;
+                    text-align: center;
+                }
+
+                .row .col-lg-3,
+                .row .col-lg-9 {
+                    margin-bottom: 1rem;
+                }
+
+                /* Stack layout on mobile */
+                .col-lg-3 {
+                    order: 1;
+                }
+
+                .col-lg-9 {
+                    order: 2;
+                }
+
+                /* Profile card adjustments */
+                .rounded-circle {
+                    width: 100px !important;
+                    height: 100px !important;
+                }
+
+                h4 {
+                    font-size: 1.1rem;
+                }
+
+                /* Form improvements */
+                .form-control {
+                    font-size: 16px; /* Prevents zoom on iOS */
+                }
+
+                .btn {
+                    padding: 10px 20px;
+                    font-size: 1rem;
+                }
+
+                /* Tab content spacing */
+                .tab-content {
+                    margin-top: 1rem;
+                }
+
+                /* List group improvements */
+                .list-group-item {
+                    padding: 12px 15px;
+                    border-left: none;
+                    border-right: none;
+                }
+
+                .list-group-item:first-child {
+                    border-top: none;
+                }
+
+                .list-group-item:last-child {
+                    border-bottom: none;
+                }
+
+                /* Input group improvements */
+                .input-group {
+                    flex-wrap: nowrap;
+                }
+
+                .input-group-text {
+                    padding: 10px 12px;
+                }
+
+                /* Card header */
+                .card-header {
+                    padding: 12px 15px;
+                    font-size: 1rem;
+                }
+
+                .card-title {
+                    font-size: 1rem;
+                    margin-bottom: 0;
+                }
+            }
+
+            @media (max-width: 576px) {
+                .container {
+                    padding: 0 10px;
+                }
+
+                .py-5 {
+                    padding-top: 1.5rem !important;
+                    padding-bottom: 1.5rem !important;
+                }
+
+                .card-body {
+                    padding: 0.75rem;
+                }
+
+                .nav-pills .nav-link {
+                    padding: 6px 10px;
+                    font-size: 0.9rem;
+                }
+
+                .rounded-circle {
+                    width: 80px !important;
+                    height: 80px !important;
+                }
+
+                h4 {
+                    font-size: 1rem;
+                }
+
+                .btn {
+                    padding: 8px 16px;
+                    font-size: 0.9rem;
+                }
+
+                .form-label {
+                    font-size: 0.9rem;
+                    margin-bottom: 0.25rem;
+                }
+
+                .form-text {
+                    font-size: 0.8rem;
+                }
+
+                .input-group-text {
+                    padding: 8px 10px;
+                }
+
+                /* Make tabs scrollable on very small screens */
+                .nav-pills {
+                    flex-wrap: nowrap;
+                    overflow-x: auto;
+                    -webkit-overflow-scrolling: touch;
+                    scrollbar-width: none;
+                    -ms-overflow-style: none;
+                }
+
+                .nav-pills::-webkit-scrollbar {
+                    display: none;
+                }
+
+                .nav-pills .nav-item {
+                    flex-shrink: 0;
+                }
+            }
+
+            /* Improve touch targets */
+            @media (hover: none) and (pointer: coarse) {
+                .nav-link {
+                    min-height: 44px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .btn {
+                    min-height: 44px;
+                }
+
+                .form-control {
+                    min-height: 44px;
+                }
+
+                .password-toggle {
+                    min-width: 44px;
+                    min-height: 44px;
+                }
+
+                .list-group-item {
+                    min-height: 44px;
+                    display: flex;
+                    align-items: center;
+                }
+            }
+
+            /* Dark mode support */
+            @media (prefers-color-scheme: dark) {
+                body {
+                    background-color: #1a1a1a;
+                    color: #ffffff;
+                }
+
+                .card {
+                    background-color: #2d2d2d;
+                    border-color: #404040;
+                }
+
+                .form-control {
+                    background-color: #404040;
+                    border-color: #555555;
+                    color: #ffffff;
+                }
+
+                .form-control:focus {
+                    background-color: #404040;
+                    border-color: #80bdff;
+                    color: #ffffff;
+                }
+
+                .nav-pills .nav-link:not(.active) {
+                    background-color: #404040;
+                    color: #cccccc;
+                }
+
+                .list-group-item {
+                    background-color: #2d2d2d;
+                    border-color: #404040;
+                    color: #ffffff;
+                }
+
+                .list-group-item:hover {
+                    background-color: #404040;
+                }
+
+                .text-muted {
+                    color: #999999 !important;
+                }
             }
         </style>
     </head>
@@ -178,6 +414,13 @@ page import="java.util.Locale" %>
                                 class="list-group-item list-group-item-action"
                             >
                                 <i class="fas fa-edit me-2"></i> Viết đánh giá
+                            </a>
+                            <a
+                                href="${pageContext.request.contextPath}/wishlist"
+                                class="list-group-item list-group-item-action"
+                            >
+                                <i class="fas fa-heart me-2"></i> Danh sách yêu
+                                thích
                             </a>
                         </div>
                     </div>

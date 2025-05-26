@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -157,10 +158,106 @@
         }
         .btn.mt-auto {
             margin-top: auto !important;
-        }
-        .card-img-top {
+        }        .card-img-top {
             height: 200px;
             object-fit: cover;
+        }
+        
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 40px 0;
+            }
+            
+            .hero-section h1 {
+                font-size: 1.8rem;
+            }
+            
+            .hero-section p {
+                font-size: 0.95rem;
+            }
+            
+            .filter-chip {
+                padding: 6px 12px;
+                margin: 3px;
+                font-size: 0.85rem;
+            }
+            
+            .card-car {
+                margin-bottom: 20px;
+            }
+            
+            .car-img-wrapper {
+                height: 160px;
+            }
+            
+            .card-title {
+                font-size: 1rem;
+                line-height: 1.3;
+            }
+            
+            .btn {
+                padding: 8px 16px;
+                font-size: 0.9rem;
+            }
+            
+            .position-absolute.top-0.end-0 .btn {
+                width: 35px !important;
+                height: 35px !important;
+            }
+            
+            .filter-section {
+                margin-bottom: 20px;
+            }
+            
+            .container {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+            
+            .row.g-4 {
+                margin: 0 -10px;
+            }
+            
+            .row.g-4 > * {
+                padding: 0 10px;
+                margin-bottom: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-section h1 {
+                font-size: 1.5rem;
+            }
+            
+            .filter-chip {
+                display: block;
+                width: 100%;
+                text-align: center;
+                margin: 5px 0;
+            }
+            
+            .car-img-wrapper {
+                height: 140px;
+            }
+            
+            .card-title {
+                font-size: 0.95rem;
+            }
+            
+            .btn {
+                padding: 6px 12px;
+                font-size: 0.85rem;
+            }
+            
+            .position-absolute.top-0.end-0 .btn {
+                width: 30px !important;
+                height: 30px !important;
+            }
+            
+            .position-absolute.top-0.end-0 .btn i {
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
@@ -291,11 +388,34 @@
             <div class="row g-4">
                 <c:choose>
                     <c:when test="${not empty allCarsList}">
-                        <c:forEach var="xe" items="${allCarsList}">
-                            <div class="col-12 col-sm-6 col-md-4 col-lg-4">
+                        <c:forEach var="xe" items="${allCarsList}">                            <div class="col-12 col-sm-6 col-md-4 col-lg-4">
                                 <!-- Using the same card design as index2.jsp -->
                                 <div class="card h-100 card-hover-effect border-0 shadow-sm">
-                                    <img src="${pageContext.request.contextPath}/imgs/${xe.anhDaiDien}" class="card-img-top object-cover" alt="${xe.tenSanPham}" style="height: 200px;">                                    <div class="card-body d-flex flex-column">
+                                    <div class="position-relative">
+                                        <img src="${pageContext.request.contextPath}/imgs/${xe.anhDaiDien}" class="card-img-top object-cover" alt="${xe.tenSanPham}" style="height: 200px;">
+                                        
+                                        <!-- Wishlist Button -->
+                                        <div class="position-absolute top-0 end-0 p-2">
+                                            <sec:authorize access="isAuthenticated()">
+                                                <button 
+                                                    class="btn btn-sm btn-light rounded-circle wishlist-btn-car shadow-sm" 
+                                                    data-car-id="${xe.productID}"
+                                                    title="Thêm vào danh sách yêu thích"
+                                                    style="width: 40px; height: 40px;"
+                                                >
+                                                    <i class="far fa-heart text-danger"></i>
+                                                </button>
+                                            </sec:authorize>
+                                            <sec:authorize access="!isAuthenticated()">
+                                                <a href="${pageContext.request.contextPath}/login" 
+                                                   class="btn btn-sm btn-light rounded-circle shadow-sm" 
+                                                   title="Đăng nhập để thêm vào yêu thích"
+                                                   style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                                                    <i class="far fa-heart text-danger"></i>
+                                                </a>
+                                            </sec:authorize>
+                                        </div>
+                                    </div><div class="card-body d-flex flex-column">
                                         <h5 class="card-title fw-bold mb-3">${xe.tenSanPham}</h5>
 
                                         <div class="d-flex justify-content-between text-muted small mb-2">
@@ -356,8 +476,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 
-    
-    // Debounce function to prevent too many form submissions
+      // Debounce function to prevent too many form submissions
     function debounce(func, wait) {
         let timeout;
         return function() {
@@ -369,6 +488,122 @@
             }, wait);
         };
     }
+
+    // Wishlist functionality for cars
+    document.addEventListener('DOMContentLoaded', function() {
+        // Car wishlist functionality
+        document.querySelectorAll('.wishlist-btn-car').forEach(button => {
+            button.addEventListener('click', function() {
+                const carId = this.getAttribute('data-car-id');
+                const heartIcon = this.querySelector('i');
+                
+                fetch('${pageContext.request.contextPath}/api/wishlist/toggle', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        carId: carId,
+                        productType: 'CAR'
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Toggle heart icon
+                        if (data.added) {
+                            heartIcon.className = 'fas fa-heart text-danger';
+                            showToast('Đã thêm xe vào danh sách yêu thích!', 'success');
+                        } else {
+                            heartIcon.className = 'far fa-heart text-danger';
+                            showToast('Đã xóa xe khỏi danh sách yêu thích!', 'info');
+                        }
+                        
+                        // Update wishlist count in header
+                        updateWishlistCount();
+                    } else {
+                        showToast('Có lỗi xảy ra. Vui lòng thử lại!', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showToast('Có lỗi xảy ra. Vui lòng thử lại!', 'error');
+                });
+            });
+        });        // Toast notification function
+        function showToast(message, type) {
+            // Create toast element
+            const toast = document.createElement('div');
+            let alertClass = 'alert alert-info';
+            let iconClass = 'fas fa-info-circle';
+            
+            if (type === 'success') {
+                alertClass = 'alert alert-success';
+                iconClass = 'fas fa-check-circle';
+            } else if (type === 'error') {
+                alertClass = 'alert alert-danger';
+                iconClass = 'fas fa-exclamation-circle';
+            }
+            
+            toast.className = alertClass + ' position-fixed';
+            toast.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+            toast.innerHTML = 
+                '<div class="d-flex align-items-center">' +
+                    '<i class="' + iconClass + ' me-2"></i>' +
+                    message +
+                    '<button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>' +
+                '</div>';
+            
+            document.body.appendChild(toast);
+            
+            // Auto remove after 3 seconds
+            setTimeout(function() {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 3000);
+        }
+
+        // Update wishlist count in header
+        function updateWishlistCount() {
+            const wishlistCountElement = document.getElementById('wishlist-count');
+            if (wishlistCountElement) {
+                fetch('${pageContext.request.contextPath}/api/wishlist/count')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.count > 0) {
+                            wishlistCountElement.textContent = data.count;
+                            wishlistCountElement.style.display = 'flex';
+                        } else {
+                            wishlistCountElement.style.display = 'none';
+                        }
+                    })
+                    .catch(error => console.log('Could not update wishlist count'));
+            }
+        }
+
+        // Load existing wishlist items to show filled hearts
+        function loadWishlistStatus() {
+            fetch('${pageContext.request.contextPath}/api/wishlist/items')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.items) {
+                        data.items.forEach(item => {
+                            if (item.carId) {
+                                const button = document.querySelector(`[data-car-id="${item.carId}"]`);
+                                if (button) {
+                                    button.querySelector('i').className = 'fas fa-heart text-danger';
+                                }
+                            }
+                        });
+                    }
+                })
+                .catch(error => console.log('Could not load wishlist status'));
+        }
+
+        // Load wishlist status on page load
+        loadWishlistStatus();
+    });
 </script>
 </body>
 </html>
