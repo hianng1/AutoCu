@@ -141,7 +141,7 @@ public class WishlistApiController {
                     }
                 }
             } else if ("ACCESSORY".equals(productType)) {
-                Integer accessoryId = (Integer) requestData.get("accessoryId");
+                Long accessoryId = Long.valueOf(requestData.get("accessoryId").toString());
                 System.out.println("Processing ACCESSORY with ID: " + accessoryId);
                 if (accessoryId != null) {
                     PhuKienOto phuKien = phuKienOtoRepository.findById(Long.valueOf(accessoryId)).orElse(null);

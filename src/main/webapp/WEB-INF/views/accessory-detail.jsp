@@ -571,11 +571,15 @@
                 const type = this.getAttribute('data-type');
                 
                 // AJAX call to add to wishlist
-                fetch(`${pageContext.request.contextPath}/wishlist/add/${type}/${id}`, {
+                fetch(`${pageContext.request.contextPath}/api/wishlist/toggle`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
-                    }
+                    },
+                    body: JSON.stringify({
+                        accessoryId: id,
+                        productType: 'ACCESSORY'
+                    })
                 })
                 .then(response => response.json())
                 .then(data => {

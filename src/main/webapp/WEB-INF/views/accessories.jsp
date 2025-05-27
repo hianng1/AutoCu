@@ -533,7 +533,7 @@
                                         <!-- <div class="discount-badge">-15%</div> -->                                        <div class="product-actions">
                                             <sec:authorize access="isAuthenticated()">
                                                 <button 
-                                                    class="product-action-btn wishlist-btn" 
+                                                    class="product-action-btn wishlist-btn-accessory" 
                                                     data-accessory-id="${phukien.accessoryID}"
                                                     title="Thêm vào danh sách yêu thích"
                                                 >                                                    <i class="far fa-heart text-danger"></i>
@@ -668,7 +668,7 @@
         });
 
         // Wishlist functionality
-        document.querySelectorAll('.wishlist-btn').forEach(button => {
+        document.querySelectorAll('.wishlist-btn-accessory').forEach(button => {
             button.addEventListener('click', function() {
                 const accessoryId = this.getAttribute('data-accessory-id');
                 const heartIcon = this.querySelector('i');
