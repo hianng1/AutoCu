@@ -30,8 +30,8 @@ public class TicketHoTro implements Serializable {
     private Long ticketID;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "UserID", nullable = false, referencedColumnName = "UserID") // Liên kết với khách hàng
-    private KhachHang khachHang;
+    @JoinColumn(name = "UserID", nullable = true, referencedColumnName = "id") // Liên kết với khách hàng
+    private User user;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "StaffID", nullable = true, referencedColumnName = "StaffID") // Nhân viên hỗ trợ

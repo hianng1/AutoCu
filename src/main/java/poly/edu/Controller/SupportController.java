@@ -118,17 +118,7 @@ public class SupportController {
             ticket.setNgayTao(new Date());
             ticket.setNgayCapNhat(new Date());
             if (loggedInUser != null) {
-                // Lấy KhachHang từ email của User
-                java.util.Optional<KhachHang> khachHangOpt = khachHangRepository.findByEmail(loggedInUser.getEmail());
-                if (khachHangOpt.isPresent()) {
-                    ticket.setKhachHang(khachHangOpt.get());
-                } else {
-                    model.addAttribute("error", "Không tìm thấy thông tin khách hàng.");
-                    return "support";
-                }
-            } else {
-                model.addAttribute("error", "Bạn cần đăng nhập để gửi yêu cầu hỗ trợ.");
-                return "support";
+                ticket.setUser(loggedInUser);
             }
             ticketHoTroService.save(ticket);
 
