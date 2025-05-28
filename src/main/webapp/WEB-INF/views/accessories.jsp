@@ -411,59 +411,6 @@
                         </div>
                     </div>
                 </div>
-                  <div class="filter-sidebar">
-                    <h5 class="fw-bold mb-3">Đánh Giá</h5>
-                    <div class="form-check mb-2">
-                        <input class="form-check-input" type="radio" value="5" id="rating5" name="rating"
-                               ${param.rating eq '5' ? 'checked' : ''} onchange="document.getElementById('filterForm').submit()">
-                        <label class="form-check-label d-flex align-items-center" for="rating5">
-                            <div class="star-rating">
-                                <i class="fas fa-star filled"></i>
-                                <i class="fas fa-star filled"></i>
-                                <i class="fas fa-star filled"></i>
-                                <i class="fas fa-star filled"></i>
-                                <i class="fas fa-star filled"></i>
-                            </div>
-                            <span class="text-muted ms-2">(5 sao)</span>
-                        </label>
-                    </div>
-                    <div class="form-check mb-2">
-                        <input class="form-check-input" type="radio" value="4" id="rating4" name="rating"
-                               ${param.rating eq '4' ? 'checked' : ''} onchange="document.getElementById('filterForm').submit()">
-                        <label class="form-check-label d-flex align-items-center" for="rating4">
-                            <div class="star-rating">
-                                <i class="fas fa-star filled"></i>
-                                <i class="fas fa-star filled"></i>
-                                <i class="fas fa-star filled"></i>
-                                <i class="fas fa-star filled"></i>
-                                <i class="far fa-star"></i>
-                            </div>
-                            <span class="text-muted ms-2">(4 sao trở lên)</span>
-                        </label>
-                    </div>
-                    <div class="form-check mb-2">
-                        <input class="form-check-input" type="radio" value="3" id="rating3" name="rating"
-                               ${param.rating eq '3' ? 'checked' : ''} onchange="document.getElementById('filterForm').submit()">
-                        <label class="form-check-label d-flex align-items-center" for="rating3">
-                            <div class="star-rating">
-                                <i class="fas fa-star filled"></i>
-                                <i class="fas fa-star filled"></i>
-                                <i class="fas fa-star filled"></i>
-                                <i class="far fa-star"></i>
-                                <i class="far fa-star"></i>
-                            </div>
-                            <span class="text-muted ms-2">(3 sao trở lên)</span>
-                        </label>
-                    </div>
-                    <div class="form-check mb-2">
-                        <input class="form-check-input" type="radio" value="0" id="ratingAll" name="rating"
-                               ${empty param.rating ? 'checked' : param.rating eq '0' ? 'checked' : ''} onchange="document.getElementById('filterForm').submit()">
-                        <label class="form-check-label" for="ratingAll">
-                            <span>Tất cả đánh giá</span>
-                        </label>
-                    </div>
-                </div>
-                
                 <button type="submit" class="btn btn-add-cart w-100 mt-3">
                     <i class="fas fa-filter me-2"></i>Lọc Kết Quả
                 </button>
@@ -504,18 +451,6 @@
                             <a class="dropdown-item ${param.sort eq 'price-asc' ? 'active' : ''}"
                                href="${pageContext.request.contextPath}/accessories?${not empty param.category ? 'category='.concat(param.category).concat('&') : ''}${not empty param.priceMax ? 'priceMax='.concat(param.priceMax).concat('&') : ''}${not empty param.rating ? 'rating='.concat(param.rating).concat('&') : ''}sort=price-asc">
                                 <i class="fas fa-sort-amount-down me-2"></i>Giá thấp đến cao
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item ${param.sort eq 'rating-desc' ? 'active' : ''}"
-                               href="${pageContext.request.contextPath}/accessories?${not empty param.category ? 'category='.concat(param.category).concat('&') : ''}${not empty param.priceMax ? 'priceMax='.concat(param.priceMax).concat('&') : ''}${not empty param.rating ? 'rating='.concat(param.rating).concat('&') : ''}sort=rating-desc">
-                                <i class="fas fa-star me-2"></i>Đánh giá cao nhất
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item ${param.sort eq 'popular' ? 'active' : ''}"
-                               href="${pageContext.request.contextPath}/accessories?${not empty param.category ? 'category='.concat(param.category).concat('&') : ''}${not empty param.priceMax ? 'priceMax='.concat(param.priceMax).concat('&') : ''}${not empty param.rating ? 'rating='.concat(param.rating).concat('&') : ''}sort=popular">
-                                <i class="fas fa-fire-alt me-2"></i>Bán chạy nhất
                             </a>
                         </li>
                     </ul>

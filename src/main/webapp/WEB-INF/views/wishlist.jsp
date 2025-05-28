@@ -332,10 +332,12 @@
                                         <i class="fas fa-eye"></i>
                                     </a>
                                     <% if (item.getPhuKienOto().getSoLuong() > 0) { %>
-                                    <button class="btn btn-primary" 
-                                            onclick="addToCart(<%= item.getPhuKienOto().getAccessoryID() %>)">
-                                        <i class="fas fa-cart-plus"></i>
-                                    </button>
+                                    <form action="${pageContext.request.contextPath}/cart/add/<%= item.getPhuKienOto().getAccessoryID() %>" method="post" style="display: inline;">
+                                        <input type="hidden" name="quantity" value="1" />
+                                        <button type="submit" class="btn btn-primary" title="Thêm vào giỏ hàng">
+                                            <i class="fas fa-cart-plus"></i>
+                                        </button>
+                                    </form>
                                     <% } %>
                                 </div>
                             </div>
@@ -444,30 +446,21 @@
             form.submit();
         }
 
-        // Add to cart function (for accessories)
+        // Add to cart function (for accessories) - Updated to use form submission
         function addToCart(accessoryId) {
-            fetch(`${window.location.origin}/cart/add`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-                body: `accessoryId=${accessoryId}&quantity=1`
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showToast('Đã thêm vào giỏ hàng', 'success');
-                    // Update cart count if available
-                    updateCartCount();
-                } else {
-                    showToast(data.message || 'Có lỗi xảy ra', 'error');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showToast('Có lỗi xảy ra khi thêm vào giỏ hàng', 'error');
-            });
+            // Create and submit form
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = `${window.location.origin}${pageContext.request.contextPath}/cart/add/${accessoryId}`;
+            
+            const quantityInput = document.createElement('input');
+            quantityInput.type = 'hidden';
+            quantityInput.name = 'quantity';
+            quantityInput.value = '1';
+            
+            form.appendChild(quantityInput);
+            document.body.appendChild(form);
+            form.submit();
         }
 
         // Update cart count
@@ -487,6 +480,13 @@
         <% if (request.getAttribute("success") != null) { %>
             showToast('<%= request.getAttribute("success") %>', 'success');
         <% } %>
+        
+        <% if (request.getAttribute("error") != null) { %>
+            showToast('<%= request.getAttribute("error") %>', 'error');
+        <% } %>
+    </script>
+</body>
+</html>
         
         <% if (request.getAttribute("error") != null) { %>
             showToast('<%= request.getAttribute("error") %>', 'error');
