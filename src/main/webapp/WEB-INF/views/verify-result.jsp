@@ -25,61 +25,25 @@ prefix="c"%>
                 <div class="col-md-8 col-lg-6">
                     <div class="card shadow-sm">
                         <div class="card-body text-center p-5">
-                            <c:choose>
-                                <c:when test="${success}">
-                                    <div class="mb-4">
-                                        <i
-                                            class="fas fa-check-circle text-success"
-                                            style="font-size: 4rem"
-                                        ></i>
-                                    </div>
-                                    <h2 class="mb-3">Xác thực thành công!</h2>
-                                    <p class="text-muted mb-4">
-                                        Tài khoản của bạn đã được xác thực thành
-                                        công. Bây giờ bạn có thể đăng nhập và sử
-                                        dụng đầy đủ các tính năng của AutoCu.
-                                    </p>
-                                    <a
-                                        href="${pageContext.request.contextPath}/login"
-                                        class="btn btn-primary"
-                                    >
-                                        <i class="fas fa-sign-in-alt me-2"></i
-                                        >Đăng nhập ngay
-                                    </a>
-                                </c:when>
-                                <c:otherwise>
-                                    <div class="mb-4">
-                                        <i
-                                            class="fas fa-times-circle text-danger"
-                                            style="font-size: 4rem"
-                                        ></i>
-                                    </div>
-                                    <h2 class="mb-3">
-                                        Xác thực không thành công
-                                    </h2>
-                                    <p class="text-muted mb-4">${message}</p>
-                                    <div
-                                        class="d-flex justify-content-center gap-3"
-                                    >
-                                        <a
-                                            href="${pageContext.request.contextPath}/resend-verification"
-                                            class="btn btn-outline-primary"
-                                        >
-                                            <i
-                                                class="fas fa-paper-plane me-2"
-                                            ></i
-                                            >Gửi lại email xác thực
-                                        </a>
-                                        <a
-                                            href="${pageContext.request.contextPath}/"
-                                            class="btn btn-outline-secondary"
-                                        >
-                                            <i class="fas fa-home me-2"></i
-                                            >Trang chủ
-                                        </a>
-                                    </div>
-                                </c:otherwise>
-                            </c:choose>
+                            <div class="mb-4">
+                                <i
+                                    class="fas fa-check-circle text-success"
+                                    style="font-size: 4rem"
+                                ></i>
+                            </div>
+                            <h2 class="mb-3">Xác thực thành công!</h2>
+                            <p class="text-muted mb-4">
+                                Tài khoản của bạn đã được xác thực thành công.
+                                Bây giờ bạn có thể đăng nhập và sử dụng đầy đủ
+                                các tính năng của AutoCu.
+                            </p>
+                            <a
+                                href="${pageContext.request.contextPath}/login"
+                                class="btn btn-primary"
+                            >
+                                <i class="fas fa-sign-in-alt me-2"></i>Đăng nhập
+                                ngay
+                            </a>
                         </div>
                     </div>
                 </div>
