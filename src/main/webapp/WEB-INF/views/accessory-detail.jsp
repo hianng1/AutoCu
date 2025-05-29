@@ -404,26 +404,41 @@
                         </div>
                     </c:otherwise>
                 </c:choose>
-                
-                <form action="${pageContext.request.contextPath}/cart/add/${phuKien.accessoryID}" method="post" class="mb-3">
-                    <div class="d-flex align-items-center gap-3 mb-3">
-                        <label for="quantity" class="form-label mb-0 fw-bold">Số lượng:</label>
-                        <div class="quantity-control">
-                            <button type="button" class="quantity-btn" onclick="decrementQuantity()">-</button>
-                            <input type="number" id="quantity" name="quantity" class="quantity-input" value="1" min="1" max="${phuKien.soLuong}">
-                            <button type="button" class="quantity-btn" onclick="incrementQuantity()">+</button>
+                  <c:choose>
+                    <c:when test="${phuKien.soLuong > 0}">
+                        <form action="${pageContext.request.contextPath}/cart/add/${phuKien.accessoryID}" method="post" class="mb-3">
+                            <div class="d-flex align-items-center gap-3 mb-3">
+                                <label for="quantity" class="form-label mb-0 fw-bold">Số lượng:</label>
+                                <div class="quantity-control">
+                                    <button type="button" class="quantity-btn" onclick="decrementQuantity()">-</button>
+                                    <input type="number" id="quantity" name="quantity" class="quantity-input" value="1" min="1" max="${phuKien.soLuong}">
+                                    <button type="button" class="quantity-btn" onclick="incrementQuantity()">+</button>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary-custom">
+                                    <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                                </button>
+                                <button type="button" class="btn btn-outline-custom add-to-wishlist" data-id="${phuKien.accessoryID}" data-type="accessory">
+                                    <i class="far fa-heart"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="mb-3">
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-secondary" disabled>
+                                    <i class="fas fa-ban me-2"></i> Hết hàng
+                                </button>
+                                <button type="button" class="btn btn-outline-custom add-to-wishlist" data-id="${phuKien.accessoryID}" data-type="accessory">
+                                    <i class="far fa-heart"></i>
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="d-flex gap-2">
-                        <button type="submit" class="btn btn-primary-custom" ${phuKien.soLuong <= 0 ? 'disabled' : ''}>
-                            <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
-                        </button>
-                        <button type="button" class="btn btn-outline-custom add-to-wishlist" data-id="${phuKien.accessoryID}" data-type="accessory">
-                            <i class="far fa-heart"></i>
-                        </button>
-                    </div>
-                </form>
+                    </c:otherwise>
+                </c:choose>
             </div>
             
             <!-- Contact Box -->

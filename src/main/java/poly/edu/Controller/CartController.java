@@ -150,9 +150,14 @@ public class CartController {
 
 			// Extract the actual PhuKienOto object from the Optional
 			PhuKienOto product = productOptional.get();
-
 			if (quantity <= 0) {
 				redirectAttributes.addFlashAttribute("error", "Số lượng phải lớn hơn 0.");
+				return getPreviousPageUrl(request);
+			}
+
+			// Check if product is out of stock
+			if (product.getSoLuong() <= 0) {
+				redirectAttributes.addFlashAttribute("error", "Sản phẩm đã hết hàng!");
 				return getPreviousPageUrl(request);
 			}
 

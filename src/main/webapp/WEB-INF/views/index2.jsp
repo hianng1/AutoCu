@@ -353,18 +353,25 @@
                                     </c:otherwise>
                                 </c:choose>
                             </div>
-                        </div>
-
-                        <p class="price-text mb-2">
+                        </div>                        <p class="price-text mb-2">
                             <fmt:formatNumber value="${phukien.gia}" pattern="#,##0" /> VND
                         </p>
                         
-                        <form action="/cart/add/${phukien.accessoryID}" method="post">
-                            <input type="hidden" name="quantity" value="1" />
-                            <button type="submit" class="btn btn-primary w-full bg-black text-yellow-400 py-2 rounded-full font-semibold mt-3 hover:bg-gray-800">
-                                <i class="fas fa-shopping-cart me-2"></i>Thêm vào giỏ
-                            </button>
-                        </form>
+                        <c:choose>
+                            <c:when test="${phukien.soLuong > 0}">
+                                <form action="/cart/add/${phukien.accessoryID}" method="post">
+                                    <input type="hidden" name="quantity" value="1" />
+                                    <button type="submit" class="btn btn-primary w-full bg-black text-yellow-400 py-2 rounded-full font-semibold mt-3 hover:bg-gray-800">
+                                        <i class="fas fa-shopping-cart me-2"></i>Thêm vào giỏ
+                                    </button>
+                                </form>
+                            </c:when>
+                            <c:otherwise>
+                                <button type="button" class="btn btn-secondary w-full py-2 rounded-full font-semibold mt-3" disabled>
+                                    <i class="fas fa-ban me-2"></i>Hết hàng
+                                </button>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                 </div>
             </div>

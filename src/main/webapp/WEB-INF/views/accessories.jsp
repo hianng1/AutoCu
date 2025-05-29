@@ -528,12 +528,20 @@
                                                 </c:otherwise>
                                             </c:choose>
                                         </div>
-                                        
-                                        <form action="${pageContext.request.contextPath}/cart/add/${phukien.accessoryID}" method="post" class="mt-3">
+                                          <form action="${pageContext.request.contextPath}/cart/add/${phukien.accessoryID}" method="post" class="mt-3">
                                             <input type="hidden" name="quantity" value="1" />
-                                            <button type="submit" class="btn btn-add-cart w-100">
-                                                <i class="fas fa-shopping-cart me-2"></i>Thêm vào giỏ
-                                            </button>
+                                            <c:choose>
+                                                <c:when test="${phukien.soLuong > 0}">
+                                                    <button type="submit" class="btn btn-add-cart w-100">
+                                                        <i class="fas fa-shopping-cart me-2"></i>Thêm vào giỏ
+                                                    </button>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <button type="button" class="btn btn-secondary w-100" disabled>
+                                                        <i class="fas fa-ban me-2"></i>Hết hàng
+                                                    </button>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </form>
                                     </div>
                                 </div>
